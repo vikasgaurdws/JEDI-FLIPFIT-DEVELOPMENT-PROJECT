@@ -15,12 +15,12 @@ public class CustomerClient {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		CustomerOperations operation = new CustomerOperations();
-		operation.createCustomer();
-		operation.listCustomer();
+		// CustomerOperations operation = new CustomerOperations();
+		// operation.createCustomer();
+		// operation.listCustomer();
 		
-		System.out.println(operation.updateCustomer(101));
-		System.out.println(operation.deleteCustomer(0));
+		// System.out.println(operation.updateCustomer(101));
+		// System.out.println(operation.deleteCustomer(0));
 	}
 	
 	//Client -> business -> bean
