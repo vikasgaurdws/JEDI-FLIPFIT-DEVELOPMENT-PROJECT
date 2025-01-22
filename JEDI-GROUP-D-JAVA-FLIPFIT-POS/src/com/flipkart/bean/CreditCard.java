@@ -5,7 +5,7 @@ public class CreditCard {
 	private Integer cvv;
 	private Long cardNumber;
 	private String name;
-	CreditCard{
+	CreditCard(){
 		this.expiryDate = expityDate;
 		this.cvv = cvv;
 		this.cardNumber = cardNumber;
