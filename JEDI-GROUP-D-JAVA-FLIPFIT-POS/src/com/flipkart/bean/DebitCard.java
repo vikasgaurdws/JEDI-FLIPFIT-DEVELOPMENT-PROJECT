@@ -6,7 +6,7 @@ public class DebitCard extends Payment{
 	private LocalDate expiryDate;
 	private Integer cvv;
 	private Long cardNumber;
-	DebitCard{
+	DebitCard(){
 		this.name = name;
 		 this.expiryDate = expiryDate;
 		this.cvv = cvv;
