@@ -7,5 +7,13 @@ public class FlipFitGymOwner extends FlipFitGymUser{
 	private Long adharNumber;
 	private Boolean flagVerified;
 	private Integer gymId;
+	flagVerified()
+	{
+		 this.panNumber = panNumber;
+		this.adharNumber = adharNumber;
+		 this.flagVerified=flagVerified;
+		 this.gymId = gymId;
+	
+	}
 
 }
