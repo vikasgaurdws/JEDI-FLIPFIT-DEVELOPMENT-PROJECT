@@ -3,6 +3,9 @@
  */
 package com.flipkart.business;
 
+import com.flipkart.bean.FlipFitGym;
+import com.flipkart.bean.FlipFitGymOwner;
+
 import java.util.List;
 
 /**
@@ -16,7 +19,7 @@ public class FlipFitAdminOperations{
 	}
 
 
-	public void viewAllGymOwners()
+	public List<FlipFitGymOwner> viewAllGymOwners()
 	{
 		//if() GymOwnerslist is empty
 		System.out.println("No Gym owner found!!");
@@ -25,10 +28,11 @@ public class FlipFitAdminOperations{
 
 		// for Gymowner in GymOwners
 		System.out.println("Gym owner");
+        return null;
 
 	}
 
-	public void viewGymDetails()
+	public List<FlipFitGym> viewGymDetails()
 	{
 		//if() Gymslist is empty
 		System.out.println("No Gym found!!");
@@ -37,6 +41,7 @@ public class FlipFitAdminOperations{
 
 		// for Gym in Gyms
 		System.out.println("Gym");
+        return null;
 
 	}
 
