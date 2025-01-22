@@ -8,6 +8,9 @@ public class WaitListed {
 	private LocalDate date;
 	private LocalTime time;
 	private Integer waitlistId;
+
+	private Integer bookingId;
+	
 	public WaitListed()
 	{
 //		this.userId = userId;

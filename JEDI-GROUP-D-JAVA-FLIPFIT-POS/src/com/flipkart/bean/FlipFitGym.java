@@ -10,6 +10,8 @@ public class FlipFitGym{
 
      public FlipFitGym()
 	{
+
+
 //		this.gymName = gymName;
 //		this.gymLocation = gymLocation;
 //		this.availableSlot = availableSlot;

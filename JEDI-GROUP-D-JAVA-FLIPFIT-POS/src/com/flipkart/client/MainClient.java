@@ -8,107 +8,99 @@ import java.util.Scanner;
 /**
  * 
  */
-public class MainClient {
+//public class MainClient {
 	
-
+	
 	/**
 	 * 
 	 */
-	public MainClient() {
+	public class MainClient {
 		// TODO Auto-generated constructor stub
+		
+	public static void login() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter your Email\n");
+		String email = sc.nextLine();
+		System.out.println("Enter your Password\n");
+		String password = sc.nextLine();
+		System.out.println("Enter your Role\n");
+		System.out.println("1.Admin\n");	
+		System.out.println("2.Gym Owner\n");
+		System.out.println("3.User\n");
+		int role = sc.nextInt();
+		switch(role) {
+		case 1:
+			String ad = "admin@flipkart.com";
+			String ps = "admin";
+			if(!email.equals(ad) && !password.equals(ps)) {
+				//We have to throw and Error
+				System.out.println("We have to throw an error\n");
+			}else {
+				System.out.println("Successfully Logged In");
+			}
+			
+			
+		case 2:
+			FlipfitGymOwnerClient FlipfitGymOwnerClient = new FlipfitGymOwnerClient(sc);
+			//flipfitGymOwnerClient.       this is to login for user
+		case 3:
+			  FlipfitCustomerClient flipfitCustomerClient = new FlipfitCustomerClient(sc);
+			  //flipfitCustomerClient.     this is to login for gymOwner
+			
+		}
+	}
+	public static void display()
+	{
+		Scanner sc = new Scanner(System.in);
+		boolean menu = true;
+		while(menu) {
+			System.out.println("Choose One of the Below");
+			System.out.println("1.Login");
+			System.out.println("2.Change Password");
+			System.out.println("3.User Registration");
+			System.out.println("4.GymOwner Registration");
+			System.out.println("5.Exit");
+			
+			System.out.println("Enter Your Choice\n");
+			
+			int n = sc.nextInt();
+			
+			switch(n) {
+				case 1: login();
+				case 2: // It will be implemented later
+				case 3: FlipfitCustomerClient flipfitCustomerClient = new FlipfitCustomerClient(sc);
+						flipfitCustomerClient.registerCustomer();
+						login();
+						break;
+					
+				case 4: FlipfitGymOwnerClient flipfitGymOwnerClient = new FlipfitGymOwnerClient(sc);
+						flipfitGymOwnerClient.gymOwnerRegistration(sc);
+						login();
+						break;
+				case 5: System.out.println("Thank you for visiting\n");
+					System.exit(0);
+					break;
+				default: System.out.println("Wrong Choice\n");
+					
+			}
+		}
+			
+			
+		
+		
 	}
 
-
-		
-	private static void display() {
-		
-		  Scanner sc = new Scanner(System.in);  
-		        
-		   try {
-		            System.out.println("Enter the role");
-		            String role = sc.next();
-		            
-		            if (role.equals("Admin")) {
-		                
-		            	System.out.println("Welcome Admin");
-		                FlipfitAdminClient flipfitAdminClient = new FlipfitAdminClient(sc);
-		                flipfitAdminClient.adminOptions();
-		            }
-		            else if (role.equals("Customer")) {
-		                System.out.println("Welcome to the customer Menu");
-		                System.out.println();
-
-		                FlipfitCustomerClient flipfitCustomerClient = new FlipfitCustomerClient(sc);
-		                System.out.println("1. Register");
-		                System.out.println("2. Login");
-		                System.out.println("3. Exit");
-		                System.out.print("Enter your choice: ");
-		                int choice = sc.nextInt();
-
-		                if (choice > 3) {
-		                    throw new InvalidInputException("Choice entered for the customer menu must be 3 or less.");
-		                }
-
-		                switch (choice) {
-		                    case 1:
-		                        flipfitCustomerClient.registerFlipfitGymOwner();
-		                        break;
-		                    case 2:
-		                        flipfitCustomerClient.login();
-		                        break;
-		                    case 3:
-		                        System.out.println("Exiting...");
-		                        break;
-		                    default:
-		                        System.out.println("Incorrect choice");
-		                }
-		            }
-		            else if (role.equals("GymOwner")) {
-		                System.out.println("Welcome to the flipfit GymOwner Menu");
-		                System.out.println();
-
-		                FlipfitGymOwner flipfitGymOwner = new FlipfitGymOwner(sc);
-		                System.out.println("1. Register");
-		                System.out.println("2. Login");
-		                System.out.println("3. Exit");
-		                System.out.print("Enter your choice: ");
-		                int choice = sc.nextInt();
-
-		                if (choice > 3) {
-		                    throw new InvalidInputException("Choice entered for the gym owner menu must be 3 or less.");
-		                }
-
-		                switch (choice) {
-		                    case 1:
-		                        flipfitGymOwner.registerCustomer();
-		                        break;
-		                    case 2:
-		                        flipfitGymOwner.login();
-		                        break;
-		                    case 3:
-		                        System.out.println("Exiting...");
-		                        break;
-		                    default:
-		                        System.out.println("Incorrect choice");
-		                }
-		            }
-		            else {
-		                System.out.println("Invalid role entered.");
-		            }
-		        } catch (InvalidInputException e) {
-		            System.out.println(e.getMessage());
-		        }
-		        
-}
+	
 	
 	/**
 	 * @param args
 	 */
 	public static void main throws InvalidInputException(String[] args) {
 		
+			display();
+		
 			System.out.println("Welcome to flipfit");
 			
-			display();
 	}
 
 	

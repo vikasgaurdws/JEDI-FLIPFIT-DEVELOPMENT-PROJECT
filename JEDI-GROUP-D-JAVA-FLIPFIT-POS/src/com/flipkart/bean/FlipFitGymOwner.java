@@ -5,6 +5,7 @@ public class FlipFitGymOwner extends FlipFitGymUser{
 	private Long adharNumber;
 	private Boolean flagVerified;
 	private Integer gymId;
+
 	public FlipFitGymOwner()
 	{
 		super();
