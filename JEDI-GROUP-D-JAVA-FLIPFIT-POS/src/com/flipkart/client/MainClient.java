@@ -44,12 +44,10 @@ import java.util.Scanner;
 		case 2:
 			FlipfitGymOwnerClient flipfitGymOwnerClient = new FlipfitGymOwnerClient();
 			flipfitGymOwnerClient.gymOwnerMenu(email);
-
-			//flipfitGymOwnerClient.       this is to login for user
 			break;
 		case 3:
 			  FlipfitCustomerClient flipfitCustomerClient = new FlipfitCustomerClient();
-			  //flipfitCustomerClient.     this is to login for gymOwner
+			  flipfitCustomerClient.login();
 			break;
 			
 		}

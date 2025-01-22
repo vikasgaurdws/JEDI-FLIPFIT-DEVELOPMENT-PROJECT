@@ -40,7 +40,7 @@ public class FlipFitCustomerOperations {
     }
 
     public void registerCustomer(FlipFitCustomer flipfitCustomer) {
-
+        System.out.println("Customer added successfully");
     }
 
     public boolean validateCreds(String email, String password) {

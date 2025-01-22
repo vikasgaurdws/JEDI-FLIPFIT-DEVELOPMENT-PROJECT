@@ -10,7 +10,7 @@ public class FlipFitCustomer extends FlipFitGymUser {
 	private Integer customerAge;
   public FlipFitCustomer()
 	{
-        	super();
+
 //		this.customerAge = customerAge;
 	}
 	public Integer getCustomerAge() {
