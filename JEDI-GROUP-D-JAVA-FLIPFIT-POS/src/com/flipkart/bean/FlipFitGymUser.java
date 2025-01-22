@@ -13,6 +13,15 @@ public class FlipFitGymUser {
 	 private Long userMobile;
 	 private String userRole;
 	 private Integer userId;
+	FlipFitGymUser()
+	{
+		this.userName = userName;
+		this.userEmail =  userEmail;
+		this.userPassword = userPassword;
+		this.userMobile = userMobile;
+		this.userRole = userRole;
+		this.userId = userId;
+	}
  public Integer getUserId() {
 	return userId;
 }
