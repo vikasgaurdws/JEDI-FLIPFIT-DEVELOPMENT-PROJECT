@@ -6,10 +6,6 @@ import com.flipkart.business.FlipFitAdminOperations;
 
 import java.util.*;
 
-/**
- *
- */
-
 public class FlipfitAdminClient {
 
 	FlipFitAdminOperations flipfitAdminOperations = new FlipFitAdminOperations();
@@ -22,8 +18,8 @@ public class FlipfitAdminClient {
 	public FlipfitAdminClient(Scanner sc)
 	{
 		this.sc=sc;
-		gymOwnerList = FlipFitAdminOperations.viewAllGymOwners();
-		gymList = FlipFitAdminOperations.viewGymDetails();
+		gymOwnerList = flipfitAdminOperations.viewAllGymOwners();
+		gymList = flipfitAdminOperations.viewGymDetails();
 	}
 	public void createAdmin() {
 		System.out.println("Enter Admin Name: ");
@@ -39,16 +35,16 @@ public class FlipfitAdminClient {
 	}
 	public void approveGymOwnerRequests() {
 		System.out.println("Enter GymOwnerId: ");
-		flipfitAdminOperations.approveGymOwnerRequests(sc.next());
+		flipfitAdminOperations.approveGymOwnerRequests(Integer.parseInt(sc.next()));
 	}
 	public void approveGymRequests() {
 		System.out.println("Enter Gym Id: ");
-		flipfitAdminOperations.approveGymRequests(sc.next());
+		flipfitAdminOperations.approveGymRequests(Integer.parseInt(sc.next()));
 	}
 
 	public void viewGymUsers() {
 		System.out.println("Enter gym Id: ");
-		flipfitAdminOperation.viewGymUsers(sc.next());
+		flipfitAdminOperations.viewGymUsers(Integer.parseInt(sc.next()));
 	}
 
 

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.flipkart.client;
 
 import java.util.Scanner;
@@ -8,14 +5,10 @@ import java.util.Scanner;
 import com.flipkart.bean.FlipFitCustomer;
 import com.flipkart.business.FlipFitCustomerOperations;
 
-/**
- * 
- */
-
 
 public class FlipfitCustomerClient {
 
-    private Scanner sc;
+    private final Scanner sc;
     private final FlipFitCustomer flipfitCustomer;  // Using FlipfitCustomer
     private final FlipFitCustomerOperations flipfitCustomerOperations;
 
