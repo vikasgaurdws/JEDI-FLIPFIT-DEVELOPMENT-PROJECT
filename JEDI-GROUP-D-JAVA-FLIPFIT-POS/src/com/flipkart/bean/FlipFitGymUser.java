@@ -10,17 +10,17 @@ public class FlipFitGymUser {
 	private String userName;
 	 private String userEmail;
 	 private String userPassword;
-	 private Long userMobile;
+	 private String userMobile;
 	 private String userRole;
 	 private Integer userId;
-	FlipFitGymUser()
+	public FlipFitGymUser()
 	{
-		this.userName = userName;
-		this.userEmail =  userEmail;
-		this.userPassword = userPassword;
-		this.userMobile = userMobile;
-		this.userRole = userRole;
-		this.userId = userId;
+//		this.userName = userName;
+//		this.userEmail =  userEmail;
+//		this.userPassword = userPassword;
+//		this.userMobile = userMobile;
+//		this.userRole = userRole;
+//		this.userId = userId;
 	}
  public Integer getUserId() {
 	return userId;
@@ -46,10 +46,10 @@ public String getUserPassword() {
 public void setUserPassword(String userPassword) {
 	this.userPassword = userPassword;
 }
-public Long getUserMobile() {
+public String getUserMobile() {
 	return userMobile;
 }
-public void setUserMobile(Long userMobile) {
+public void setUserMobile(String userMobile) {
 	this.userMobile = userMobile;
 }
 public String getUserRole() {

@@ -8,13 +8,13 @@ public class WaitListed {
 	private LocalDate date;
 	private LocalTime time;
 	private Integer waitlistId;
-	WaitListed()
+	public WaitListed()
 	{
-		this.userId = userId;
-		this.slotId = slotId;
-		this.date = date;
-		this.time = time;
-		this.waitlistId=waitlistId;
+//		this.userId = userId;
+//		this.slotId = slotId;
+//		this.date = date;
+//		this.time = time;
+//		this.waitlistId=waitlistId;
  		
 	}
 	public Integer getWaitlistId() {

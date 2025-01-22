@@ -6,13 +6,13 @@ public class Slot {
 	private Integer capacity;
 	private Integer availableSeats;
 	private Integer slotId;
-	Slot()
+	public Slot()
 	{
-		 this.gymId = gymId;
-		this.startTime = startTime;
-		this.capacity = capacity;
-		this.availableSeats=availableSeats;
-		this.slotId = slotId;
+//		 this.gymId = gymId;
+//		this.startTime = startTime;
+//		this.capacity = capacity;
+//		this.availableSeats=availableSeats;
+//		this.slotId = slotId;
 		
 	}
 	public Integer getSlotId() {

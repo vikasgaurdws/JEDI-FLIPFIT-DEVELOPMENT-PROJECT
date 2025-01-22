@@ -2,9 +2,9 @@ package com.flipkart.bean;
 
 public class UPI extends Payment{
 	private String upiId;
-        UPI()
+     public UPI()
 	{
-		this.upiId = upiId;
+//		this.upiId = upiId;
 	}
 	public String getUpiId() {
 		return upiId;

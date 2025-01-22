@@ -8,14 +8,14 @@ public class FlipFitGym{
 	private Boolean flagVerified;
 	private Integer gymId;
 
-        FlipFitGym()
+     public FlipFitGym()
 	{
-		this.gymNmae = gymName;
-		this.gymLocation = gymLocation;
-		this.availableSlot = avaiableSlot;
-		this.price = price;
-		this.flagVerified = flagVerified;
-		this.gymId = gymId;
+//		this.gymName = gymName;
+//		this.gymLocation = gymLocation;
+//		this.availableSlot = availableSlot;
+//		this.price = price;
+//		this.flagVerified = flagVerified;
+//		this.gymId = gymId;
 	}
 	
 	public Integer getGymId() {

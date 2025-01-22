@@ -8,16 +8,16 @@ public class Booking {
 	private Integer slotId;
 	private Integer gymId;
 	private LocalTime time;
-	private Enum bookingStatus;
+	private String bookingStatus;
 	private LocalDate bookingDate;
 	private Integer bookingId;
-	Booking(){
-		 this.userId = userId;
-		 this.slotId = slotId;
-		 this.gymId = gymId;
-		 this.time= time;
-		 this.bookingDate = bookingDate;
-		this.bookingId = bookingId;
+	public Booking(){
+//		 this.userId = userId;
+//		 this.slotId = slotId;
+//		 this.gymId = gymId;
+//		 this.time= time;
+//		 this.bookingDate = bookingDate;
+//		this.bookingId = bookingId;
 	}
 	public Integer getBookingId() {
 		return bookingId;
@@ -49,10 +49,10 @@ public class Booking {
 	public void setTime(LocalTime time) {
 		this.time = time;
 	}
-	public Enum getBookingStatus() {
+	public String getBookingStatus() {
 		return bookingStatus;
 	}
-	public void setBookingStatus(Enum bookingStatus) {
+	public void setBookingStatus(String bookingStatus) {
 		this.bookingStatus = bookingStatus;
 	}
 	public LocalDate getBookingDate() {
