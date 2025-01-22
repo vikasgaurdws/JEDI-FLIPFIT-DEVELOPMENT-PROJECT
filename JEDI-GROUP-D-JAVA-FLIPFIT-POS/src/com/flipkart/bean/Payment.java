@@ -8,13 +8,13 @@ public class Payment {
 	private Integer amount;
 	private String type;
 	private Integer paymentId;
-	Payment ()
+	public Payment ()
 	{
-		this .amount = amount;
-		this.type =type;
-		this.paymentId = paymentId;
-		this.paymentTime = paymentTime;
-		this.paymentDate= paymentDate;
+//		this .amount = amount;
+//		this.type =type;
+//		this.paymentId = paymentId;
+//		this.paymentTime = paymentTime;
+//		this.paymentDate= paymentDate;
 		
 	}
 	public Integer getPaymentId() {

@@ -3,17 +3,17 @@ package com.flipkart.bean;
 public class Notification {
 	private Integer bookingId;
 	private Integer slotId;
-	private Enum bookingStatus;
-	Notification()
+	private String bookingStatus;
+	public Notification()
 	{
-		this.bookingId = bookingId;
-		this.slotId = slotId;
-		this.bookingStatus = bookingStatus;
+//		this.bookingId = bookingId;
+//		this.slotId = slotId;
+//		this.bookingStatus = bookingStatus;
 	}
-	public Enum getBookingStatus() {
+	public String getBookingStatus() {
 		return bookingStatus;
 	}
-	public void setBookingStatus(Enum bookingStatus) {
+	public void setBookingStatus(String bookingStatus) {
 		this.bookingStatus = bookingStatus;
 	}
 	public Integer getBookingId() {
@@ -28,7 +28,4 @@ public class Notification {
 	public void setSlotId(Integer slotId) {
 		this.slotId = slotId;
 	}
-	
-	
-
 }
