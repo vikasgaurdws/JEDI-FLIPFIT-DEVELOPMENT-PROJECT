@@ -8,9 +8,10 @@ import java.util.*;
  */
 public class FlipFitAdmin extends FlipFitGymUser {
 	private ArrayList<String> gymOwnerList;
-	FlipFitAdmin()
+	public FlipFitAdmin()
 	{
-		this.gymOwnerList = gymOwnerList;
+		super();
+//		this.gymOwnerList = gymOwnerList;
 	}
 	public ArrayList<String> getGymOwnerList() {
 		return gymOwnerList;

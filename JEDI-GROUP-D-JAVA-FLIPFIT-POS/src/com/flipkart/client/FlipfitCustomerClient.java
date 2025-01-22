@@ -5,8 +5,8 @@ package com.flipkart.client;
 
 import java.util.Scanner;
 
-import com.flipkart.bean.Customer;
-import com.flipkart.business.CustomerOperations;
+import com.flipkart.bean.FlipFitCustomer;
+import com.flipkart.business.FlipFitCustomerOperations;
 
 /**
  * 
@@ -16,34 +16,34 @@ import com.flipkart.business.CustomerOperations;
 public class FlipfitCustomerClient {
 
     private Scanner sc;
-    private FlipfitCustomer flipfitCustomer;  // Using FlipfitCustomer
-    private FlipfitCustomerOperations flipfitCustomerOperations;
+    private final FlipFitCustomer flipfitCustomer;  // Using FlipfitCustomer
+    private final FlipFitCustomerOperations flipfitCustomerOperations;
 
     // Constructor initializes scanner and customer operations
     public FlipfitCustomerClient(Scanner sc) {
         this.sc = sc;
-        this.flipfitCustomer = new FlipfitCustomer();  // Initialize FlipfitCustomer
-        this.flipfitCustomerOperations = new FlipfitCustomerOperations();  // Initialize FlipfitCustomerOperations
+        this.flipfitCustomer = new FlipFitCustomer();  // Initialize FlipfitCustomer
+        this.flipfitCustomerOperations = new FlipFitCustomerOperations();  // Initialize FlipfitCustomerOperations
     }
 
     // Register a new customer
     public void registerCustomer() {
         System.out.print("Enter Name: ");
-        flipfitCustomer.setName(sc.next());
+        flipfitCustomer.setUserName(sc.next());
 
         System.out.print("Enter email: ");
-        flipfitCustomer.setEmail(sc.next());
+        flipfitCustomer.setUserEmail(sc.next());
 
         System.out.print("Enter password: ");
-        flipfitCustomer.setPassword(sc.next());
+        flipfitCustomer.setUserPassword(sc.next());
 
         System.out.print("Enter Phone Number: ");
-        flipfitCustomer.setPhoneNumber(sc.next());
+        flipfitCustomer.setUserMobile(sc.next());
 
-        flipfitCustomer.setRole("Customer");
+        flipfitCustomer.setUserRole("Customer");
 
         System.out.print("Enter Age: ");
-        flipfitCustomer.setAge(Integer.valueOf(sc.next()));
+        flipfitCustomer.setCustomerAge(Integer.valueOf(sc.next()));
 
 
         flipfitCustomerOperations.registerCustomer(flipfitCustomer);
@@ -70,19 +70,17 @@ public class FlipfitCustomerClient {
 
     public void editProfile(String email) {
         System.out.print("Enter password: ");
-        flipfitCustomer.setPassword(sc.next());
+        flipfitCustomer.setUserPassword(sc.next());
 
         System.out.print("Enter Name: ");
-        flipfitCustomer.setName(sc.next());
+        flipfitCustomer.setUserName(sc.next());
 
         System.out.print("Enter Phone Number: ");
-        flipfitCustomer.setPhoneNumber(sc.next());
+        flipfitCustomer.setUserMobile(sc.next());
 
         System.out.print("Enter Age: ");
-        flipfitCustomer.setAge(Integer.valueOf(sc.next()));
+        flipfitCustomer.setCustomerAge(Integer.valueOf(sc.next()));
 
-        System.out.print("Enter Address: ");
-        flipfitCustomer.setAddress(sc.next());
 
         // Here you would likely want to update the customer using an operation method
         flipfitCustomerOperations.updateCustomerProfile(flipfitCustomer);
@@ -91,13 +89,13 @@ public class FlipfitCustomerClient {
     }
 
     public void viewProfile(String email) {
-        FlipfitCustomer customerProfile = flipfitCustomerOperations.getCustomerProfile(email);
+        FlipFitCustomer customerProfile = flipfitCustomerOperations.getCustomerProfile(email);
         if (customerProfile != null) {
             System.out.println("Customer Profile: ");
-            System.out.println("Name: " + customerProfile.getName());
-            System.out.println("Email: " + customerProfile.getEmail());
-            System.out.println("Phone Number: " + customerProfile.getPhoneNumber());
-            System.out.println("Age: " + customerProfile.getAge());
+            System.out.println("Name: " + customerProfile.getUserName());
+            System.out.println("Email: " + customerProfile.getUserEmail());
+            System.out.println("Phone Number: " + customerProfile.getUserMobile());
+            System.out.println("Age: " + customerProfile.getCustomerAge());
         } 
         else {
             System.out.println("No profile found for the given email.");
@@ -105,26 +103,20 @@ public class FlipfitCustomerClient {
     }
 
     public void getGyms() {
-        flipfitCustomerOperations.getAvailableGyms().forEach(gym -> {
-            System.out.println(gym);
-        });
+        flipfitCustomerOperations.getAvailableGyms().forEach(System.out::println);
     }
 
     public void searchByLocation() {
         System.out.print("Enter location to search for gyms: ");
         String location = sc.nextLine();
-        flipfitCustomerOperations.searchGymsByLocation(location).forEach(gym -> {
-            System.out.println(gym);
-        });
+        flipfitCustomerOperations.searchGymsByLocation(location).forEach(System.out::println);
     }
 
     // Search for gyms by available time
     public void searchByTime() {
         System.out.print("Enter time to search for available gyms: ");
         String time = sc.nextLine();
-        flipfitCustomerOperations.searchGymsByTime(time).forEach(gym -> {
-            System.out.println(gym);
-        });
+        flipfitCustomerOperations.searchGymsByTime(time).forEach(System.out::println);
     }
 
     public void bookSlot(String email) {
@@ -154,9 +146,7 @@ public class FlipfitCustomerClient {
 
     // View customer's bookings
     public void viewBookings(String email) {
-        flipfitCustomerOperations.getCustomerBookings(email).forEach(booking -> {
-            System.out.println(booking);
-        });
+        flipfitCustomerOperations.getCustomerBookings(email).forEach(System.out::println);
     }
 
     // Make payment for a booking
