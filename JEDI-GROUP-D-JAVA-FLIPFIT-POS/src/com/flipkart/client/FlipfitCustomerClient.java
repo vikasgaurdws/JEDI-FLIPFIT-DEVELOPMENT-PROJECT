@@ -11,6 +11,7 @@ public class FlipfitCustomerClient {
     private final Scanner sc = new Scanner(System.in);
     private final FlipFitCustomer flipfitCustomer;  // Using FlipfitCustomer
     private final FlipFitCustomerOperations flipfitCustomerOperations;
+    private String email;
 
     // Constructor initializes scanner and customer operations
     public FlipfitCustomerClient() {
@@ -24,7 +25,8 @@ public class FlipfitCustomerClient {
         flipfitCustomer.setUserName(sc.next());
 
         System.out.print("Enter email: ");
-        flipfitCustomer.setUserEmail(sc.next());
+        email=sc.next();
+        flipfitCustomer.setUserEmail(email);
 
         System.out.print("Enter password: ");
         flipfitCustomer.setUserPassword(sc.next());
@@ -47,7 +49,7 @@ public class FlipfitCustomerClient {
         sc.nextLine();  
 
         System.out.print("Enter email: ");
-        String email = sc.nextLine();
+        email = sc.nextLine();
 
         System.out.print("Enter password: ");
         String password = sc.nextLine();
@@ -55,6 +57,7 @@ public class FlipfitCustomerClient {
         // Validate credentials
         if (flipfitCustomerOperations.validateCreds(email, password)) {
             System.out.println("Login successful!");
+            flipfitCustomerMenu();
         } else {
             System.out.println("Invalid email or password.");
         }
@@ -112,10 +115,12 @@ public class FlipfitCustomerClient {
     }
 
     public void bookSlot(String email) {
-        System.out.print("Enter gym name to book: ");
+        System.out.println("Enter gym name to book: ");
         String gymName = sc.nextLine();
-        System.out.print("Enter desired time: ");
+        System.out.println("Enter desired time: ");
         String time = sc.nextLine();
+        System.out.println("Enter details for payment");
+        makePayment(email);
         boolean success = flipfitCustomerOperations.bookGymSlot(email, gymName, time);
         if (success) {
             System.out.println("Slot booked successfully.");
@@ -139,6 +144,10 @@ public class FlipfitCustomerClient {
     // View customer's bookings
     public void viewBookings(String email) {
         flipfitCustomerOperations.getCustomerBookings(email).forEach(System.out::println);
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("Do you want to cancel a booking? Enter 1 for yes 0 for no");
+        if(sc.nextInt()==1)
+            cancelBooking(email);
     }
 
     // Make payment for a booking
@@ -149,6 +158,51 @@ public class FlipfitCustomerClient {
     
     public void flipfitCustomerMenu()
     {
-    	
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+        while (true) {
+            System.out.println("1. Edit profile");
+            System.out.println("2. View profile");
+            System.out.println("3. View gyms");
+            System.out.println("4. Search gyms by location");
+            System.out.println("5. Search gyms by time");
+            System.out.println("6. Book slots");
+            System.out.println("7. View Bookings");
+            System.out.println("8. Exit");
+
+            System.out.print("Enter your choice: ");
+            int choice = sc.nextInt();
+            switch (choice) {
+
+
+                case 1:
+                    editProfile(email);
+                    break;
+
+                case 2:
+                    viewProfile(email);
+                    break;
+
+                case 3:
+                    getGyms();
+                    break;
+
+                case 4:
+                    searchByLocation();
+                    break;
+                case 5:
+                    searchByTime();
+                    break;
+                case 6:
+                    bookSlot(email);
+                    break;
+                case 7:
+                    viewBookings(email);
+                case 8:
+                    System.out.println("Exiting...");
+                    return;
+                default:
+                    System.out.println("Please check the option you have entered");
+            }
+        }
     }
 }
