@@ -13,45 +13,39 @@ import com.flipkart.bean.FlipFitGym;
 /**
  * 
  */
-public class FlipfitGymOwnerClient {
+public class FlipfitGymOwnerMenu {
 	FlipFitGymOwner gymOwner;
 	FlipFitGymOwnerOperations flipfitGymOwnerOperations;
-	Scanner in = new Scanner(System.in);
+	Scanner in;
 	FlipFitGym flipFitGym = new FlipFitGym("Gym1","Bellandur",5,500,false,1);
-	FlipfitGymOwnerClient(){
+	FlipfitGymOwnerMenu(Scanner in){
+		this.in=in;
 	 gymOwner = new FlipFitGymOwner();
 	 flipfitGymOwnerOperations = new FlipFitGymOwnerOperations();
 	}
 	public void gymOwnerRegistration(Scanner in) {
 		System.out.println("\nEnter GymOwner Details: \n");
-		System.out.print("Enter Email: ");
+		System.out.println("Enter Email: ");
 		gymOwner.setUserEmail(in.next());
-		System.out.print("Enter Password: ");
+		System.out.println("Enter Password: ");
 		gymOwner.setUserPassword(in.next());
 		gymOwner.setUserRole("GymOwner");
-		System.out.print("Enter Name: ");
+		System.out.println("Enter Name: ");
 		gymOwner.setUserName(in.next());
-		System.out.print("Enter Phone Number: ");
+		System.out.println("Enter Phone Number: ");
 		gymOwner.setUserMobile(in.next());
-		System.out.print("Enter PAN: ");
+		System.out.println("Enter PAN: ");
 		gymOwner.setPanNumber(in.next());
-		System.out.print("Enter Aadhaar: ");
+		System.out.println("Enter Aadhaar: ");
 		gymOwner.setAdharNumber(in.next());
 
 	 //need to add it to db and get the confirmation
 	}
-    public void login() {
-        in.nextLine();  
-
-        System.out.print("Enter email: ");
-        String email = in.nextLine();
-
-        System.out.print("Enter password: ");
-        String password = in.nextLine();
-
+    public void login(String email,String password) {
         // Validate credentials
         if (flipfitGymOwnerOperations.validateCreds(email, password)) {
             System.out.println("Login successful!");
+            gymOwnerMenu(email);
         } else {
             System.out.println("Invalid email or password.");
         }
@@ -59,18 +53,18 @@ public class FlipfitGymOwnerClient {
 
 	public void editProfile(String email) {
 		System.out.println("Enter Details: ");
-		System.out.print("Enter Email: ");
+		System.out.println("Enter Email: ");
 		gymOwner.setUserEmail(in.next());
-		System.out.print("Enter Password: ");
+		System.out.println("Enter Password: ");
 		gymOwner.setUserPassword(in.next());
 		gymOwner.setUserRole("GymOwner");
-		System.out.print("Enter Name: ");
+		System.out.println("Enter Name: ");
 		gymOwner.setUserName(in.next());
-		System.out.print("Enter Phone Number: ");
+		System.out.println("Enter Phone Number: ");
 		gymOwner.setUserMobile(in.next());
-		System.out.print("Enter PAN: ");
+		System.out.println("Enter PAN: ");
 		gymOwner.setPanNumber(in.next());
-		System.out.print("Enter Aadhaar: ");
+		System.out.println("Enter Aadhaar: ");
 		gymOwner.setAdharNumber(in.next());
 
 		flipfitGymOwnerOperations.editProfile();
@@ -113,7 +107,7 @@ public class FlipfitGymOwnerClient {
 			System.out.println("6. View All Gym Details");
 			System.out.println("7. LogOut\n");
 
-			System.out.print("Enter Your Choice: " );
+			System.out.println("Enter Your Choice: " );
 
 			System.out.println("______________________________________________________________\n");
 			int choice=in.nextInt();

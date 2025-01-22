@@ -14,19 +14,20 @@ import java.util.Scanner;
 	/**
 	 * 
 	 */
-	public class MainClient {
+	public class FlipfitMenu {
 		// TODO Auto-generated constructor stub
+		public static Scanner sc = new Scanner(System.in);
 		
 	public static void login() throws Exception {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter your Email\n");
+		System.out.println("Enter your Email");
 		String email = sc.nextLine();
-		System.out.println("Enter your Password\n");
+		System.out.println("Enter your Password");
 		String password = sc.nextLine();
-		System.out.println("Enter your Role\n");
-		System.out.println("1.Admin\n");	
-		System.out.println("2.Gym Owner\n");
-		System.out.println("3.User\n");
+		System.out.println("Enter your Role");
+		System.out.println("1.Admin");	
+		System.out.println("2.Gym Owner");
+		System.out.println("3.User");
 		int role = sc.nextInt();
 		switch(role) {
 		case 1:
@@ -38,22 +39,21 @@ import java.util.Scanner;
 			}else {
 				System.out.println("Successfully Logged In");
 			}
-			FlipfitAdminClient flipfitAdminClient = new FlipfitAdminClient();
+			FlipfitAdminMenu flipfitAdminClient = new FlipfitAdminMenu(sc);
 			flipfitAdminClient.adminOptions();
 			break;
 		case 2:
-			FlipfitGymOwnerClient flipfitGymOwnerClient = new FlipfitGymOwnerClient();
-			flipfitGymOwnerClient.gymOwnerMenu(email);
+			FlipfitGymOwnerMenu flipfitGymOwnerClient = new FlipfitGymOwnerMenu(sc);
+			flipfitGymOwnerClient.login(email,password);
 			break;
 		case 3:
-			  FlipfitCustomerClient flipfitCustomerClient = new FlipfitCustomerClient();
-			  flipfitCustomerClient.login();
+			  FlipfitCustomerMenu flipfitCustomerClient = new FlipfitCustomerMenu(sc);
+			  flipfitCustomerClient.login(email,password);
 			break;
 			
 		}
 	}
 	public static void display() throws Exception {
-		Scanner sc = new Scanner(System.in);
 		boolean menu = true;
 		while(menu) {
 			System.out.println("Choose One of the Below");
@@ -72,43 +72,29 @@ import java.util.Scanner;
 						login();
 						break;
 				case 2: // It will be implemented later
-				case 3: FlipfitCustomerClient flipfitCustomerClient = new FlipfitCustomerClient();
+				case 3: FlipfitCustomerMenu flipfitCustomerClient = new FlipfitCustomerMenu(sc);
 						flipfitCustomerClient.registerCustomer();
 						login();
 						break;
 					
-				case 4: FlipfitGymOwnerClient flipfitGymOwnerClient = new FlipfitGymOwnerClient();
+				case 4: FlipfitGymOwnerMenu flipfitGymOwnerClient = new FlipfitGymOwnerMenu(sc);
 						flipfitGymOwnerClient.gymOwnerRegistration(sc);
 						login();
 						break;
 				case 5: System.out.println("Thank you for visiting\n");
-					System.exit(0);
-					break;
+					return;
 				default: System.out.println("Wrong Choice\n");
 					
 			}
 		}
-			
-			
-		
-		
 	}
-
-	
-	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-
+		System.out.println("Welcome to flipfit");
 			display();
 
-			System.out.println("Welcome to flipfit");
 
 	}
-
-	
-	
-	
-
 }
