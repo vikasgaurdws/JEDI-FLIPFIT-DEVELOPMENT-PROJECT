@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.flipkart.bean.FlipFitGymOwner;
+import com.flipkart.bean.Slot;
 import com.flipkart.business.FlipFitGymOwnerOperations;
 import com.flipkart.bean.FlipFitGym;
 /**
@@ -16,7 +17,7 @@ public class FlipfitGymOwnerClient {
 	FlipFitGymOwner gymOwner;
 	FlipFitGymOwnerOperations flipfitGymOwnerOperations;
 	Scanner in = new Scanner(System.in);
-	
+	FlipFitGym flipFitGym = new FlipFitGym("Gym1","Bellandur",5,500,false,1);
 	FlipfitGymOwnerClient(){
 	 gymOwner = new FlipFitGymOwner();
 	 flipfitGymOwnerOperations = new FlipFitGymOwnerOperations();
@@ -76,26 +77,27 @@ public class FlipfitGymOwnerClient {
 	}
 
 	public void viewProfile( String email) {
-		
+		flipfitGymOwnerOperations.viewProfile();
 	}
 
 	public void addGym( String email) {
-		
+		flipfitGymOwnerOperations.addGym(flipFitGym);
 	}
 
 	public void editGym(String email) {
-		
+		flipfitGymOwnerOperations.editGym(flipFitGym);
 	}
 
 	public void getGymDetails(String email) {
 		List<FlipFitGym> gymDetails = flipfitGymOwnerOperations.getGymDetail(email);
 		for (FlipFitGym gym : gymDetails) {
-			System.out.println(gym);
+			System.out.println(gym.toString());
 		}
 	}
 
 	public void addSlot() {
-		
+		Slot slot = new Slot();
+		flipfitGymOwnerOperations.addSlot(slot);
 	}
 
 	public void gymOwnerMenu(String email) {

@@ -4,6 +4,7 @@ import com.flipkart.bean.FlipFitGym;
 import com.flipkart.bean.FlipFitGymOwner;
 import com.flipkart.bean.Slot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
@@ -51,7 +52,10 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 	}
 
 	public List<FlipFitGym> getGymDetail(String gymOwnerEmail) {
-		return null;
+		FlipFitGym flipFitGym = new FlipFitGym("Gym1","Bellandur",5,500,false,1);
+		List<FlipFitGym> list = new ArrayList<>();
+		list.add(flipFitGym);
+		return list;
 	}
 
 	public boolean validateCreds(String email, String password) {

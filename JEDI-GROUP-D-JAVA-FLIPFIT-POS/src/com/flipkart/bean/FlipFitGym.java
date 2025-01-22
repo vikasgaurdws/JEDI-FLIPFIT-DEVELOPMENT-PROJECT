@@ -54,5 +54,9 @@ public class FlipFitGym{
 	public void setFlagVerified(Boolean flagVerified) {
 		this.flagVerified = flagVerified;
 	}
-	
+
+	@Override
+	public String toString() {
+        return "Gym id : " + getGymId() + "\nGym Name: " + getGymName() + "\n";
+	}
 }
