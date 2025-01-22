@@ -8,7 +8,7 @@ package com.flipkart.bean;
  */
 public class FlipFitCustomer extends FlipFitGymUser {
 	private Integer customerAge;
-        FlipFitCustomer()
+	public FlipFitCustomer()
 	{
 		this.customerAge = customerAge;
 	}
