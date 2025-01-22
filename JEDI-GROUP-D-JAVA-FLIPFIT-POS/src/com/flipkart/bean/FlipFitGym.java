@@ -57,6 +57,12 @@ public class FlipFitGym{
 
 	@Override
 	public String toString() {
-        return "Gym id : " + getGymId() + "\nGym Name: " + getGymName() + "\n";
+	    return "Gym ID: " + getGymId() + "\n" +
+	           "Gym Name: " + getGymName() + "\n" +
+	           "Location: " + getGymLocation() + "\n" +
+	           "Available Slots: " + getAvailableSlot() + "\n" +
+	           "Price: " + getPrice() + "\n" +
+	           "Verified: " + (getFlagVerified() ? "Yes" : "No") + "\n";
 	}
+
 }
