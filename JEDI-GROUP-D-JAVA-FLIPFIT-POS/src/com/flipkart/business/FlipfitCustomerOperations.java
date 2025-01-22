@@ -6,7 +6,7 @@ package com.flipkart.business;
 /**
  * 
  */
-public class CustomerOperations {
+public class FlipfitCustomerOperations {
 	public void createCustomer()
 	{
 		System.out.println("This method is used to create a Customer");
