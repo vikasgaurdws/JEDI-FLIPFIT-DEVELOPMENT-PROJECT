@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.flipkart.business;
 
 public class SlotOperations {
@@ -19,4 +20,24 @@ public class SlotOperations {
     public String getSlotID() {
         return slotID;
     }
+=======
+/**
+ * 
+ */
+package com.flipkart.business;
+
+/**
+ * 
+ */
+public class SlotOperations {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+>>>>>>> 2b7bc13 (Adding some files)
 }
