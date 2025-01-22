@@ -4,6 +4,12 @@ public class Notification {
 	private Integer bookingId;
 	private Integer slotId;
 	private Enum bookingStatus;
+	Notification()
+	{
+		this.bookingId = bookingId;
+		this.slotId = slotId;
+		this.bookingStatus = bookingStatus;
+	}
 	public Enum getBookingStatus() {
 		return bookingStatus;
 	}
