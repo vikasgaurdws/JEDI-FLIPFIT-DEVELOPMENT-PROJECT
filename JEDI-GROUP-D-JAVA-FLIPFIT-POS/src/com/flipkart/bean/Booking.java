@@ -3,6 +3,7 @@ package com.flipkart.bean;
 import java.time.LocalDateTime;
 import java.time.*;
 public class Booking {
+
 	private Integer userId;
 	private Integer slotId;
 	private Integer gymId;
@@ -10,6 +11,14 @@ public class Booking {
 	private Enum bookingStatus;
 	private LocalDate bookingDate;
 	private Integer bookingId;
+	Booking{
+		 this.userId = userId;
+		 this.slotId = slotId;
+		 this.gymId = gymId;
+		 this.time= time;
+		 this.bookingDate = bookingDate;
+		this.bookingId = bookingId;
+	}
 	public Integer getBookingId() {
 		return bookingId;
 	}
