@@ -2,7 +2,7 @@ package com.flipkart.bean;
 
 public class FlipFitGymOwner extends FlipFitGymUser{
 	private String panNumber;
-	private Long adharNumber;
+	private String adharNumber;
 	private Boolean flagVerified;
 	private Integer gymId;
 	public FlipFitGymOwner()
@@ -19,10 +19,10 @@ public class FlipFitGymOwner extends FlipFitGymUser{
 	public void setPanNumber(String panNumber) {
 		this.panNumber = panNumber;
 	}
-	public Long getAdharNumber() {
+	public String getAdharNumber() {
 		return adharNumber;
 	}
-	public void setAdharNumber(Long adharNumber) {
+	public void setAdharNumber(String adharNumber) {
 		this.adharNumber = adharNumber;
 	}
 	public Boolean getFlagVerified() {
