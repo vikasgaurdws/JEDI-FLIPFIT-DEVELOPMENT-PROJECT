@@ -17,7 +17,7 @@ import java.util.Scanner;
 	public class MainClient {
 		// TODO Auto-generated constructor stub
 		
-	public static void login() {
+	public static void login() throws Exception {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter your Email\n");
 		String email = sc.nextLine();
@@ -38,19 +38,23 @@ import java.util.Scanner;
 			}else {
 				System.out.println("Successfully Logged In");
 			}
-			
-			
+			FlipfitAdminClient flipfitAdminClient = new FlipfitAdminClient();
+			flipfitAdminClient.adminOptions();
+			break;
 		case 2:
-			FlipfitGymOwnerClient FlipfitGymOwnerClient = new FlipfitGymOwnerClient(sc);
+			FlipfitGymOwnerClient flipfitGymOwnerClient = new FlipfitGymOwnerClient();
+			flipfitGymOwnerClient.gymOwnerMenu(email);
+
 			//flipfitGymOwnerClient.       this is to login for user
+			break;
 		case 3:
-			  FlipfitCustomerClient flipfitCustomerClient = new FlipfitCustomerClient(sc);
+			  FlipfitCustomerClient flipfitCustomerClient = new FlipfitCustomerClient();
 			  //flipfitCustomerClient.     this is to login for gymOwner
+			break;
 			
 		}
 	}
-	public static void display()
-	{
+	public static void display() throws Exception {
 		Scanner sc = new Scanner(System.in);
 		boolean menu = true;
 		while(menu) {
@@ -61,19 +65,21 @@ import java.util.Scanner;
 			System.out.println("4.GymOwner Registration");
 			System.out.println("5.Exit");
 			
-			System.out.println("Enter Your Choice\n");
+			System.out.println("Enter Your Choice");
 			
 			int n = sc.nextInt();
 			
 			switch(n) {
-				case 1: login();
+				case 1:
+						login();
+						break;
 				case 2: // It will be implemented later
-				case 3: FlipfitCustomerClient flipfitCustomerClient = new FlipfitCustomerClient(sc);
+				case 3: FlipfitCustomerClient flipfitCustomerClient = new FlipfitCustomerClient();
 						flipfitCustomerClient.registerCustomer();
 						login();
 						break;
 					
-				case 4: FlipfitGymOwnerClient flipfitGymOwnerClient = new FlipfitGymOwnerClient(sc);
+				case 4: FlipfitGymOwnerClient flipfitGymOwnerClient = new FlipfitGymOwnerClient();
 						flipfitGymOwnerClient.gymOwnerRegistration(sc);
 						login();
 						break;
@@ -95,12 +101,12 @@ import java.util.Scanner;
 	/**
 	 * @param args
 	 */
-	public static void main throws InvalidInputException(String[] args) {
-		
+	public static void main(String[] args) throws Exception {
+
 			display();
-		
+
 			System.out.println("Welcome to flipfit");
-			
+
 	}
 
 	

@@ -15,12 +15,11 @@ import com.flipkart.bean.FlipFitGym;
 public class FlipfitGymOwnerClient {
 	FlipFitGymOwner gymOwner;
 	FlipFitGymOwnerOperations flipfitGymOwnerOperations;
-	Scanner in;
+	Scanner in = new Scanner(System.in);
 	
-	FlipfitGymOwnerClient(Scanner sc){
+	FlipfitGymOwnerClient(){
 	 gymOwner = new FlipFitGymOwner();
 	 flipfitGymOwnerOperations = new FlipFitGymOwnerOperations();
-	 this.in=sc;
 	}
 	public void gymOwnerRegistration(Scanner in) {
 		System.out.println("\nEnter GymOwner Details: \n");
@@ -99,7 +98,7 @@ public class FlipfitGymOwnerClient {
 		
 	}
 
-	public void gymOwnerMenu(Scanner in, String email) {
+	public void gymOwnerMenu(String email) {
 		boolean recur = true;
 		while (recur) {
 			System.out.println("\nHere are the actions you can perform!");

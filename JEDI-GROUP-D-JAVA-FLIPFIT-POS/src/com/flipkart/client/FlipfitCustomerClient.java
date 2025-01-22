@@ -8,13 +8,12 @@ import com.flipkart.business.FlipFitCustomerOperations;
 
 public class FlipfitCustomerClient {
 
-    private final Scanner sc;
+    private final Scanner sc = new Scanner(System.in);
     private final FlipFitCustomer flipfitCustomer;  // Using FlipfitCustomer
     private final FlipFitCustomerOperations flipfitCustomerOperations;
 
     // Constructor initializes scanner and customer operations
-    public FlipfitCustomerClient(Scanner sc) {
-        this.sc = sc;
+    public FlipfitCustomerClient() {
         this.flipfitCustomer = new FlipFitCustomer();  // Initialize FlipfitCustomer
         this.flipfitCustomerOperations = new FlipFitCustomerOperations();  // Initialize FlipfitCustomerOperations
     }
