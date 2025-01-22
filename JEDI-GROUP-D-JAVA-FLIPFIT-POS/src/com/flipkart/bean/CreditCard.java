@@ -6,7 +6,7 @@ public class CreditCard {
 	private Long cardNumber;
 	private String name;
 	CreditCard(){
-		this.expiryDate = expityDate;
+		this.expiryDate = expiryDate;
 		this.cvv = cvv;
 		this.cardNumber = cardNumber;
 		this.name= name;

@@ -10,9 +10,9 @@ public class FlipFitGym{
 
         FlipFitGym()
 	{
-		this.gymNmae = gymName;
+		this.gymName = gymName;
 		this.gymLocation = gymLocation;
-		this.availableSlot = avaiableSlot;
+		this.availableSlot = availableSlot;
 		this.price = price;
 		this.flagVerified = flagVerified;
 		this.gymId = gymId;
