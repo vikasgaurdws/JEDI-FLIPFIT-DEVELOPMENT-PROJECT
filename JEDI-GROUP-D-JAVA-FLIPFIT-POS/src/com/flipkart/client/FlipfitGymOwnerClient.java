@@ -3,58 +3,77 @@
  */
 package com.flipkart.client;
 
+import java.util.List;
 import java.util.Scanner;
 
+import com.flipkart.bean.FlipFitGymOwner;
+import com.flipkart.business.FlipFitGymOwnerOperations;
+import com.flipkart.bean.FlipFitGym;
 /**
  * 
  */
 public class FlipfitGymOwnerClient {
-	FlipfitGymOwner gymOwner;
-	FlipfitGymOwnerOperations flipfitGymOwnerOperations;
+	FlipFitGymOwner gymOwner;
+	FlipFitGymOwnerOperations flipfitGymOwnerOperations;
 	Scanner in;
 	
 	FlipfitGymOwnerClient(Scanner sc){
-	 gymOwner = new GymOwner();
-	 gymOwnerBusiness = new GymOwnerBusiness();
+	 gymOwner = new FlipFitGymOwner();
+	 flipfitGymOwnerOperations = new FlipFitGymOwnerOperations();
 	 this.in=sc;
 	}
-	
 	public void gymOwnerRegistration(Scanner in) {
 		System.out.println("\nEnter GymOwner Details: \n");
 		System.out.print("Enter Email: ");
-		gymOwner.setEmail(in.next());
+		gymOwner.setUserEmail(in.next());
 		System.out.print("Enter Password: ");
-		gymOwner.setPassword(in.next());
-		gymOwner.setRoleId("GymOwner");
+		gymOwner.setUserPassword(in.next());
+		gymOwner.setUserRole("GymOwner");
 		System.out.print("Enter Name: ");
-		gymOwner.setName(in.next());
+		gymOwner.setUserName(in.next());
 		System.out.print("Enter Phone Number: ");
-		gymOwner.setPhoneNumber(in.next());
+		gymOwner.setUserMobile(in.next());
 		System.out.print("Enter PAN: ");
 		gymOwner.setPanNumber(in.next());
 		System.out.print("Enter Aadhaar: ");
-		gymOwner.setAadharNumber(in.next());
+		gymOwner.setAdharNumber(in.next());
 
 	 //need to add it to db and get the confirmation
 	}
+    public void login() {
+        in.nextLine();  
+
+        System.out.print("Enter email: ");
+        String email = in.nextLine();
+
+        System.out.print("Enter password: ");
+        String password = in.nextLine();
+
+        // Validate credentials
+        if (flipfitGymOwnerOperations.validateCreds(email, password)) {
+            System.out.println("Login successful!");
+        } else {
+            System.out.println("Invalid email or password.");
+        }
+    }
 
 	public void editProfile(String email) {
 		System.out.println("Enter Details: ");
 		System.out.print("Enter Email: ");
-		gymOwner.setEmail(in.next());
+		gymOwner.setUserEmail(in.next());
 		System.out.print("Enter Password: ");
-		gymOwner.setPassword(in.next());
-		gymOwner.setRoleId("GymOwner");
+		gymOwner.setUserPassword(in.next());
+		gymOwner.setUserRole("GymOwner");
 		System.out.print("Enter Name: ");
-		gymOwner.setName(in.next());
+		gymOwner.setUserName(in.next());
 		System.out.print("Enter Phone Number: ");
-		gymOwner.setPhoneNumber(in.next());
+		gymOwner.setUserMobile(in.next());
 		System.out.print("Enter PAN: ");
 		gymOwner.setPanNumber(in.next());
 		System.out.print("Enter Aadhaar: ");
-		gymOwner.setAadharNumber(in.next());
+		gymOwner.setAdharNumber(in.next());
 
-		gymOwnerBusiness.editProfile(gymOwner);
+		flipfitGymOwnerOperations.editProfile();
 	}
 
 	public void viewProfile( String email) {
@@ -65,18 +84,18 @@ public class FlipfitGymOwnerClient {
 		
 	}
 
-	public void editGym(Scanner in, String email) {
+	public void editGym(String email) {
 		
 	}
 
-	public void getGymDetails(Scanner in, String email) {
-		List<Gym> gymDetails = gymOwnerBusiness.getGymDetail(email);
-		for (Gym gym : gymDetails) {
+	public void getGymDetails(String email) {
+		List<FlipFitGym> gymDetails = flipfitGymOwnerOperations.getGymDetail(email);
+		for (FlipFitGym gym : gymDetails) {
 			System.out.println(gym);
 		}
 	}
 
-	public void addSlot(Scanner in) {
+	public void addSlot() {
 		
 	}
 
@@ -96,7 +115,7 @@ public class FlipfitGymOwnerClient {
 			System.out.print("Enter Your Choice: " );
 
 			System.out.println("______________________________________________________________\n");
-
+			int choice=in.nextInt();
 			switch (choice) {
 			case 1:
 				viewProfile( email);
@@ -120,15 +139,15 @@ public class FlipfitGymOwnerClient {
 				recur = false;
 				break;
 			default:
-				System.out.println(ColorConstants.RED + "Invalid Choice!" + ColorConstants.RESET);
+				System.out.println("Invalid Choice!");
 			}
 			if (!recur) {
-				gymOwner = new GymOwner();
-				boolean logOutSuccess = userBusiness.logout(gymOwner);
-				if (logOutSuccess)
-					System.out.println(ColorConstants.GREEN + "Logged Out Successfully!" + ColorConstants.RESET);
-				else
-					System.out.println(ColorConstants.RED + "Logged Out Successfully!" + ColorConstants.RESET);
+				gymOwner = new FlipFitGymOwner();
+				//boolean logOutSuccess = userBusiness.logout(gymOwner);
+//				if (logOutSuccess)
+//					System.out.println("Logged Out Successfully!");
+//				else
+					System.out.println("Logged Out Successfully!");
 			}
 		}
 
