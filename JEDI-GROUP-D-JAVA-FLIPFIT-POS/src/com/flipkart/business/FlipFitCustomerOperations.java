@@ -2,34 +2,9 @@ package com.flipkart.business;
 
 import com.flipkart.bean.FlipFitCustomer;
 
-import java.util.Iterator;
 
 public class FlipFitCustomerOperations {
-    
-    public void getGyms(){
-        System.out.println("getGyms");
-    }
-    public void getSlots(){
-        System.out.println("getSlots");
-    }
-    public void searchByLocation(){
-        System.out.println("searchLocation");
-    }
-    public void searchByTime(){
-        System.out.println("searchByTime");
-    }
-    public void cancelBooking(){
-        System.out.println("cancelBooking");
-    }
-    public void viewBookings(){
-        System.out.println("viewBookings");
-    }
-    public void bookSlot(){
-        System.out.println("bookSlot");
-    }
-    public void makePayment(){
-        System.out.println("makePayment");
-    }
+
 
     public boolean cancelBooking(String email, String bookingId) {
         System.out.println("Canceled Booking");
