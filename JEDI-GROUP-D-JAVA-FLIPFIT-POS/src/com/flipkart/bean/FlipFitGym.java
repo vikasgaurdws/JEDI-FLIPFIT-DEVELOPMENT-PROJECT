@@ -7,6 +7,17 @@ public class FlipFitGym{
 	private Integer price;
 	private Boolean flagVerified;
 	private Integer gymId;
+
+        FlipFitGym()
+	{
+		this.gymNmae = gymName;
+		this.gymLocation = gymLocation;
+		this.availableSlot = avaiableSlot;
+		this.price = price;
+		this.flagVerified = flagVerified;
+		this.gymId = gymId;
+	}
+	
 	public Integer getGymId() {
 		return gymId;
 	}
