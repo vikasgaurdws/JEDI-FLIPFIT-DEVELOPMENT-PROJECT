@@ -11,7 +11,7 @@ public class Booking {
 	private Enum bookingStatus;
 	private LocalDate bookingDate;
 	private Integer bookingId;
-	Booking{
+	Booking(){
 		 this.userId = userId;
 		 this.slotId = slotId;
 		 this.gymId = gymId;
