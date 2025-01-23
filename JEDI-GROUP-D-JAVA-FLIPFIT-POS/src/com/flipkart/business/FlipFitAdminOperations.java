@@ -1,104 +1,71 @@
-/**
- *
- */
 package com.flipkart.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.flipkart.DAO.FlipFitAdminDAO;
 import com.flipkart.bean.FlipFitGym;
 import com.flipkart.bean.FlipFitGymOwner;
 
-import java.util.List;
+public class FlipFitAdminOperations {
 
-/**
- *
- */
-public class FlipFitAdminOperations{
+    // Simulating DAO object (replace with actual DAO implementation)
+    private final FlipFitAdminDAO adminDAO;
 
-	public void createAdmin(String UserName)
-	{
-		System.out.println("Admin is Created");
-	}
+    // Constructor for dependency injection
+    public FlipFitAdminOperations(FlipFitAdminDAO adminDAO) {
+        this.adminDAO = adminDAO;
+    }
 
+    public void createAdmin(String userName) {
+        adminDAO.createAdmin(userName);
+    }
 
-	public List<FlipFitGymOwner> viewAllGymOwners()
-	{
-		//if() GymOwnerslist is empty
-		System.out.println("No Gym owner found!!");
-//		else
-		System.out.println("All Gym Owners");
+    public List<FlipFitGymOwner> viewAllGymOwners() {
+        List<FlipFitGymOwner> gymOwners = adminDAO.viewAllGymOwners();
+        if (gymOwners.isEmpty()) {
+            System.out.println("No Gym Owners found!");
+            return new ArrayList<>();
+        }
+        return gymOwners;
+    }
 
-		// for Gymowner in GymOwners
-		System.out.println("Gym owner");
-        return null;
+    public List<FlipFitGym> viewGymDetails() {
+        List<FlipFitGym> gyms = adminDAO.viewGymDetails();
+        if (gyms.isEmpty()) {
+            System.out.println("No Gyms found!");
+            return new ArrayList<>();
+        }
+        return gyms;
+    }
 
-	}
+    public void approveGymOwnerRequests(int ownerId) {
+        boolean result = adminDAO.approveGymOwnerRequests(ownerId);
+        if (result) {
+            System.out.println("Gym Owner request with ID " + ownerId + " has been approved.");
+        } else {
+            System.out.println("Gym Owner request with ID " + ownerId + " could not be found.");
+        }
+    }
 
-	public List<FlipFitGym> viewGymDetails()
-	{
-		//if() Gymslist is empty
-		System.out.println("No Gym found!!");
-//		else
-		System.out.println("All Gyms");
+    public void approveGymRequests(int gymId) {
+        boolean result = adminDAO.approveGymRequests(gymId);
+        if (result) {
+            System.out.println("Gym request with ID " + gymId + " has been approved.");
+        } else {
+            System.out.println("Gym request with ID " + gymId + " could not be found.");
+        }
+    }
 
-		// for Gym in Gyms
-		System.out.println("Gym");
-        return null;
+    public List<FlipFitGym> viewPendingGymRequests() {
+        return adminDAO.viewPendingGymRequests();
+    }
 
-	}
+    public List<FlipFitGymOwner> viewPendingGymOwnerRequests() {
+        return adminDAO.viewPendingGymOwnerRequests();
+    }
 
-	public void approveGymOwnerRequests(int ownerId) {
-//        boolean res=adminDAO.approveGymOwnerRequests(ownerId);
-//        if (res){
-		System.out.println("Gym Owner request with ID " + ownerId + " has been approved.");
-//        }
-//        else{
-		System.out.println("Gym Owner request with ID " + ownerId + " could not be found!!");
-//        }
-	}
-
-	/**
-	 * Method to approve gym requests
-	 * @param gymId
-	 */
-//    @Override
-	public void approveGymRequests(int gymId) {
-//        boolean res=adminDAO.approveGymRequests(gymId);
-//        if (res){
-		System.out.println("Gym request with ID " + gymId + " has been approved.");
-//        }
-//        else{
-		System.out.println("Gym request with ID " + gymId + " could not be found!!");
-//        }
-	}
-
-	public void viewPendingGymRequests()
-	{
-//    	GymReqList take it from DAO
-//    	if(GymReqList not empty)
-		System.out.println("All pending Requests");
-//    	for GymReq in List print GymReq
-	}
-	public void viewPendingGymOwnerRequests()
-	{
-//    	GymOwnerReqList take it from DAO
-//    	if(GymOwnerReqList not empty)
-		System.out.println("All pending Requests");
-//    	for GymOwnerReq in List print GymReq
-	}
-
-	public void viewGymUsers(int gymid)
-	{
-//    	GymUserList take it from DAO
-//    	if(GymUserList not empty)
-//    	{
-//    		User id list = GymUserList[gymid]
-//    	    for User in Userlist:
-//    	    System.out.println("User details")
-//    	}
-//    	else
-//    	{
-//        System.out.println("Gym has no users");
-//    	}
-	}
-
-
+    public List<FlipFitGymOwner> viewGymUsers(int gymId) {
+        return adminDAO.viewGymUsers(gymId);
+    }
 }
