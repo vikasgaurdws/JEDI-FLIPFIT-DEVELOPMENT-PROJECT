@@ -1,6 +1,6 @@
 package com.flipkart.bean;
 
-public class FlipFitGym{
+public class FlipFit{
 	private String gymName;
 	private String gymLocation;
 	private Integer availableSlot;
@@ -8,7 +8,7 @@ public class FlipFitGym{
 	private Boolean flagVerified;
 	private Integer gymId;
 
-    public FlipFitGym(String gymName,String gymLocation,Integer availableSlot,Integer price,Boolean flagVerified,Integer gymId)
+    public FlipFit(String gymName,String gymLocation,Integer availableSlot,Integer price,Boolean flagVerified,Integer gymId)
 	{
 		this.gymName = gymName;
 		this.gymLocation = gymLocation;

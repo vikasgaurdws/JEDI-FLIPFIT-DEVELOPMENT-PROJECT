@@ -1,6 +1,6 @@
 package com.flipkart.client;
 
-import com.flipkart.bean.FlipFitGym;
+import com.flipkart.bean.FlipFit;
 import com.flipkart.bean.FlipFitGymOwner;
 import com.flipkart.business.FlipFitAdminOperations;
 
@@ -11,7 +11,7 @@ public class FlipfitAdminClient {
 	FlipFitAdminOperations flipfitAdminOperations = new FlipFitAdminOperations();
 
 	List<FlipFitGymOwner> gymOwnerList;
-	List<FlipFitGym> gymList;
+	List<FlipFit> gymList;
 
 	Scanner sc = new Scanner(System.in);
 

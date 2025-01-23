@@ -3,7 +3,7 @@
  */
 package com.flipkart.business;
 
-import com.flipkart.bean.FlipFitGym;
+import com.flipkart.bean.FlipFit;
 import com.flipkart.bean.FlipFitGymOwner;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class FlipFitAdminOperations{
 
 	}
 
-	public List<FlipFitGym> viewGymDetails()
+	public List<FlipFit> viewGymDetails()
 	{
 		//if() Gymslist is empty
 		System.out.println("No Gym found!!");

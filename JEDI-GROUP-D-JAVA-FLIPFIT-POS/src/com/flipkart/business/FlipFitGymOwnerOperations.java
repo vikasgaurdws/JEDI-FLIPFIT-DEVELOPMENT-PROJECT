@@ -1,6 +1,6 @@
 package com.flipkart.business;
 
-import com.flipkart.bean.FlipFitGym;
+import com.flipkart.bean.FlipFit;
 import com.flipkart.bean.FlipFitGymOwner;
 import com.flipkart.bean.Slot;
 
@@ -27,7 +27,7 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 		System.out.println("Edited your profile Successfully!");
 	}
 	
-	public boolean addGym(FlipFitGym gym) {
+	public boolean addGym(FlipFit gym) {
 		System.out.println("Added");
 		return true;
 	}
@@ -36,7 +36,7 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 		
 	}
 	
-	public void editGym(FlipFitGym gym) {
+	public void editGym(FlipFit gym) {
 		System.out.println("Edited Gym Details Successfully! ");
 	}
 	
@@ -51,10 +51,10 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 		return true;
 	}
 
-	public List<FlipFitGym> getGymDetail(String gymOwnerEmail) {
-		FlipFitGym flipFitGym = new FlipFitGym("Gym1","Bellandur",5,500,false,1);
-		List<FlipFitGym> list = new ArrayList<>();
-		list.add(flipFitGym);
+	public List<FlipFit> getGymDetail(String gymOwnerEmail) {
+		FlipFit flipFit = new FlipFit("Gym1","Bellandur",5,500,false,1);
+		List<FlipFit> list = new ArrayList<>();
+		list.add(flipFit);
 		return list;
 	}
 
