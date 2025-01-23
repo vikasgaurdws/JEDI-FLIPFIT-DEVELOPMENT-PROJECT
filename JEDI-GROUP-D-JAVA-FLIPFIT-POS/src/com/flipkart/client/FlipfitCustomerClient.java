@@ -1,8 +1,11 @@
 package com.flipkart.client;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Scanner;
 
 import com.flipkart.bean.FlipFitCustomer;
+import com.flipkart.bean.Slot;
 import com.flipkart.business.FlipFitCustomerOperations;
 
 
@@ -12,6 +15,7 @@ public class FlipfitCustomerClient {
     private final FlipFitCustomer flipfitCustomer;  // Using FlipfitCustomer
     private final FlipFitCustomerOperations flipfitCustomerOperations;
     private String email;
+    private int userId; //need to carry this forward for further methods
 
     // Constructor initializes scanner and customer operations
     public FlipfitCustomerClient() {
@@ -19,13 +23,14 @@ public class FlipfitCustomerClient {
         this.flipfitCustomerOperations = new FlipFitCustomerOperations();  // Initialize FlipfitCustomerOperations
     }
 
-    // Register a new customer
+    // Register a new customer 
+    // TODO:and get the userID
     public void registerCustomer() {
         System.out.print("Enter Name: ");
         flipfitCustomer.setUserName(sc.next());
 
         System.out.print("Enter email: ");
-        email=sc.next();
+        this.email=sc.next();
         flipfitCustomer.setUserEmail(email);
 
         System.out.print("Enter password: ");
@@ -45,14 +50,9 @@ public class FlipfitCustomerClient {
         System.out.println("Customer registered successfully!");
     }
 
-    public void login() {
+    public void login(String email, String password) {
         sc.nextLine();  
-
-        System.out.print("Enter email: ");
-        email = sc.nextLine();
-
-        System.out.print("Enter password: ");
-        String password = sc.nextLine();
+        this.email=email;
 
         // Validate credentials
         if (flipfitCustomerOperations.validateCreds(email, password)) {
@@ -98,8 +98,25 @@ public class FlipfitCustomerClient {
     }
 
     public void getGyms() {
-        flipfitCustomerOperations.getAvailableGyms().forEach(System.out::println);
-    }
+        flipfitCustomerOperations.getGyms()
+                                 .forEach(gym -> System.out.println(gym)); 
+        
+        System.out.print("Would you like to see the slots for any gym? (yes/no): ");
+        String response = sc.nextLine().trim().toLowerCase();
+
+        if (response.equals("yes")) {
+
+         
+        	bookSlot(this.email);
+
+        } 
+        else {
+        	flipfitCustomerMenu();
+        	
+        }
+
+     }
+
 
     public void searchByLocation() {
         System.out.print("Enter location to search for gyms: ");
@@ -115,18 +132,48 @@ public class FlipfitCustomerClient {
     }
 
     public void bookSlot(String email) {
-        System.out.println("Enter gym name to book: ");
-        String gymName = sc.nextLine();
-        System.out.println("Enter desired time: ");
-        String time = sc.nextLine();
+        
+    	
+        System.out.print("/n Please enter the Gym ID to view available slots: ");
+        int gymId = sc.nextInt();
+        
+        System.out.print("Enter Date (yyyy-mm-dd): ");
+		String dateStr = sc.next();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = dateFormat.parse(dateStr);
+        
+        List<Slot> slots = flipfitCustomerOperations.getSlots(gymId);
+
+         for (Slot slot : slots) {
+             System.out.println(slot);
+         }
+         
+
+        System.out.println("Enter the slot id that you want to book: ");
+		String slotId = sc.next();
         System.out.println("Enter details for payment");
-        makePayment(email);
-        boolean success = flipfitCustomerOperations.bookGymSlot(email, gymName, time);
-        if (success) {
-            System.out.println("Slot booked successfully.");
-        } else {
-            System.out.println("Failed to book the slot.");
-        }
+	      
+        //TODO:check the payment from client to DAO
+	        makePayment(email);
+	        
+        int bookingResponse = flipfitCustomerOperations.bookSlot(gymId,slotId, email, date);
+		
+        switch (bookingResponse) {
+		case 0:
+			System.out.println("You have already booked this time. Cancelling the previous one and booking this slot");
+			break;
+		case 1:
+			System.out.println("Slot is already booked, added to the waiting list");
+			break;
+		case 2:
+			System.out.println("Successfully booked the slot");
+			break;
+		case 3:
+			System.out.println("Slot not found");
+			break;
+		default:
+			System.out.println("Booking failed");
+		}
     }
 
     // Cancel a booking

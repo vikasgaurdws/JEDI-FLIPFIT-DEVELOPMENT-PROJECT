@@ -47,7 +47,7 @@ import java.util.Scanner;
 			break;
 		case 3:
 			  FlipfitCustomerClient flipfitCustomerClient = new FlipfitCustomerClient();
-			  flipfitCustomerClient.login();
+			  flipfitCustomerClient.login(email,password);
 			break;
 			
 		}
@@ -82,8 +82,8 @@ import java.util.Scanner;
 						login();
 						break;
 				case 5: System.out.println("Thank you for visiting\n");
-					System.exit(0);
-					break;
+						System.exit(0);
+						break;
 				default: System.out.println("Wrong Choice\n");
 					
 			}
