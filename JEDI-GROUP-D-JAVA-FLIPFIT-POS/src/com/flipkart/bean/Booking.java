@@ -11,14 +11,7 @@ public class Booking {
 	private String bookingStatus;
 	private LocalDate bookingDate;
 	private Integer bookingId;
-	public Booking(){
-//		 this.userId = userId;
-//		 this.slotId = slotId;
-//		 this.gymId = gymId;
-//		 this.time= time;
-//		 this.bookingDate = bookingDate;
-//		this.bookingId = bookingId;
-	}
+
 	public Integer getBookingId() {
 		return bookingId;
 	}
@@ -61,9 +54,9 @@ public class Booking {
 	public void setBookingDate(LocalDate bookingDate) {
 		this.bookingDate = bookingDate;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 }

@@ -13,15 +13,7 @@ public class FlipFitGymUser {
 	 private String userMobile;
 	 private String userRole;
 	 private Integer userId;
-	public FlipFitGymUser()
-	{
-//		this.userName = userName;
-//		this.userEmail =  userEmail;
-//		this.userPassword = userPassword;
-//		this.userMobile = userMobile;
-//		this.userRole = userRole;
-//		this.userId = userId;
-	}
+
  public Integer getUserId() {
 	return userId;
 }
@@ -59,5 +51,27 @@ public void setUserRole(String userRole) {
 	this.userRole = userRole;
 }
 
- 
+	public FlipFitGymUser() {
+	}
+
+	public FlipFitGymUser(String userName, String userEmail, String userPassword, String userMobile, String userRole, Integer userId) {
+		this.userName = userName;
+		this.userEmail = userEmail;
+		this.userPassword = userPassword;
+		this.userMobile = userMobile;
+		this.userRole = userRole;
+		this.userId = userId;
+	}
+
+	@Override
+	public String toString() {
+		return "FlipFitGymUser{" +
+				"userName='" + userName + '\'' +
+				", userEmail='" + userEmail + '\'' +
+				", userPassword='" + userPassword + '\'' +
+				", userMobile='" + userMobile + '\'' +
+				", userRole='" + userRole + '\'' +
+				", userId=" + userId +
+				'}';
+	}
 }

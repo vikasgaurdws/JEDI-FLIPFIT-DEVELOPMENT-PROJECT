@@ -8,16 +8,6 @@ public class FlipFitGym{
 	private Boolean flagVerified;
 	private Integer gymId;
 
-    public FlipFitGym(String gymName,String gymLocation,Integer availableSlot,Integer price,Boolean flagVerified,Integer gymId)
-	{
-		this.gymName = gymName;
-		this.gymLocation = gymLocation;
-		this.availableSlot = availableSlot;
-		this.price = price;
-		this.flagVerified = flagVerified;
-		this.gymId = gymId;
-	}
-	
 	public Integer getGymId() {
 		return gymId;
 	}
@@ -55,14 +45,28 @@ public class FlipFitGym{
 		this.flagVerified = flagVerified;
 	}
 
-	@Override
-	public String toString() {
-	    return "Gym ID: " + getGymId() + "\n" +
-	           "Gym Name: " + getGymName() + "\n" +
-	           "Location: " + getGymLocation() + "\n" +
-	           "Available Slots: " + getAvailableSlot() + "\n" +
-	           "Price: " + getPrice() + "\n" +
-	           "Verified: " + (getFlagVerified() ? "Yes" : "No") + "\n";
+	public FlipFitGym() {
 	}
 
+	public FlipFitGym(String gymName, String gymLocation, Integer availableSlot, Integer price, Boolean flagVerified, Integer gymId) {
+		this.gymName = gymName;
+		this.gymLocation = gymLocation;
+		this.availableSlot = availableSlot;
+		this.price = price;
+		this.flagVerified = flagVerified;
+		this.gymId = gymId;
+	}
+
+	@Override
+	public String toString() {
+		return "FlipFitGym{" +
+				"gymName='" + gymName + '\'' +
+				", gymLocation='" + gymLocation + '\'' +
+				", availableSlot=" + availableSlot +
+				", price=" + price +
+				", flagVerified=" + flagVerified +
+				", gymId=" + gymId +
+				'}';
+	}
 }
+

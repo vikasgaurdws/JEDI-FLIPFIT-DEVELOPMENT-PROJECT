@@ -6,14 +6,7 @@ public class DebitCard extends Payment{
 	private LocalDate expiryDate;
 	private Integer cvv;
 	private Long cardNumber;
-	public DebitCard(){
-		super();
-//		this.name = name;
-//		 this.expiryDate = expiryDate;
-//		this.cvv = cvv;
-//		this.cardNumber = cardNumber;
-		
-	}
+
 	public Long getCardNumber() {
 		return cardNumber;
 	}
@@ -38,6 +31,24 @@ public class DebitCard extends Payment{
 	public void setCvv(Integer cvv) {
 		this.cvv = cvv;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "DebitCard{" +
+				"name='" + name + '\'' +
+				", expiryDate=" + expiryDate +
+				", cvv=" + cvv +
+				", cardNumber=" + cardNumber +
+				'}';
+	}
+
+	public DebitCard() {
+	}
+
+	public DebitCard(String name, LocalDate expiryDate, Integer cvv, Long cardNumber) {
+		this.name = name;
+		this.expiryDate = expiryDate;
+		this.cvv = cvv;
+		this.cardNumber = cardNumber;
+	}
 }
