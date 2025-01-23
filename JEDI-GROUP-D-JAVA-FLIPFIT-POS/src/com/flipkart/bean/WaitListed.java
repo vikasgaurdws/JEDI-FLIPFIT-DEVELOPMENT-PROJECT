@@ -11,15 +11,7 @@ public class WaitListed {
 
 	private Integer bookingId;
 	
-	public WaitListed()
-	{
-//		this.userId = userId;
-//		this.slotId = slotId;
-//		this.date = date;
-//		this.time = time;
-//		this.waitlistId=waitlistId;
- 		
-	}
+
 	public Integer getWaitlistId() {
 		return waitlistId;
 	}
@@ -50,7 +42,28 @@ public class WaitListed {
 	public void setTime(LocalTime time) {
 		this.time = time;
 	}
-	
-	
-	
+
+	public WaitListed() {
+	}
+
+	@Override
+	public String toString() {
+		return "WaitListed{" +
+				"userId=" + userId +
+				", slotId=" + slotId +
+				", date=" + date +
+				", time=" + time +
+				", waitlistId=" + waitlistId +
+				", bookingId=" + bookingId +
+				'}';
+	}
+
+	public WaitListed(Integer userId, Integer slotId, LocalDate date, LocalTime time, Integer waitlistId, Integer bookingId) {
+		this.userId = userId;
+		this.slotId = slotId;
+		this.date = date;
+		this.time = time;
+		this.waitlistId = waitlistId;
+		this.bookingId = bookingId;
+	}
 }

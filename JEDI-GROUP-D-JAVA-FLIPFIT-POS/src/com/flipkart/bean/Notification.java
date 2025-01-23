@@ -4,12 +4,7 @@ public class Notification {
 	private Integer bookingId;
 	private Integer slotId;
 	private String bookingStatus;
-	public Notification()
-	{
-//		this.bookingId = bookingId;
-//		this.slotId = slotId;
-//		this.bookingStatus = bookingStatus;
-	}
+
 	public String getBookingStatus() {
 		return bookingStatus;
 	}
@@ -27,5 +22,23 @@ public class Notification {
 	}
 	public void setSlotId(Integer slotId) {
 		this.slotId = slotId;
+	}
+
+	public Notification(Integer bookingId, Integer slotId, String bookingStatus) {
+		this.bookingId = bookingId;
+		this.slotId = slotId;
+		this.bookingStatus = bookingStatus;
+	}
+
+	public Notification() {
+	}
+
+	@Override
+	public String toString() {
+		return "Notification{" +
+				"bookingId=" + bookingId +
+				", slotId=" + slotId +
+				", bookingStatus='" + bookingStatus + '\'' +
+				'}';
 	}
 }

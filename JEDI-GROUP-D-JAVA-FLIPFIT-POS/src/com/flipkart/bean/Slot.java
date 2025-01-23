@@ -8,9 +8,6 @@ public class Slot {
     private Integer availableSeats;
     private Integer slotId;
 
-    public Slot() {
-        // Constructor logic
-    }
 
     public Integer getSlotId() {
         return slotId;
@@ -52,15 +49,25 @@ public class Slot {
         this.availableSeats = availableSeats;
     }
 
-    // Override toString method to print all details
+    public Slot() {
+    }
+
     @Override
     public String toString() {
         return "Slot{" +
-               "slotId=" + slotId +
-               ", gymId=" + gymId +
-               ", startTime=" + startTime +
-               ", capacity=" + capacity +
-               ", availableSeats=" + availableSeats +
-               '}';
+                "gymId=" + gymId +
+                ", startTime=" + startTime +
+                ", capacity=" + capacity +
+                ", availableSeats=" + availableSeats +
+                ", slotId=" + slotId +
+                '}';
+    }
+
+    public Slot(Integer gymId, LocalTime startTime, Integer capacity, Integer availableSeats, Integer slotId) {
+        this.gymId = gymId;
+        this.startTime = startTime;
+        this.capacity = capacity;
+        this.availableSeats = availableSeats;
+        this.slotId = slotId;
     }
 }

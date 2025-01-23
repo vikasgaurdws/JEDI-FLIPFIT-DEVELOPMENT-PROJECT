@@ -6,14 +6,6 @@ public class CreditCard {
 	private Long cardNumber;
 	private String name;
 
-public CreditCard(){
-		super();
-//		this.expiryDate = expiryDate;
-//		this.cvv = cvv;
-//		this.cardNumber = cardNumber;
-//		this.name= name;	
-
-	}
 	public String getName() {
 		return name;
 	}
@@ -38,4 +30,25 @@ public CreditCard(){
 	public void setCardNumber(Long cardNumber) {
 		this.cardNumber = cardNumber;
 	}
+
+
+	public CreditCard() {
 	}
+
+	public CreditCard(LocalDate expiryDate, Integer cvv, Long cardNumber, String name) {
+		this.expiryDate = expiryDate;
+		this.cvv = cvv;
+		this.cardNumber = cardNumber;
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "CreditCard{" +
+				"expiryDate=" + expiryDate +
+				", cvv=" + cvv +
+				", cardNumber=" + cardNumber +
+				", name='" + name + '\'' +
+				'}';
+	}
+}

@@ -8,15 +8,7 @@ public class Payment {
 	private Integer amount;
 	private String type;
 	private Integer paymentId;
-	public Payment ()
-	{
-//		this .amount = amount;
-//		this.type =type;
-//		this.paymentId = paymentId;
-//		this.paymentTime = paymentTime;
-//		this.paymentDate= paymentDate;
-		
-	}
+
 	public Integer getPaymentId() {
 		return paymentId;
 	}
@@ -47,8 +39,27 @@ public class Payment {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
-	
-	
 
+
+	public Payment() {
+	}
+
+	public Payment(LocalDate paymentDate, LocalTime paymentTime, Integer amount, String type, Integer paymentId) {
+		this.paymentDate = paymentDate;
+		this.paymentTime = paymentTime;
+		this.amount = amount;
+		this.type = type;
+		this.paymentId = paymentId;
+	}
+
+	@Override
+	public String toString() {
+		return "Payment{" +
+				"paymentDate=" + paymentDate +
+				", paymentTime=" + paymentTime +
+				", amount=" + amount +
+				", type='" + type + '\'' +
+				", paymentId=" + paymentId +
+				'}';
+	}
 }
