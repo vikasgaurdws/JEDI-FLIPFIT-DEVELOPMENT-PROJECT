@@ -1,4 +1,4 @@
-package com.flipkart.dao;
+package com.flipkart.DAO;
 
 import com.flipkart.bean.FlipFitCustomer;
 import com.flipkart.bean.FlipFitGymOwner;
