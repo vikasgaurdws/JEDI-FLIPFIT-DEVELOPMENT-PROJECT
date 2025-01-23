@@ -1,4 +1,4 @@
-package com.flipkart.dao;
+package com.flipkart.DAO;
 
 import java.sql.Connection;
 
@@ -10,7 +10,7 @@ import com.flipkart.bean.*;
 import com.flipkart.constants.SQLConstants;
 import com.flipkart.utils.DBconnection;
 
-public abstract class FlipFitUserDAOImpl implements FlipFitUserDAO {
+public class FlipFitUserDAOImpl implements FlipFitUserDAO {
 
 	public boolean authenticateUser(FlipFitGymUser user) {
 		// to run without authentication, make isUserValid = true
@@ -24,10 +24,10 @@ public abstract class FlipFitUserDAOImpl implements FlipFitUserDAO {
 
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
-				if (user.getUserPassword().equals(rs.getString("password"))
-						&& user.getUserRole().equalsIgnoreCase(rs.getString("role"))) {
+				if (user.getUserPassword().equals(rs.getString("passwordHash"))
+						&& user.getUserRole().equalsIgnoreCase(rs.getString("roleID"))) {
 					System.out.println(
-							rs.getString("email") + " " + rs.getString("password") + " " + rs.getString("role"));
+							rs.getString("email") + " " + rs.getString("passwordHash") + " " + rs.getString("roleID"));
 					isUserValid = true;
 				}
 			}
@@ -42,25 +42,24 @@ public abstract class FlipFitUserDAOImpl implements FlipFitUserDAO {
 	public boolean registerCustomer(FlipFitCustomer customer) {
 		Connection connection = null;
 		boolean registerSuccess = false;
-		String query = "INSERT INTO customer VALUES (?,?,?,?,?)";
+		String query = "INSERT INTO customer VALUES (?,?)";
 		String queryUser = "INSERT INTO user VALUES (?,?,?)";
 		try {connection = DBconnection.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				PreparedStatement preparedStatementUser = connection.prepareStatement(queryUser);
 
-			preparedStatement.setString(1, customer.getUserEmail());
-			preparedStatement.setString(2, customer.getUserName());
-//			preparedStatement.setString(3, customer.getPanNumber());
-			preparedStatement.setInt(4, customer.getCustomerAge());
-//			preparedStatement.setString(1, customer.getAddress());
+			preparedStatement.setInt(1, customer.getUserId());
+			preparedStatement.setInt(2, customer.getCustomerAge());
 
 			int rowsAffected = preparedStatement.executeUpdate();
 			if (rowsAffected != 0)
 				registerSuccess = true;
-
-			preparedStatementUser.setString(1, customer.getUserEmail());
-			preparedStatementUser.setString(2, customer.getUserPassword());
-			preparedStatementUser.setString(3, "Customer");
+			
+			preparedStatementUser.setInt(1, customer.getUserId());
+			preparedStatementUser.setString(2, customer.getUserEmail());
+			preparedStatementUser.setString(3, customer.getUserMobile());
+			preparedStatementUser.setString(4, customer.getUserRole());
+			preparedStatementUser.setString(5, customer.getUserPassword());
 
 			rowsAffected = preparedStatementUser.executeUpdate();
 			if (rowsAffected != 0)
@@ -76,26 +75,27 @@ public abstract class FlipFitUserDAOImpl implements FlipFitUserDAO {
 	public boolean registerGymOwner(FlipFitGymOwner gymOwner) {
 		Connection connection = null;
 		boolean registerSuccess = false;
-		String query = "INSERT INTO gymOwner VALUES (?,?,?,?,?,?)";
-		String queryOwner = "INSERT INTO user VALUES (?,?,?)";
+		String query = "INSERT INTO gymOwner VALUES (?,?,?,?)";
+		String queryOwner = "INSERT INTO user VALUES (?,?,?,?,?)";
 		try {connection = DBconnection.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				PreparedStatement preparedStatementOwner = connection.prepareStatement(queryOwner);
 
-			preparedStatement.setString(1, gymOwner.getUserEmail());
-			preparedStatement.setString(2, gymOwner.getUserName());
-			preparedStatement.setString(3, gymOwner.getUserMobile());
-			preparedStatement.setString(4, gymOwner.getAdharNumber());
-			preparedStatement.setString(5, gymOwner.getPanNumber());
-			preparedStatement.setBoolean(6, gymOwner.getFlagVerified());
+			preparedStatement.setInt(1, gymOwner.getUserId());
+			preparedStatement.setString(2, gymOwner.getUserMobile());
+			preparedStatement.setString(3, gymOwner.getAdharNumber());
+			preparedStatement.setBoolean(4, gymOwner.getFlagVerified());
 
 			int rowsAffected = preparedStatement.executeUpdate();
 			if (rowsAffected != 0)
 				registerSuccess = true;
+			
+			preparedStatementOwner.setInt(1, gymOwner.getUserId());
+			preparedStatementOwner.setString(2, gymOwner.getUserEmail());
+			preparedStatementOwner.setString(3, gymOwner.getUserMobile());
+			preparedStatementOwner.setString(4, gymOwner.getUserRole());
+			preparedStatementOwner.setString(5, gymOwner.getUserPassword());
 
-			preparedStatementOwner.setString(1, gymOwner.getUserEmail());
-			preparedStatementOwner.setString(2, gymOwner.getUserPassword());
-			preparedStatementOwner.setString(3, "GymOwner");
 
 			rowsAffected = preparedStatementOwner.executeUpdate();
 			if (rowsAffected != 0)
