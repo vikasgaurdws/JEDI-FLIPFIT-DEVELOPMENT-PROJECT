@@ -67,11 +67,11 @@ public class FlipfitGymOwnerMenu {
 		System.out.println("Enter Aadhaar: ");
 		gymOwner.setAdharNumber(in.next());
 
-		flipfitGymOwnerOperations.editProfile();
+//		flipfitGymOwnerOperations.editProfile();
 	}
 
 	public void viewProfile( String email) {
-		flipfitGymOwnerOperations.viewProfile();
+//		flipfitGymOwnerOperations.viewProfile();
 	}
 
 	public void addGym( String email) {

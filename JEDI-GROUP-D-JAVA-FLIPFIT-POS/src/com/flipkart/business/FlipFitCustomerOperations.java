@@ -1,51 +1,64 @@
 package com.flipkart.business;
 
+import java.sql.Date;
+import java.util.List;
+
+import com.flipkart.bean.Booking;
 import com.flipkart.bean.FlipFitCustomer;
+import com.flipkart.bean.FlipFitGym;
+import com.flipkart.bean.Slot;
+import com.flipkart.DAO.FlipFitCustomerDAO;
+import com.flipkart.DAO.FlipFitCustomerDAOImpl;
 
 
 public class FlipFitCustomerOperations {
+	FlipFitCustomerDAO flipfitcustomerdao=new FlipFitCustomerDAOImpl();
+//	FlipFitUserDAO flipfituserdao=new FlipFitUserDAOImpli();
 
-
-    public boolean cancelBooking(String email, String bookingId) {
-        System.out.println("Canceled Booking");
+    public boolean cancelBooking(int userId, int bookingId) {
+    	flipfitcustomerdao.cancelBooking(userId,bookingId);
+//        System.out.println("Canceled Booking");
         return true;
     }
 
-    public boolean bookGymSlot(String email, String gymName, String time) {
-        System.out.println("Booked");
-        return true;
+    public int bookGymSlot(int userId,int slotId,int gymId,Date date) {
+        return flipfitcustomerdao.bookSlots(userId,slotId,gymId,date);
     }
 
     public void updateCustomerProfile(FlipFitCustomer flipfitCustomer) {
+    	flipfitcustomerdao.updateCustomerProfile(flipfitCustomer);
     }
 
-    public FlipFitCustomer getCustomerProfile(String email) {
-        return new FlipFitCustomer();
+    public List<FlipFitGym> getAvailableGyms() {
+        return flipfitcustomerdao.getAvailableGyms();
     }
 
-    public Iterable<Object> getAvailableGyms() {
-        return null;
+    public List<FlipFitGym> searchGymsByLocation(String location) {
+        return flipfitcustomerdao.getGymsByLocation(location);
+    }
+    public List<Slot> getSlots(int gymId){
+    	return flipfitcustomerdao.getSlots(gymId);
+    }
+    
+    public void makePayment(int gymId,String paymentType,int bookingId) {
+    	flipfitcustomerdao.makePayment(gymId,paymentType,bookingId);
     }
 
-    public Iterable<Object> searchGymsByLocation(String location) {
-        return null;
+    public List<Booking> getCustomerBookings(int userId) {
+        return flipfitcustomerdao.viewBookings(userId);
     }
-
-    public Iterable<Object> searchGymsByTime(String time) {
-        return null;
+    public FlipFitCustomer getCustomerProfile(int userId) {
+    	return flipfitcustomerdao.getCustomerProfile(userId);
     }
-
-    public Iterable<Object> getCustomerBookings(String email) {
-        return null;
-    }
-
+    // call from user DAO
     public void registerCustomer(FlipFitCustomer flipfitCustomer) {
+    	flipfitcustomerdao.registerCustomer(flipfitCustomer);
         System.out.println("Customer added successfully");
     }
-
-    public boolean validateCreds(String email, String password) {
+    public int validateCreds(String email, String password) {
+    	int id=flipfitcustomerdao.authenticateUser(email,password);// 1 is the int for role of user
         System.out.println("Credentials verified");
-        return true;
+        return id;
     }
 }
 

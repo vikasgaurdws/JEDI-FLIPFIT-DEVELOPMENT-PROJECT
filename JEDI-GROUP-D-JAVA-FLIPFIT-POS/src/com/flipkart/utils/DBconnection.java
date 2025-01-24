@@ -6,7 +6,7 @@ public class DBconnection {
 	private static Connection connection = null;
 	private static String url = "jdbc:mysql://localhost:3306/flipfit_Schema";
 	private static String username = "root";
-	private static String password = "";
+	private static String password = "mysql@123";
 
 	
 	public static Connection getConnection() {
@@ -20,7 +20,7 @@ public class DBconnection {
  	        	Class.forName("com.mysql.cj.jdbc.Driver");
 
  	        	connection = DriverManager.getConnection(url, username, password);
- 	            System.out.println("Connection successful!");
+// 	            System.out.println("Connection successful!");
 
  	           } catch (ClassNotFoundException e) {
  	            System.err.println("MySQL JDBC Driver not found.");

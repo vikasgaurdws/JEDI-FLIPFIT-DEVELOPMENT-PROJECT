@@ -2,9 +2,6 @@
  * 
  */
 package com.flipkart.business;
-
-import com.flipkart.DAO.FlipFitGymOwnerDAOImpl;
-
 import com.flipkart.DAO.FlipFitUserDAOImpl;
 import com.flipkart.bean.FlipFitCustomer;
 import com.flipkart.bean.FlipFitGymOwner;
@@ -14,8 +11,6 @@ import com.flipkart.bean.FlipFitGymUser;
  * 
  */
 public class FlipFitUserOperations{
-	
-	GymOwnerDAOImpl gymOwnerDao = new GymOwnerDAOImpl();
 	FlipFitUserDAOImpl userDao = new FlipFitUserDAOImpl();
 	/**
 	Registers a customer in the system.
