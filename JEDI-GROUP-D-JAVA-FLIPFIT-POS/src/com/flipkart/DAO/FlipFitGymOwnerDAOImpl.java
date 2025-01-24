@@ -112,6 +112,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
         return gyms;
     }
 
+
     @Override
     public boolean addSlot(Slot slot) {
         try (Connection connection = DBconnection.getConnection()) {
@@ -144,6 +145,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
             }
         }
     }
+
 
 	@Override
     public FlipFitGymOwner login(String email, String pass) {
