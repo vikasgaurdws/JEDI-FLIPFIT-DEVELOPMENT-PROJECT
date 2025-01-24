@@ -28,10 +28,10 @@ public class FlipfitAdminMenu {
 	}
 
 	public void viewPendingGymOwnerRequests() {
-		flipfitAdminOperations.viewPendingGymOwnerRequests();
+		flipfitAdminOperations.viewPendingGymOwnerRequests().forEach(System.out::println);
 	}
 	public void viewPendingGymRequests() {
-		flipfitAdminOperations.viewPendingGymRequests();
+		flipfitAdminOperations.viewPendingGymRequests().forEach(System.out::println);
 	}
 	public void approveGymOwnerRequests() {
 		System.out.println("Enter GymOwnerId: ");
@@ -56,10 +56,10 @@ public class FlipfitAdminMenu {
 			System.out.println("2. View pending Gym Requests");
 			System.out.println("3. Approve Gym Owner Request");
 			System.out.println("4. Approve Gym Request");
-			System.out.println("5. view gym users");
-			System.out.println("6. view all gym owners");
-			System.out.println("7. view gym details");
-			System.out.println("8. Exit");
+//			System.out.println("5. view gym users");
+//			System.out.println("5. view all gym owners");
+//			System.out.println("6. view gym details");
+			System.out.println("5. Exit");
 
 			System.out.println("Enter your choice: ");
 			int choice = sc.nextInt();
@@ -82,9 +82,9 @@ public class FlipfitAdminMenu {
 					approveGymRequests();
 					break;
 				case 5:
-					viewGymUsers();
-					break;
-				case 8:
+//					viewGymUsers();
+//					break;
+//				case 8:
 					System.out.println("Exiting...");
 					return;
 

@@ -4,21 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.flipkart.DAO.FlipFitAdminDAO;
+import com.flipkart.DAO.FlipFitAdminDAOImpl;
 import com.flipkart.bean.FlipFitGym;
 import com.flipkart.bean.FlipFitGymOwner;
 
 public class FlipFitAdminOperations {
 
     // Simulating DAO object (replace with actual DAO implementation)
-    private final FlipFitAdminDAO adminDAO;
+    private final FlipFitAdminDAO adminDAO=new FlipFitAdminDAOImpl();
 
     // Constructor for dependency injection
-    public FlipFitAdminOperations(FlipFitAdminDAO adminDAO) {
-        this.adminDAO = adminDAO;
-    }
 
     public void createAdmin(String userName) {
         adminDAO.createAdmin(userName);
+    }
+    
+    public boolean verifyCred(String email, String pwd) {
+    	return adminDAO.verifyCred(email, pwd);
     }
 
     public List<FlipFitGymOwner> viewAllGymOwners() {

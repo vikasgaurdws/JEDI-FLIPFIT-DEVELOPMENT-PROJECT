@@ -10,6 +10,8 @@ public interface FlipFitAdminDAO {
     List<FlipFitGymOwner> viewAllGymOwners();
 
     List<FlipFitGym> viewGymDetails();
+    
+    public boolean verifyCred(String email, String pwd);
 
     boolean approveGymOwnerRequests(int ownerId);
 

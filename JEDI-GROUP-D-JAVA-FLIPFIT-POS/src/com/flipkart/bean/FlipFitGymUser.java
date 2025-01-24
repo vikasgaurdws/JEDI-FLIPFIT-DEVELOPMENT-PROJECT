@@ -12,7 +12,7 @@ public class FlipFitGymUser {
 	 private String userPassword;
 	 private String userMobile;
 	 private String userRole;
-	 private Integer userId;
+	 public Integer userId;
 
  public Integer getUserId() {
 	return userId;
