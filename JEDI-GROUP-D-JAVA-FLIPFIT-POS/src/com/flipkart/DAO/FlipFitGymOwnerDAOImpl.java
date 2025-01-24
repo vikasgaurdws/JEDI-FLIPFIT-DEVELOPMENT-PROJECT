@@ -24,7 +24,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 ownerDetails = new FlipFitGymOwner();
-                ownerDetails.setUserId(resultSet.getInt("gymOwnerID"));
+                ownerDetails.setGymOwnerId(resultSet.getInt("gymOwnerID"));
                 ownerDetails.setPanNumber(resultSet.getString("gymOwnerPAN"));
                 ownerDetails.setAdharNumber(resultSet.getString("gymOwnerAadharNumber"));
                 ownerDetails.setFlagVerified(resultSet.getBoolean("flagVerified"));
