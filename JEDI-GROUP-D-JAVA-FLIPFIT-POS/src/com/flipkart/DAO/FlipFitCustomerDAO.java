@@ -8,6 +8,10 @@ import java.util.List;
 import com.flipkart.bean.*;
 
 public interface FlipFitCustomerDAO {
+	
+	public int registerCustomer(FlipFitCustomer flipFitCustomer );
+	 
+	public int authenticateUser(String email,String password);
 	public List<FlipFitGym> getAvailableGyms();
 	
 	public List<FlipFitGym> getGymsByLocation(String location);

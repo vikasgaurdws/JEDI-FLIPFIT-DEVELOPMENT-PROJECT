@@ -17,9 +17,11 @@ import java.util.List;
 public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
     
     private Connection connection = null;
+    
+
 
     @Override
-    public List<FlipFitGym> getAvailableGyms() {
+     public List<FlipFitGym> getAvailableGyms() {
         List<FlipFitGym> gyms = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet rs = null;
@@ -92,7 +94,7 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	        PreparedStatement statement = null;
 	        ResultSet rs = null;
 	
-	        String query = "SELECT gymSlotID, gymID, startTime, capacity, availableSeats FROM FlipfitGymSlot WHERE gymId = ?";
+	        String query = "SELECT gymSlotID, gymID, startTime, capacity, availableSeats FROM FlipfitGymSlot WHERE gymID = ?";
 	
 	        try {
 	            connection = DBconnection.getConnection();
@@ -151,7 +153,7 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 
 	            System.out.println("Conflict found! Deleting previous booking: " + bookingId);
 	            
-	            // Delete the existing booking
+	            
 	            String deleteQuery = "DELETE FROM FlipFitGymBookSlot WHERE bookingID = ?";
 	            PreparedStatement deleteStmt = connection.prepareStatement(deleteQuery);
 	            deleteStmt.setInt(1, bookingId);
@@ -286,11 +288,37 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    return bookings;
 	}
 
-	
-	public void cancelBooking(int userid,int bookingId)
-	{
-		
+	@Override
+	public void cancelBooking(int userId, int bookingId) {
+	    PreparedStatement statement = null;
+
+	    // SQL query to delete the booking
+	    String query = "DELETE FROM FlipFitBooking WHERE userID = ? AND bookingID = ?";
+
+	    try {
+	        connection = DBconnection.getConnection();
+	        statement = connection.prepareStatement(query);
+	        statement.setInt(1, userId);
+	        statement.setInt(2, bookingId);
+
+	        int affectedRows = statement.executeUpdate();
+
+	        if (affectedRows > 0) {
+	            System.out.println("Booking deleted successfully.");
+	        } else {
+	            System.out.println("No booking found with the given details.");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (statement != null) statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
 	}
+
 	
 	
 	
@@ -412,6 +440,148 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	private int getRoleIDFromRole(String roleName)
+	{
+		int roleId=-1;
+	    PreparedStatement statement = null;
+	    ResultSet rs = null;
+	    
+	    String query = "SELECT roleID FROM Role WHERE roleName = ?";
+	    
+	    try {
+	        connection = DBconnection.getConnection();
+	        
+	        statement = connection.prepareStatement(query);
+	        statement.setString(1, roleName);
+	        
+	        rs = statement.executeQuery();
+	        
+	        if (rs.next()) {
+	        	roleId = rs.getInt("roleID");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Ensure resources are closed
+	        try {
+	            if (rs != null) rs.close();
+	            if (statement != null) statement.close();
+	            if (connection != null) connection.close();
+	        } 
+	        catch (SQLException ex) {
+	            ex.printStackTrace();
+	        }
+	    }
+	    
+	    return roleId;
+
+		
+	}
+	
+	@Override
+	public int registerCustomer(FlipFitCustomer flipFitCustomer) {
+	    PreparedStatement statementUser = null;
+	    PreparedStatement statementCustomer = null;
+	    ResultSet generatedKeys = null;
+	    int userId = -1;
+	    
+	    int roleId= getRoleIDFromRole("Customer");
+
+	    String queryUser = "INSERT INTO FlipFitUser (userName, email, passwordHash, phoneNumber, roleID) VALUES (?, ?, ?, ?, ?)";
+
+	    String queryCustomer = "INSERT INTO FlipFitCustomer (userID, customerAge) VALUES (?, ?)";
+
+	    try {
+	        connection = DBconnection.getConnection();
+	        connection.setAutoCommit(false); // Start transaction
+
+	        // Insert into FlipFitUser table
+	        statementUser = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
+	        statementUser.setString(1, flipFitCustomer.getUserName());
+	        statementUser.setString(2, flipFitCustomer.getUserEmail());
+	        statementUser.setString(3, flipFitCustomer.getUserPassword()); 
+	        statementUser.setString(4, flipFitCustomer.getUserMobile());
+	        statementUser.setInt(5, roleId);
+	        
+	        int affectedRows = statementUser.executeUpdate();
+
+	        if (affectedRows > 0) {
+
+	        	generatedKeys = statementUser.getGeneratedKeys();
+	            if (generatedKeys.next()) {
+	                userId = generatedKeys.getInt(1);
+	                flipFitCustomer.setUserId(userId);
+
+
+	                statementCustomer = connection.prepareStatement(queryCustomer);
+	                statementCustomer.setInt(1, userId);
+	                statementCustomer.setInt(2, flipFitCustomer.getCustomerAge());
+	                statementCustomer.executeUpdate();
+
+	                connection.commit();
+	            }
+	        } else {
+	            System.out.println("User registration failed.");
+	            connection.rollback(); 
+	        }
+	    } catch (SQLException e) {
+	        try {
+	            if (connection != null) {
+	                connection.rollback(); 
+	            }
+	        } catch (SQLException rollbackEx) {
+	            rollbackEx.printStackTrace();
+	        }
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (statementUser != null) statementUser.close();
+	            if (statementCustomer != null) statementCustomer.close();
+	            if (generatedKeys != null) generatedKeys.close();
+	            if (connection != null) connection.setAutoCommit(true); // Reset auto-commit
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    
+	    return userId;
+	    
+	}
+
+	@Override
+	public int authenticateUser(String email, String password) {
+	    PreparedStatement statement = null;
+	    ResultSet rs = null;
+	    int userId = -1; // Default value if authentication fails
+
+	    // SQL query to check if the user exists with the given email and password
+	    String query = "SELECT userID FROM FlipFitUser WHERE email = ? AND passwordHash = ?";
+
+	    try {
+	        connection = DBconnection.getConnection();
+	        statement = connection.prepareStatement(query);
+	        statement.setString(1, email);
+	        statement.setString(2, password); // Ensure password is hashed if stored as a hash in DB
+	        rs = statement.executeQuery();
+
+	        if (rs.next()) {
+	            userId = rs.getInt("userID"); // Authentication successful, return user ID
+	        } else {
+	            System.out.println("Invalid email or password.");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return userId; 
+	}
+
+	   
+
+	
+	
+
 
 
 
