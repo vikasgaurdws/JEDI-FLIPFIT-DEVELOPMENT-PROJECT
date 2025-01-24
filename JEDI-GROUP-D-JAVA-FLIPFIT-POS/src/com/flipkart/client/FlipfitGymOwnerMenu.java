@@ -86,7 +86,7 @@ public class FlipfitGymOwnerMenu {
 
         System.out.println("Enter Password: ");
         gymOwner.setUserPassword(in.next());
-        gymOwner.setUserRole(3);
+        gymOwner.setUserRole(2);
 
         System.out.println("Enter Name: ");
         gymOwner.setUserName(in.next());
