@@ -10,19 +10,19 @@ public interface FlipFitGymOwnerDAO {
      * @param FlipFitGymOwnerEmailId the email ID of the gym owner
      * @return a FlipFitGymOwner object containing the owner's details
      */
-    FlipFitGymOwner getFlipFitGymOwnerDetails(String FlipFitGymOwnerEmailId);
+    FlipFitGymOwner getFlipFitGymOwnerDetails(FlipFitGymOwner gymOwner);
 
     /**
      * Adds a new FlipFit Gym Owner's details to the database.
      * @param FlipFitGymOwnerDetails the FlipFitGymOwner object containing the details to be added
      */
-//    void addFlipFitGymOwnerDetails(FlipFitGymOwner FlipFitGymOwnerDetails);
+//    boolean addFlipFitGymOwnerDetails(FlipFitGymOwner FlipFitGymOwnerDetails);
 
     /**
      * Edits the details of an existing FlipFit Gym Owner in the database.
      * @param FlipFitGymOwnerDetails the FlipFitGymOwner object containing the updated details
      */
-    void editFlipFitGymOwnerDetails(String FlipFitGymOwnerEmailId );
+    boolean editFlipFitGymOwnerDetails(FlipFitGymOwner gymOwner );
 
     /**
      * Retrieves the details of a gym based on its ID.
@@ -35,20 +35,20 @@ public interface FlipFitGymOwnerDAO {
      * Adds a new gym's details to the database.
      * @param gymDetails the FlipFitGym object containing the details to be added
      */
-    void addGym(String FlipFitGymOwnerEmailId);
+    boolean addGym(FlipFitGymOwner gymOwner, FlipFitGym gym);
 
     /**
      * Edits the details of an existing gym in the database.
      * @param gymDetails the FlipFitGym object containing the updated details
      */
-    void editGym(String FlipFitGymOwnerEmailId);
+    boolean editGym(FlipFitGymOwner gymOwner, FlipFitGym gym);
 
     /**
      * Retrieves a list of gyms owned by a specific FlipFit Gym Owner.
      * @param FlipFitGymOwnerId the email ID of the gym owner
      * @return a list of FlipFitGym objects containing the details of the gyms
      */
-    List<FlipFitGym> getGymsOfFlipFitGymOwner(String FlipFitGymOwnerEmailId);
+    List<FlipFitGym> getGymsOfFlipFitGymOwner(FlipFitGymOwner gymOwner);
 
     /**
      * Retrieves a list of possible slots for a specific gym.
@@ -61,7 +61,13 @@ public interface FlipFitGymOwnerDAO {
      * Adds a new slot's details to the database.
      * @param slot the Slot object containing the details to be added
      */
-    void addSlot();
+    boolean addSlot(Slot slot);
+    
+    FlipFitGymOwner login(String email, String Pass);
+    
+    FlipFitGymOwner register(FlipFitGymOwner gymOwner);
+    
+    
 
     /**
      * Checks whether a FlipFit Gym Owner is approved.
