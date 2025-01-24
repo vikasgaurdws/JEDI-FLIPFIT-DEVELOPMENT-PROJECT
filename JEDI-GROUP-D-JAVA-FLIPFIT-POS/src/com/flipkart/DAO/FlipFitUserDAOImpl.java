@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.flipkart.bean.*;
-import com.flipkart.constants.SQLConstants;
 import com.flipkart.utils.DBconnection;
 
 public class FlipFitUserDAOImpl implements FlipFitUserDAO {
@@ -18,7 +17,7 @@ public class FlipFitUserDAOImpl implements FlipFitUserDAO {
 		
 		boolean isUserValid = false;
 		try {connection = DBconnection.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(SQLConstants.SQL_SELECT_USER_LOGIN_CREDENTIAL); 
+				PreparedStatement preparedStatement = connection.prepareStatement("SQLConstants.SQL_SELECT_USER_LOGIN_CREDENTIAL"); 
 
 			preparedStatement.setString(1, user.getUserEmail());
 

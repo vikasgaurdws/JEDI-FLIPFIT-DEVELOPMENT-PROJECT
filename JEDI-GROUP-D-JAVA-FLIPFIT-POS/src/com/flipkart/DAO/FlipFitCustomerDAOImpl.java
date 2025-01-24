@@ -16,7 +16,7 @@ import java.util.List;
 
 public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
     
-    private Connection connection = null;
+    private Connection connection = DBconnection.getConnection();
     
 
 
@@ -29,7 +29,6 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
         String query = "SELECT gymID, gymName, gymLocation, availableSlot, price, flagVerified FROM FlipFitGym Where flagVerified= true ";
 
         try {
-            connection = DBconnection.getConnection();
             
             statement = connection.prepareStatement(query);
             
@@ -59,10 +58,9 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
         PreparedStatement statement = null;
         ResultSet rs = null;
 
-        String query = "SELECT gymID, gymName, gymLocation, availableSlot, price, flagVerified FROM gym WHERE flagVerified= true AND  gymLocation LIKE ?";
+        String query = "SELECT gymID, gymName, gymLocation, availableSlot, price, flagVerified FROM FlipFitGym WHERE flagVerified= true AND  gymLocation LIKE ?";
 
-        try {
-            connection = DBconnection.getConnection();
+        try {;
             
             statement = connection.prepareStatement(query);
             statement.setString(1, "%" + location + "%"); 
@@ -97,7 +95,6 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	        String query = "SELECT gymSlotID, gymID, startTime, capacity, availableSeats FROM FlipfitGymSlot WHERE gymID = ?";
 	
 	        try {
-	            connection = DBconnection.getConnection();
 	            
 	            statement = connection.prepareStatement(query);
 	            statement.setInt(1, gymId);
@@ -132,12 +129,11 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    Time slotStartTime = getSlotStartTime(slotId);
 
 	    // Check if a conflicting booking exists
-	    String checkQuery = "SELECT bookingID, gymID, gymSlotID, bookingDate FROM FlipFitGymBookSlot " +
+	    String checkQuery = "SELECT bookingID, gymID, gymSlotID, bookingDate FROM FlipFitBookSlot " +
 	                        "WHERE userID = ? AND gymSlotID IN (SELECT gymSlotID FROM FlipFitGymSlot WHERE startTime = ?) " +
-	                        "AND bookingDate = ?";
+	                        "AND bookingDate = ? AND bookingStatus !='Cancelled' " ;
 
 	    try {
-	        connection = DBconnection.getConnection();
 	        statement = connection.prepareStatement(checkQuery);
 	        statement.setInt(1, userId);
 	        statement.setTime(2, slotStartTime);
@@ -151,17 +147,18 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	            int existingSlotId = rs.getInt("gymSlotID");
 	            Date existingDate = rs.getDate("bookingDate");
 
-	            System.out.println("Conflict found! Deleting previous booking: " + bookingId);
+	            System.out.println("Conflict found! Cancelling previous booking with ID: " + bookingId);
 	            
 	            
-	            String deleteQuery = "DELETE FROM FlipFitGymBookSlot WHERE bookingID = ?";
+	            String deleteQuery = "UPDATE FlipFitBookSlot SET bookingStatus='Cancelled' WHERE userID = ? AND bookingID = ?";
 	            PreparedStatement deleteStmt = connection.prepareStatement(deleteQuery);
-	            deleteStmt.setInt(1, bookingId);
+	            deleteStmt.setInt(1, userId);
+	            deleteStmt.setInt(2, bookingId);
 	            deleteStmt.executeUpdate();
 	        }
 	        
 	        // Insert the new booking
-	        String insertQuery = "INSERT INTO FlipFitGymBookSlot (userID, gymSlotID, gymID, bookingDate, bookingStatus) " +
+	        String insertQuery = "INSERT INTO FlipFitBookSlot (userID, gymSlotID, gymID, bookingDate, bookingStatus) " +
 	                             "VALUES (?, ?, ?, ?, 'Confirmed')";
 	        PreparedStatement insertStmt = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
 	        insertStmt.setInt(1, userId);
@@ -193,7 +190,6 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    String query = "SELECT startTime FROM FlipfitGymSlot WHERE gymSlotID = ?";
 	    
 	    try {
-	        connection = DBconnection.getConnection();
 	        
 	        statement = connection.prepareStatement(query);
 	        statement.setInt(1, slotId);
@@ -210,7 +206,6 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	        try {
 	            if (rs != null) rs.close();
 	            if (statement != null) statement.close();
-	            if (connection != null) connection.close();
 	        } 
 	        catch (SQLException ex) {
 	            ex.printStackTrace();
@@ -231,10 +226,9 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    PreparedStatement statement = null;
 	    ResultSet rs = null;
 	    
-	    String query = "SELECT COUNT(*) FROM FlipFitGymBookSlot WHERE slotID = ? AND bookingDate = ? AND bookingStatus = 'Confirmed'";
+	    String query = "SELECT COUNT(*) FROM FlipFitBookSlot WHERE slotID = ? AND bookingDate = ? AND bookingStatus = 'Confirmed'";
 	    
 	    try {
-	        connection = DBconnection.getConnection();
 	        statement = connection.prepareStatement(query);
 	        statement.setInt(1, slotId);
 	        statement.setDate(2, java.sql.Date.valueOf(date));
@@ -260,10 +254,9 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    PreparedStatement statement = null;
 	    ResultSet rs = null;
 
-	    String query = "SELECT * FROM booking WHERE userId = ?";
+	    String query = "SELECT * FROM FlipFitBookSlot WHERE userId = ? AND bookingStatus != 'Cancelled'";
 
 	    try {
-	        connection = DBconnection.getConnection();
 	        statement = connection.prepareStatement(query);
 	        statement.setInt(1, userId);
 
@@ -293,10 +286,9 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    PreparedStatement statement = null;
 
 	    // SQL query to delete the booking
-	    String query = "DELETE FROM FlipFitBooking WHERE userID = ? AND bookingID = ?";
+	    String query = "UPDATE FlipFitBookSlot SET bookingStatus='Cancelled' WHERE userID = ? AND bookingID = ?";
 
 	    try {
-	        connection = DBconnection.getConnection();
 	        statement = connection.prepareStatement(query);
 	        statement.setInt(1, userId);
 	        statement.setInt(2, bookingId);
@@ -328,10 +320,9 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    
 	    // SQL queries to update FlipFitUser and FlipFitCustomer
 	    String queryUser = "UPDATE FlipFitUser SET userName = ?, phoneNumber = ?, passwordHash = ? WHERE userID = ?";
-	    String queryCustomer = "UPDATE FlipFitCustomer SET customerAge = ? WHERE userID = ?";
+	    String queryCustomer = "UPDATE FlipFitCustomer SET customerAge = ? WHERE customerID = ?";
 
 	    try {
-	        connection = DBconnection.getConnection();
 	        
 	        // Start a transaction
 	        connection.setAutoCommit(false);
@@ -392,11 +383,10 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    ResultSet rsCustomer = null;
 
 	    // SQL queries to get data from FlipFitUser and FlipFitCustomer
-	    String queryUser = "SELECT userID, userName, email, passwordHash, phoneNumber FROM FlipFitUser WHERE userID = ?";
-	    String queryCustomer = "SELECT customerAge FROM FlipFitCustomer WHERE userID = ?";
+	    String queryUser = "SELECT userName, userID, email, passwordHash, phoneNumber FROM FlipFitUser WHERE userID = ?";
+	    String queryCustomer = "SELECT customerAge FROM FlipFitCustomer WHERE customerID = ?";
 
 	    try {
-	        connection = DBconnection.getConnection();
 	        
 	        // Get data from FlipFitUser table
 	        statementUser = connection.prepareStatement(queryUser);
@@ -450,7 +440,6 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    String query = "SELECT roleID FROM Role WHERE roleName = ?";
 	    
 	    try {
-	        connection = DBconnection.getConnection();
 	        
 	        statement = connection.prepareStatement(query);
 	        statement.setString(1, roleName);
@@ -467,7 +456,6 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	        try {
 	            if (rs != null) rs.close();
 	            if (statement != null) statement.close();
-	            if (connection != null) connection.close();
 	        } 
 	        catch (SQLException ex) {
 	            ex.printStackTrace();
@@ -490,10 +478,9 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 
 	    String queryUser = "INSERT INTO FlipFitUser (userName, email, passwordHash, phoneNumber, roleID) VALUES (?, ?, ?, ?, ?)";
 
-	    String queryCustomer = "INSERT INTO FlipFitCustomer (userID, customerAge) VALUES (?, ?)";
+	    String queryCustomer = "INSERT INTO FlipFitCustomer (customerID, customerAge) VALUES (?, ?)";
 
 	    try {
-	        connection = DBconnection.getConnection();
 	        connection.setAutoCommit(false); // Start transaction
 
 	        // Insert into FlipFitUser table
@@ -559,7 +546,6 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    String query = "SELECT userID FROM FlipFitUser WHERE email = ? AND passwordHash = ?";
 
 	    try {
-	        connection = DBconnection.getConnection();
 	        statement = connection.prepareStatement(query);
 	        statement.setString(1, email);
 	        statement.setString(2, password); // Ensure password is hashed if stored as a hash in DB

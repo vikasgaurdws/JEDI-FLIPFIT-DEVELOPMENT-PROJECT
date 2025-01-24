@@ -75,12 +75,14 @@ public class FlipfitGymOwnerMenu {
         }
     }
 
+
  public void editProfile() {
         FlipFitGymOwner gymOwner = new FlipFitGymOwner();
         System.out.println("\nEnter GymOwner Details: \n");
 
         System.out.println("Enter Email: ");
         gymOwner.setUserEmail(in.next());
+
 
         System.out.println("Enter Password: ");
         gymOwner.setUserPassword(in.next());

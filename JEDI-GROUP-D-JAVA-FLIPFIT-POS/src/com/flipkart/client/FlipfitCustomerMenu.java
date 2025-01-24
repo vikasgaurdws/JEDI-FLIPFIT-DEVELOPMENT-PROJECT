@@ -1,5 +1,5 @@
 package com.flipkart.client;
-
+import java.text.*;
 import java.util.Scanner;
 
 import com.flipkart.bean.FlipFitCustomer;
@@ -12,6 +12,7 @@ public class FlipfitCustomerMenu {
     private final FlipFitCustomer flipfitCustomer;  // Using FlipfitCustomer
     private final FlipFitCustomerOperations flipfitCustomerOperations;
     private String email;
+    private int userId;
 
     // Constructor initializes scanner and customer operations
     public FlipfitCustomerMenu(Scanner sc) {
@@ -49,15 +50,17 @@ public class FlipfitCustomerMenu {
     public void login(String email,String password) {  
 
         // Validate credentials
-        if (flipfitCustomerOperations.validateCreds(email, password)) {
+    	userId=flipfitCustomerOperations.validateCreds(email, password);
+        if (userId!=-1) {
             System.out.println("Login successful!");
+            flipfitCustomer.setUserId(userId);
             flipfitCustomerMenu();
         } else {
             System.out.println("Invalid email or password.");
         }
     }
 
-    public void editProfile(String email) {
+    public void editProfile() {
         System.out.println("Enter password: ");
         flipfitCustomer.setUserPassword(sc.next());
 
@@ -77,8 +80,8 @@ public class FlipfitCustomerMenu {
         System.out.println("Successfully edited your profile");
     }
 
-    public void viewProfile(String email) {
-        FlipFitCustomer customerProfile = flipfitCustomerOperations.getCustomerProfile(email);
+    public void viewProfile() {
+        FlipFitCustomer customerProfile = flipfitCustomerOperations.getCustomerProfile(userId);
         if (customerProfile != null) {
             System.out.println("Customer Profile: ");
             System.out.println("Name: " + customerProfile.getUserName());
@@ -87,47 +90,52 @@ public class FlipfitCustomerMenu {
             System.out.println("Age: " + customerProfile.getCustomerAge());
         } 
         else {
-            System.out.println("No profile found for the given email.");
+            System.out.println("No profile found for the given user.");
         }
     }
 
     public void getGyms() {
         flipfitCustomerOperations.getAvailableGyms().forEach(System.out::println);
+        System.out.println("Enter gym Id to view slots: ");
+        int gymId=sc.nextInt();
+        flipfitCustomerOperations.getSlots(gymId).forEach(System.out::println);
+        bookSlot(gymId);
     }
 
     public void searchByLocation() {
         System.out.println("Enter location to search for gyms: ");
+        sc.nextLine();
         String location = sc.nextLine();
         flipfitCustomerOperations.searchGymsByLocation(location).forEach(System.out::println);
+        System.out.println("Enter gym Id to view slots: ");
+        int gymId=sc.nextInt();
+        flipfitCustomerOperations.getSlots(gymId).forEach(System.out::println);
+        bookSlot(gymId);
     }
 
-    // Search for gyms by available time
-    public void searchByTime() {
-        System.out.println("Enter time to search for available gyms: ");
-        String time = sc.nextLine();
-        flipfitCustomerOperations.searchGymsByTime(time).forEach(System.out::println);
-    }
-
-    public void bookSlot(String email) {
-        System.out.println("Enter gym name to book: ");
-        String gymName = sc.nextLine();
-        System.out.println("Enter desired time: ");
-        String time = sc.nextLine();
-        System.out.println("Enter details for payment");
-        makePayment(email);
-        boolean success = flipfitCustomerOperations.bookGymSlot(email, gymName, time);
-        if (success) {
+    public void bookSlot(int gymId) {
+        System.out.println("Enter slot Id: ");
+        int slotId = sc.nextInt();
+        System.out.println("Enter date: (yyyy-mm-dd)");
+        sc.nextLine();
+        String date=sc.nextLine();
+//        SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+        int success=flipfitCustomerOperations.bookGymSlot(userId,slotId, gymId,java.sql.Date.valueOf(date));
+        if (success!=-1) {
             System.out.println("Slot booked successfully.");
+            System.out.println("Enter payment type: ");
+            String type=sc.nextLine();
+            flipfitCustomerOperations.makePayment(gymId, type, success);;
         } else {
             System.out.println("Failed to book the slot.");
         }
     }
 
     // Cancel a booking
-    public void cancelBooking(String email) {
+    public void cancelBooking() {
         System.out.println("Enter booking ID to cancel: ");
-        String bookingId = sc.nextLine();
-        boolean success = flipfitCustomerOperations.cancelBooking(email, bookingId);
+        int bookingId = sc.nextInt();
+        boolean success = flipfitCustomerOperations.cancelBooking(userId, bookingId);
         if (success) {
             System.out.println("Booking cancelled successfully.");
         } else {
@@ -136,19 +144,13 @@ public class FlipfitCustomerMenu {
     }
 
     // View customer's bookings
-    public void viewBookings(String email) {
-        flipfitCustomerOperations.getCustomerBookings(email).forEach(System.out::println);
+    public void viewBookings() {
+        flipfitCustomerOperations.getCustomerBookings(userId).forEach(System.out::println);
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.println("Do you want to cancel a booking? Enter 1 for yes 0 for no");
         if(sc.nextInt()==1)
-            cancelBooking(email);
+            cancelBooking();
     }
-
-    // Make payment for a booking
-    public void makePayment(String email) {
-       
-    }
-    
     
     public void flipfitCustomerMenu()
     {
@@ -158,11 +160,9 @@ public class FlipfitCustomerMenu {
             System.out.println("2. View profile");
             System.out.println("3. View gyms");
             System.out.println("4. Search gyms by location");
-            System.out.println("5. Search gyms by time");
-            System.out.println("6. Book slots");
-            System.out.println("7. View Bookings");
-            System.out.println("8. Cancel Bookings");
-            System.out.println("9. Exit");
+            System.out.println("5. View Bookings");
+            System.out.println("6. Cancel Bookings");
+            System.out.println("7. Exit");
 
             System.out.print("Enter your choice: ");
             int choice = sc.nextInt();
@@ -170,33 +170,26 @@ public class FlipfitCustomerMenu {
 
 
                 case 1:
-                    editProfile(email);
+                    editProfile();
                     break;
 
                 case 2:
-                    viewProfile(email);
+                    viewProfile();
                     break;
 
                 case 3:
                     getGyms();
                     break;
-
                 case 4:
                     searchByLocation();
                     break;
                 case 5:
-                    searchByTime();
+                    viewBookings();
                     break;
                 case 6:
-                    bookSlot(email);
-                    break;
-                case 7:
-                    viewBookings(email);
-                    break;
-                case 8:
-                	cancelBooking(email);
+                	cancelBooking();
                 	break;
-                case 9:
+                case 7:
                     System.out.println("Exiting...");
                     return;
                 default:
