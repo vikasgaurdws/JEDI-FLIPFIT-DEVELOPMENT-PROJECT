@@ -1,5 +1,7 @@
 package com.flipkart.business;
 
+import com.flipkart.DAO.FlipFitGymOwnerDAOImpl;
+import com.flipkart.DAO.FlipFitUserDAO;
 import com.flipkart.bean.FlipFitGym;
 import com.flipkart.bean.FlipFitGymOwner;
 import com.flipkart.bean.Slot;
@@ -8,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
+
+	private final FlipFitGymOwnerDAOImpl flipFitGymOwnerDAO = new FlipFitGymOwnerDAOImpl();
 	
     public void requestForProfileVerfication(){
         System.out.println("requestForProfileVerfication");
@@ -27,23 +31,24 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 		System.out.println("Edited your profile Successfully!");
 	}
 	
-	public boolean addGym(FlipFitGym gym) {
-		System.out.println("Added");
-		return true;
+	public void addGym(String email) {
+
 	}
 	
 	public void addSlot(Slot slot) {
-		
+		boolean resp = flipFitGymOwnerDAO.addSlot(slot);
+		if(resp){
+			System.out.println("Slot added successfully \n"+slot.toString());
+		}else{
+			System.out.println("Failed to add slot.");
+		}
 	}
 	
 	public void editGym(FlipFitGym gym) {
 		System.out.println("Edited Gym Details Successfully! ");
 	}
 	
-	public void viewGym() {
-		
-	}
-	
+
 	public boolean isGymVerified(String gymId) {
 		return true;
 	}
@@ -51,14 +56,17 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 		return true;
 	}
 
-	public List<FlipFitGym> getGymDetail(String gymOwnerEmail) {
-		FlipFitGym flipFitGym = new FlipFitGym("Gym1","Bellandur",5,500,false,1);
-		List<FlipFitGym> list = new ArrayList<>();
-		list.add(flipFitGym);
-		return list;
+	public List<FlipFitGym> getGymDetail(FlipFitGymOwner gymOwner) {
+
+//		FlipFitGym flipFitGym = new FlipFitGym("Gym1","Bellandur",5,500,false,1);
+//		List<FlipFitGym> list = new ArrayList<>();
+//		list.add(flipFitGym);
+//		return list;
+
+		return flipFitGymOwnerDAO.getGymsOfFlipFitGymOwner(gymOwner);
 	}
 
-	public boolean validateCreds(String email, String password) {
-		return true;
+	public FlipFitGymOwner login(String email, String password) {
+        return flipFitGymOwnerDAO.login(email,password);
 	}
 }

@@ -78,7 +78,7 @@ import java.util.Scanner;
 						break;
 					
 				case 4: FlipfitGymOwnerMenu flipfitGymOwnerClient = new FlipfitGymOwnerMenu(sc);
-						flipfitGymOwnerClient.gymOwnerRegistration(sc);
+						flipfitGymOwnerClient.gymOwnerRegistration();
 						login();
 						break;
 				case 5: System.out.println("Thank you for visiting\n");

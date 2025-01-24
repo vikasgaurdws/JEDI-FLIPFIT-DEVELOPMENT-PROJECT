@@ -44,6 +44,11 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO{
 
 	@Override
 	public void addSlot() {
+
+	}
+
+	@Override
+	public boolean addSlot(Slot slot) {
 		// TODO Auto-generated method stub
 		
 	}
