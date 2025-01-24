@@ -25,7 +25,7 @@ public class FlipFitUserDAOImpl implements FlipFitUserDAO {
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				if (user.getUserPassword().equals(rs.getString("passwordHash"))
-						&& user.getUserRole().equalsIgnoreCase(rs.getString("roleID"))) {
+						&& user.getUserRole().equals(rs.getInt("roleID"))) {
 					System.out.println(
 							rs.getString("email") + " " + rs.getString("passwordHash") + " " + rs.getString("roleID"));
 					isUserValid = true;
@@ -58,7 +58,7 @@ public class FlipFitUserDAOImpl implements FlipFitUserDAO {
 			preparedStatementUser.setInt(1, customer.getUserId());
 			preparedStatementUser.setString(2, customer.getUserEmail());
 			preparedStatementUser.setString(3, customer.getUserMobile());
-			preparedStatementUser.setString(4, customer.getUserRole());
+			preparedStatementUser.setInt(4, customer.getUserRole());
 			preparedStatementUser.setString(5, customer.getUserPassword());
 
 			rowsAffected = preparedStatementUser.executeUpdate();
@@ -72,57 +72,132 @@ public class FlipFitUserDAOImpl implements FlipFitUserDAO {
 		return registerSuccess;
 	}
 
+//	public boolean registerGymOwner(FlipFitGymOwner gymOwner) {
+//		Connection connection = null;
+//		boolean registerSuccess = false;
+////		String query = "INSERT INTO gymOwner VALUES (?,?,?,?)";
+//		String queryOwner = "INSERT INTO FlipFitGymOwner (gymOwnerPAN,gymOwnerAadharNumber) VALUES (?,?)";
+//		
+////		gymOwnerID INT PRIMARY KEY,
+////	    gymOwnerPAN VARCHAR(50),
+////	    gymOwnerAadharNumber VARCHAR(50),
+////	    flagVerified BOOLEAN DEFAULT FALSE,
+//		
+//		String queryUser = "INSERT INTO FlipFitUser (userName, email, passwordHash, phoneNumber, roleID) VALUES (?, ?, ?, ?, ?)";
+//
+//		try {connection = DBconnection.getConnection();
+//				PreparedStatement statementUser = connection.prepareStatement(queryUser);
+//				PreparedStatement preparedStatementOwner = connection.prepareStatement(queryOwner);
+//				
+////			preparedStatementOwner.setInt(1, gymOwner.getUserId());
+////			preparedStatementOwner.setString(2, gymOwner.getUserMobile());
+//			preparedStatementOwner.setString(1, gymOwner.getAdharNumber());
+//			preparedStatementOwner.setString(2, gymOwner.getPanNumber());
+//
+//			int rowsAffected = statementUser.executeUpdate();
+//			if (rowsAffected != 0)
+//				registerSuccess = true;
+//			
+////			preparedStatement.setInt(1, gymOwner.getUserId());
+////			preparedStatement.setString(2, gymOwner.getUserEmail());
+////			preparedStatement.setString(3, gymOwner.getUserMobile());
+////			preparedStatement.setString(4, gymOwner.getUserRole());
+////			preparedStatement.setString(5, gymOwner.getUserPassword());
+//			
+//			 // Insert into FlipFitUser table
+//	        statementUser = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
+//	        statementUser.setString(1, gymOwner.getUserName());
+//	        statementUser.setString(2, gymOwner.getUserEmail());
+//	        statementUser.setString(3, gymOwner.getUserPassword()); 
+//	        statementUser.setString(4, gymOwner.getUserMobile());
+//	        statementUser.setInt(5, 3);
+//
+//
+//			rowsAffected = preparedStatementOwner.executeUpdate();
+//			if (rowsAffected != 0)
+//				registerSuccess = true;
+//
+//		} catch (SQLException e) {
+//			printSQLException(e);
+//		}
+//
+//		return registerSuccess;
+//	}
+	
 	public boolean registerGymOwner(FlipFitGymOwner gymOwner) {
-		Connection connection = null;
-		boolean registerSuccess = false;
-//		String query = "INSERT INTO gymOwner VALUES (?,?,?,?)";
-		String queryOwner = "INSERT INTO FlipFitGymOwner (gymOwnerPAN,gymOwnerAadharNumber) VALUES (?,?)";
-		
-//		gymOwnerID INT PRIMARY KEY,
-//	    gymOwnerPAN VARCHAR(50),
-//	    gymOwnerAadharNumber VARCHAR(50),
-//	    flagVerified BOOLEAN DEFAULT FALSE,
-		
-		String queryUser = "INSERT INTO FlipFitUser (userName, email, passwordHash, phoneNumber, roleID) VALUES (?, ?, ?, ?, ?)";
+	    Connection connection = null;
+	    boolean registerSuccess = false;
+	    String queryUser = "INSERT INTO FlipFitUser (userName, email, passwordHash, phoneNumber, roleID) VALUES (?, ?, ?, ?, ?)";
+	    String queryOwner = "INSERT INTO FlipFitGymOwner (gymOwnerID, gymOwnerPAN, gymOwnerAadharNumber, flagVerified) VALUES (?, ?, ?, DEFAULT)";
 
-		try {connection = DBconnection.getConnection();
-				PreparedStatement statementUser = connection.prepareStatement(queryUser);
-				PreparedStatement preparedStatementOwner = connection.prepareStatement(queryOwner);
-				
-//			preparedStatementOwner.setInt(1, gymOwner.getUserId());
-//			preparedStatementOwner.setString(2, gymOwner.getUserMobile());
-			preparedStatementOwner.setString(1, gymOwner.getAdharNumber());
-			preparedStatementOwner.setString(2, gymOwner.getPanNumber());
+	    try {
+	        connection = DBconnection.getConnection();
+	        connection.setAutoCommit(false); // Start transaction
 
-			int rowsAffected = statementUser.executeUpdate();
-			if (rowsAffected != 0)
-				registerSuccess = true;
-			
-//			preparedStatement.setInt(1, gymOwner.getUserId());
-//			preparedStatement.setString(2, gymOwner.getUserEmail());
-//			preparedStatement.setString(3, gymOwner.getUserMobile());
-//			preparedStatement.setString(4, gymOwner.getUserRole());
-//			preparedStatement.setString(5, gymOwner.getUserPassword());
-			
-			 // Insert into FlipFitUser table
-	        statementUser = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
-	        statementUser.setString(1, gymOwner.getUserName());
-	        statementUser.setString(2, gymOwner.getUserEmail());
-	        statementUser.setString(3, gymOwner.getUserPassword()); 
-	        statementUser.setString(4, gymOwner.getUserMobile());
-	        statementUser.setInt(5, 3);
+	        // Step 1: Insert into FlipFitUser table
+	        try (PreparedStatement statementUser = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS)) {
+	            statementUser.setString(1, gymOwner.getUserName());
+	            statementUser.setString(2, gymOwner.getUserEmail());
+	            statementUser.setString(3, gymOwner.getUserPassword());
+	            statementUser.setString(4, gymOwner.getUserMobile());
+	            statementUser.setInt(5, gymOwner.getUserRole()); // Assuming roleID 3 is for Gym Owners
 
+	            int userRowsInserted = statementUser.executeUpdate();
+	            if (userRowsInserted == 0) {
+	                throw new SQLException("Failed to insert into FlipFitUser. No rows affected.");
+	            }
 
-			rowsAffected = preparedStatementOwner.executeUpdate();
-			if (rowsAffected != 0)
-				registerSuccess = true;
+	            // Retrieve the generated userID
+	            try (ResultSet generatedKeys = statementUser.getGeneratedKeys()) {
+	                if (generatedKeys.next()) {
+	                    int gymOwnerID = generatedKeys.getInt(1);
 
-		} catch (SQLException e) {
-			printSQLException(e);
-		}
+	                    // Step 2: Insert into FlipFitGymOwner table
+	                    try (PreparedStatement preparedStatementOwner = connection.prepareStatement(queryOwner)) {
+	                        preparedStatementOwner.setInt(1, gymOwnerID);
+	                        preparedStatementOwner.setString(2, gymOwner.getPanNumber());
+	                        preparedStatementOwner.setString(3, gymOwner.getAdharNumber());
 
-		return registerSuccess;
+	                        int ownerRowsInserted = preparedStatementOwner.executeUpdate();
+	                        if (ownerRowsInserted > 0) {
+	                            registerSuccess = true;
+	                            gymOwner.setGymOwnerId(gymOwnerID); // Update the gymOwner object with the generated ID
+	                        } else {
+	                            throw new SQLException("Failed to insert into FlipFitGymOwner. No rows affected.");
+	                        }
+	                    }
+	                } else {
+	                    throw new SQLException("Failed to retrieve generated userID.");
+	                }
+	            }
+	        }
+
+	        connection.commit(); // Commit transaction
+	    } catch (SQLException e) {
+	        if (connection != null) {
+	            try {
+	                connection.rollback(); // Rollback transaction in case of failure
+	            } catch (SQLException rollbackEx) {
+	                rollbackEx.printStackTrace();
+	            }
+	        }
+	        printSQLException(e);
+	    } finally {
+//	        if (connection != null) {
+//	            try {
+//	                connection.setAutoCommit(true); // Reset auto-commit to default
+////	                connection.close();
+//	            } catch (SQLException e) {
+//	                e.printStackTrace();
+//	            }
+//	        }
+	    }
+
+	    return registerSuccess;
 	}
+
+
+
 
 	public static void printSQLException(SQLException ex) {
 		for (Throwable e : ex) {

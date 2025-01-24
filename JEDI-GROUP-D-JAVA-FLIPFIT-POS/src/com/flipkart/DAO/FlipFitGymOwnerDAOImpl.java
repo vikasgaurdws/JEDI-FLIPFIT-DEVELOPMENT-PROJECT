@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.flipkart.bean.*;
@@ -122,7 +123,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
             String query = "INSERT INTO FlipFitGymSlot (gymID, startTime, capacity, availableSeats) VALUES (?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, slot.getGymId());
-            preparedStatement.setTimestamp(2, slot.getStartTime());
+            preparedStatement.setTime(2, java.sql.Time.valueOf(slot.getStartTime()));
             preparedStatement.setInt(3, slot.getCapacity());
             preparedStatement.setInt(4, slot.getAvailableSeats());
             int rowsInserted = preparedStatement.executeUpdate();

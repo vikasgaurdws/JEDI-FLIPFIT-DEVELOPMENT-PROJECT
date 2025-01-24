@@ -36,7 +36,7 @@ public class FlipfitCustomerMenu {
         System.out.println("Enter Phone Number: ");
         flipfitCustomer.setUserMobile(sc.next());
 
-        flipfitCustomer.setUserRole("Customer");
+        flipfitCustomer.setUserRole(3);
 
         System.out.println("Enter Age: ");
         flipfitCustomer.setCustomerAge(Integer.valueOf(sc.next()));
