@@ -5,6 +5,8 @@ package com.flipkart.client;
 
 import java.util.Scanner;
 
+import com.flipkart.DAO.FlipFitAdminDAOImpl;
+
 /**
  * 
  */
@@ -31,16 +33,17 @@ import java.util.Scanner;
 		int role = sc.nextInt();
 		switch(role) {
 		case 1:
-			String ad = "admin@flipkart.com";
-			String ps = "admin";
-			if(!email.equals(ad) && !password.equals(ps)) {
-				//We have to throw and Error
-				System.out.println("We have to throw an error\n");
-			}else {
+			FlipFitAdminDAOImpl ob = new FlipFitAdminDAOImpl();
+			if(ob.verifyCred(email, password))
+			{
 				System.out.println("Successfully Logged In");
+				FlipfitAdminMenu flipfitAdminClient = new FlipfitAdminMenu(sc);
+				flipfitAdminClient.adminOptions();
 			}
-			FlipfitAdminMenu flipfitAdminClient = new FlipfitAdminMenu(sc);
-			flipfitAdminClient.adminOptions();
+			else {
+				//We have to throw and Error
+				System.out.println("Invalid credentials.\n");
+			}
 			break;
 		case 2:
 			FlipfitGymOwnerMenu flipfitGymOwnerClient = new FlipfitGymOwnerMenu(sc);
@@ -78,7 +81,7 @@ import java.util.Scanner;
 						break;
 					
 				case 4: FlipfitGymOwnerMenu flipfitGymOwnerClient = new FlipfitGymOwnerMenu(sc);
-						flipfitGymOwnerClient.gymOwnerRegistration(sc);
+						flipfitGymOwnerClient.gymOwnerRegistration();
 						login();
 						break;
 				case 5: System.out.println("Thank you for visiting\n");

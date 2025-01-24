@@ -11,6 +11,8 @@ import com.flipkart.bean.FlipFitGymUser;
  * 
  */
 public class FlipFitUserOperations{
+
+	FlipFitGymOwnerDAOImpl gymOwnerDao = new FlipFitGymOwnerDAOImpl();
 	FlipFitUserDAOImpl userDao = new FlipFitUserDAOImpl();
 	/**
 	Registers a customer in the system.

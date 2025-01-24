@@ -18,6 +18,10 @@ public class FlipFitAdminOperations {
     public void createAdmin(String userName) {
         adminDAO.createAdmin(userName);
     }
+    
+    public boolean verifyCred(String email, String pwd) {
+    	return adminDAO.verifyCred(email, pwd);
+    }
 
     public List<FlipFitGymOwner> viewAllGymOwners() {
         List<FlipFitGymOwner> gymOwners = adminDAO.viewAllGymOwners();
