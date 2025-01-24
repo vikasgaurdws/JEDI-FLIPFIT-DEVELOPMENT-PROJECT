@@ -23,7 +23,7 @@ public interface FlipFitCustomerDAO {
 	
 	public int bookSlots( int userId, int slotId, int gymId, Date date);
 
-	public void makePayment(int gymId, String paymentType, int bookingId);
+	public boolean makePayment(int gymId, String paymentType, int bookingId);
 	
 	public List<Booking> viewBookings(int userid);
 	
