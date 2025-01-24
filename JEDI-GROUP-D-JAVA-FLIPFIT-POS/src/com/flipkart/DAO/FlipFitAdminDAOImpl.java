@@ -21,7 +21,7 @@ public class FlipFitAdminDAOImpl implements FlipFitAdminDAO {
 
     @Override
     public void createAdmin(String userName) {
-        String query = "INSERT INTO Admin (username) VALUES (?)";
+        String query = "INSERT INTO FlipFitAdmin (username) VALUES (?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, userName);
             statement.executeUpdate();
@@ -30,10 +30,31 @@ public class FlipFitAdminDAOImpl implements FlipFitAdminDAO {
             System.err.println("Error creating admin: " + e.getMessage());
         }
     }
+    
+    @Override
+    public boolean verifyCred(String email, String pwd) {
+        String query = "SELECT * FROM FlipFitUser WHERE email = ? AND passwordHash = ? AND roleID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            statement.setString(2, pwd);
+            statement.setString(3, "3"); // Assuming "role" stores roleId as a string
+            
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                // A match is found
+                return true;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error verifying credentials: " + e.getMessage());
+        }
+        // No match found or an error occurred
+        return false;
+    }
+
 
     @Override
     public List<FlipFitGymOwner> viewAllGymOwners() {
-        String query = "SELECT * FROM GymOwners";
+        String query = "SELECT * FROM FlipFitGymOwners";
         List<FlipFitGymOwner> gymOwners = new ArrayList<>();
         try (Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(query)) {
@@ -49,7 +70,7 @@ public class FlipFitAdminDAOImpl implements FlipFitAdminDAO {
 
     @Override
     public List<FlipFitGym> viewGymDetails() {
-        String query = "SELECT * FROM Gyms";
+        String query = "SELECT * FROM FlipFitGym";
         List<FlipFitGym> gyms = new ArrayList<>();
         try (Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(query)) {
@@ -65,7 +86,7 @@ public class FlipFitAdminDAOImpl implements FlipFitAdminDAO {
 
     @Override
     public boolean approveGymOwnerRequests(int ownerId) {
-        String query = "UPDATE GymOwners SET approved = 1 WHERE ownerId = ?";
+        String query = "UPDATE FlipFitGymOwner SET flagVerified = true WHERE gymOwnerId = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, ownerId);
             int rowsAffected = statement.executeUpdate();
@@ -78,7 +99,7 @@ public class FlipFitAdminDAOImpl implements FlipFitAdminDAO {
 
     @Override
     public boolean approveGymRequests(int gymId) {
-        String query = "UPDATE Gyms SET approved = 1 WHERE gymId = ?";
+        String query = "UPDATE FlipFitGym SET flagVerified = true WHERE gymId = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, gymId);
             int rowsAffected = statement.executeUpdate();
@@ -91,12 +112,21 @@ public class FlipFitAdminDAOImpl implements FlipFitAdminDAO {
 
     @Override
     public List<FlipFitGym> viewPendingGymRequests() {
-        String query = "SELECT * FROM Gyms WHERE approved = 0";
+        String query = "SELECT * FROM FlipFitGym WHERE flagVerified = 0";
         List<FlipFitGym> pendingGyms = new ArrayList<>();
         try (Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(query)) {
             while (rs.next()) {
+            	
                 FlipFitGym gym = new FlipFitGym();
+            	gym.setGymId(rs.getInt("gymID"));
+            	gym.setGymName(rs.getString("gymName"));
+            	gym.setGymLocation(rs.getString("gymLocation"));
+            	gym.setPrice(rs.getInt("price"));
+            	if(rs.getInt("flagVerified")==1)
+            		gym.setFlagVerified(true);
+            	else
+            		gym.setFlagVerified(false);
                 pendingGyms.add(gym);
             }
         } catch (SQLException e) {
@@ -107,12 +137,15 @@ public class FlipFitAdminDAOImpl implements FlipFitAdminDAO {
 
     @Override
     public List<FlipFitGymOwner> viewPendingGymOwnerRequests() {
-        String query = "SELECT * FROM GymOwners WHERE approved = 0";
+        String query = "SELECT * FROM FlipFitGymOwner Where flagVerified = 0";
         List<FlipFitGymOwner> pendingOwners = new ArrayList<>();
         try (Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(query)) {
             while (rs.next()) {
                 FlipFitGymOwner owner = new FlipFitGymOwner();
+                owner.setGymOwnerId(rs.getInt("gymOwnerID"));
+                owner.setPanNumber(rs.getString("gymOwnerPAN"));
+                owner.setAdharNumber(rs.getString("gymOwnerAadharNumber"));
                 pendingOwners.add(owner);
             }
         } catch (SQLException e) {

@@ -4,7 +4,7 @@ public class FlipFitGymOwner extends FlipFitGymUser{
 	private String panNumber;
 	private String adharNumber;
 	private Boolean flagVerified;
-	private Integer gymId;
+	private Integer userId;
 
 	public String getPanNumber() {
 		return panNumber;
@@ -24,32 +24,33 @@ public class FlipFitGymOwner extends FlipFitGymUser{
 	public void setFlagVerified(Boolean flagVerified) {
 		this.flagVerified = flagVerified;
 	}
-	public Integer getGymId() {
-		return gymId;
+	public Integer getGymOwnerId() {
+		return userId;
 	}
-	public void setGymId(Integer gymId) {
-		this.gymId = gymId;
+	public void setGymOwnerId(Integer GymOwnerId) {
+		this.userId = GymOwnerId;
 	}
 
 
 	public FlipFitGymOwner() {
 	}
 
-	public FlipFitGymOwner(String panNumber, String adharNumber, Boolean flagVerified, Integer gymId) {
+	public FlipFitGymOwner(String panNumber, String adharNumber, Boolean flagVerified, Integer GymOwnerId) {
 		this.panNumber = panNumber;
 		this.adharNumber = adharNumber;
 		this.flagVerified = flagVerified;
-		this.gymId = gymId;
+		this.userId = GymOwnerId;
 	}
 
 
 	@Override
 	public String toString() {
 		return "FlipFitGymOwner{" +
-				"panNumber='" + panNumber + '\'' +
+				"GymOwnerId='" + userId + '\'' +
+				", panNumber='" + panNumber + '\'' +
 				", adharNumber='" + adharNumber + '\'' +
-				", flagVerified=" + flagVerified +
-				", gymId=" + gymId +
+				", flagVerified=" + flagVerified + 
+//				", userId=" + userId +
 				'}';
 	}
 }
