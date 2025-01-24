@@ -23,17 +23,17 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
         System.out.println("requestGV");
     }
 
-	public void getProfile(FlipFitGym gymOwner) {
+	public void getProfile(FlipFitGymOwner gymOwner) {
 		System.out.println("gym owner details are : ");
 		FlipFitGymOwner gymOwnerProfile = flipFitGymOwnerDAO.getFlipFitGymOwnerDetails(gymOwner);
 		System.out.println(gymOwnerProfile.toString());
     }
 
-	public void editProfile(FlipFitGym gymOwner) {
+	public void editProfile(FlipFitGymOwner gymOwner) {
        boolean chk = flipFitGymOwnerDAO.editFlipFitGymOwnerDetails(gymOwner);
 
 		if(chk){
-			System.out.println("Gym is edited successfully\n"  + gym.toString());
+			System.out.println("Gym is edited successfully\n"  + gymOwner.toString());
 		}
 		else{
 			System.out.println("Try Again");
@@ -41,7 +41,7 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 	}
 	
 
-	public void addGym(FlipFitGym GymOwner,FlipFitGym gym) {
+	public void addGym(FlipFitGymOwner GymOwner,FlipFitGym gym) {
 	    boolean chk = flipFitGymOwnerDAO.addGym(GymOwner,gym);
 		if(chk){
 			System.out.println("Gym is added successfully\n"  + gym.toString());
@@ -65,7 +65,7 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 
 	}
 
-	public void editGym(FlipFitGym GymOwner, FlipFitGym gym) {
+	public void editGym(FlipFitGymOwner GymOwner, FlipFitGym gym) {
 
 		boolean chk = flipFitGymOwnerDAO.editGym(GymOwner,gym);
 		if(chk){
