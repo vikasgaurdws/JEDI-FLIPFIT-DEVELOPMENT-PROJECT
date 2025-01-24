@@ -3,6 +3,7 @@
  */
 package com.flipkart.client;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,6 +17,7 @@ import com.flipkart.bean.FlipFitGym;
 public class FlipfitGymOwnerMenu {
 	FlipFitGymOwner gymOwner;
 	FlipFitGymOwnerOperations flipfitGymOwnerOperations;
+
 	Scanner in;
 	FlipFitGym flipFitGym = new FlipFitGym("Gym1","Bellandur",5,500,false,1);
 	FlipfitGymOwnerMenu(Scanner in){
@@ -91,6 +93,16 @@ public class FlipfitGymOwnerMenu {
 
 	public void addSlot() {
 		Slot slot = new Slot();
+		System.out.println("Enter slot id");
+		slot.setSlotId(Integer.valueOf(in.next()));
+		System.out.println("Enter Gym id");
+		slot.setGymtId(Integer.valueOf(in.next()));
+		System.out.println("Enter Start time");
+		slot.setStartTime(LocalTime.ofSecondOfDay(Integer.parseInt(in.next())));
+		System.out.println("Enter capacity");
+		slot.setCapacity(Integer.valueOf(in.next()));
+		System.out.println("Enter available seats");
+		slot.setAvailableSeats(Integer.valueOf(in.next()));
 		flipfitGymOwnerOperations.addSlot(slot);
 	}
 
