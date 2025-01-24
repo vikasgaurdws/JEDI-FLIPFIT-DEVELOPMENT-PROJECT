@@ -1,14 +1,8 @@
 package com.flipkart.DAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.flipkart.bean.*;
-import com.flipkart.utils.DBconnection;
 
 public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
 
@@ -35,6 +29,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
         }
         return ownerDetails;
     }
+
 
     @Override
     public boolean editFlipFitGymOwnerDetails(FlipFitGymOwner gymOwner) {
@@ -88,6 +83,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
         }
         return false;
     }
+
 
     @Override
     public List<FlipFitGym> getGymsOfFlipFitGymOwner(FlipFitGymOwner gymOwner) {

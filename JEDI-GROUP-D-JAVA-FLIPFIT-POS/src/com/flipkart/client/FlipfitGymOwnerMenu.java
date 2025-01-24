@@ -3,6 +3,7 @@
  */
 package com.flipkart.client;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,6 +15,7 @@ import com.flipkart.bean.FlipFitGym;
 import static java.sql.Types.NULL;
 
 public class FlipfitGymOwnerMenu {
+
 
     FlipFitGymOwner gymOwner;
 
@@ -62,6 +64,7 @@ public class FlipfitGymOwnerMenu {
     }
 
     public void login(String email, String password) {
+
         // Validate credentials
         this.gymOwner = flipfitGymOwnerOperations.login(email, password);
         if (gymOwner != null) {
@@ -72,7 +75,7 @@ public class FlipfitGymOwnerMenu {
         }
     }
 
-    public void editProfile() {
+ public void editProfile() {
         FlipFitGymOwner gymOwner = new FlipFitGymOwner();
         System.out.println("\nEnter GymOwner Details: \n");
 
@@ -143,11 +146,22 @@ public class FlipfitGymOwnerMenu {
             System.out.println(gym.toString());
         }
     }
+  
+public void addSlot() {
+		Slot slot = new Slot();
+		System.out.println("Enter slot id");
+		slot.setSlotId(Integer.valueOf(in.next()));
+		System.out.println("Enter Gym id");
+		slot.setGymId(Integer.valueOf(in.next()));
+		System.out.println("Enter Start time");
+		slot.setStartTime(LocalTime.ofSecondOfDay(Integer.parseInt(in.next())));
+		System.out.println("Enter capacity");
+		slot.setCapacity(Integer.valueOf(in.next()));
+		System.out.println("Enter available seats");
+		slot.setAvailableSeats(Integer.valueOf(in.next()));
+		flipfitGymOwnerOperations.addSlot(slot);
+	}
 
-    public void addSlot() {
-        Slot slot = new Slot();
-        flipfitGymOwnerOperations.addSlot(slot);
-    }
 
     public void gymOwnerMenu(String email) {
         boolean recur = true;
@@ -198,4 +212,5 @@ public class FlipfitGymOwnerMenu {
         }
 
     }
+
 }
