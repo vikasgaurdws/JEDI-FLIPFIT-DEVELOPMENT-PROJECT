@@ -25,7 +25,7 @@ public class FlipFitGymOwner extends FlipFitGymUser{
 		this.flagVerified = flagVerified;
 	}
 	public Integer getGymOwnerId() {
-		return userId;
+		return super.userId;
 	}
 	public void setGymOwnerId(Integer GymOwnerId) {
 		this.userId = GymOwnerId;

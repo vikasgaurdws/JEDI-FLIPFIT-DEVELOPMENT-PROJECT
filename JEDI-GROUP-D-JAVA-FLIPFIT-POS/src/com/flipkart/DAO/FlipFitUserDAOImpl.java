@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.flipkart.bean.*;
 import com.flipkart.utils.DBconnection;
@@ -74,26 +75,42 @@ public class FlipFitUserDAOImpl implements FlipFitUserDAO {
 	public boolean registerGymOwner(FlipFitGymOwner gymOwner) {
 		Connection connection = null;
 		boolean registerSuccess = false;
-		String query = "INSERT INTO gymOwner VALUES (?,?,?,?)";
-		String queryOwner = "INSERT INTO user VALUES (?,?,?,?,?)";
+//		String query = "INSERT INTO gymOwner VALUES (?,?,?,?)";
+		String queryOwner = "INSERT INTO FlipFitGymOwner (gymOwnerPAN,gymOwnerAadharNumber) VALUES (?,?)";
+		
+//		gymOwnerID INT PRIMARY KEY,
+//	    gymOwnerPAN VARCHAR(50),
+//	    gymOwnerAadharNumber VARCHAR(50),
+//	    flagVerified BOOLEAN DEFAULT FALSE,
+		
+		String queryUser = "INSERT INTO FlipFitUser (userName, email, passwordHash, phoneNumber, roleID) VALUES (?, ?, ?, ?, ?)";
+
 		try {connection = DBconnection.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				PreparedStatement statementUser = connection.prepareStatement(queryUser);
 				PreparedStatement preparedStatementOwner = connection.prepareStatement(queryOwner);
+				
+//			preparedStatementOwner.setInt(1, gymOwner.getUserId());
+//			preparedStatementOwner.setString(2, gymOwner.getUserMobile());
+			preparedStatementOwner.setString(1, gymOwner.getAdharNumber());
+			preparedStatementOwner.setString(2, gymOwner.getPanNumber());
 
-			preparedStatement.setInt(1, gymOwner.getUserId());
-			preparedStatement.setString(2, gymOwner.getUserMobile());
-			preparedStatement.setString(3, gymOwner.getAdharNumber());
-			preparedStatement.setBoolean(4, gymOwner.getFlagVerified());
-
-			int rowsAffected = preparedStatement.executeUpdate();
+			int rowsAffected = statementUser.executeUpdate();
 			if (rowsAffected != 0)
 				registerSuccess = true;
 			
-			preparedStatementOwner.setInt(1, gymOwner.getUserId());
-			preparedStatementOwner.setString(2, gymOwner.getUserEmail());
-			preparedStatementOwner.setString(3, gymOwner.getUserMobile());
-			preparedStatementOwner.setString(4, gymOwner.getUserRole());
-			preparedStatementOwner.setString(5, gymOwner.getUserPassword());
+//			preparedStatement.setInt(1, gymOwner.getUserId());
+//			preparedStatement.setString(2, gymOwner.getUserEmail());
+//			preparedStatement.setString(3, gymOwner.getUserMobile());
+//			preparedStatement.setString(4, gymOwner.getUserRole());
+//			preparedStatement.setString(5, gymOwner.getUserPassword());
+			
+			 // Insert into FlipFitUser table
+	        statementUser = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
+	        statementUser.setString(1, gymOwner.getUserName());
+	        statementUser.setString(2, gymOwner.getUserEmail());
+	        statementUser.setString(3, gymOwner.getUserPassword()); 
+	        statementUser.setString(4, gymOwner.getUserMobile());
+	        statementUser.setInt(5, 3);
 
 
 			rowsAffected = preparedStatementOwner.executeUpdate();
