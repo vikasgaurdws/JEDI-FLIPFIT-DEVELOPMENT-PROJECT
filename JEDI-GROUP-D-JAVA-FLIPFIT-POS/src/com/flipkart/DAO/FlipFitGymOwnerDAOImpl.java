@@ -1,15 +1,22 @@
 package com.flipkart.DAO;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.flipkart.bean.*;
+import com.flipkart.utils.DBconnection;
 
 public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
+	
+	Connection connection = DBconnection.getConnection();
 
     @Override
     public FlipFitGymOwner getFlipFitGymOwnerDetails(FlipFitGymOwner gymOwner) {
         FlipFitGymOwner ownerDetails = null;
-        try (Connection connection = DBconnection.getConnection()) {
+        try{
             String query = "SELECT * FROM FlipFitGymOwner JOIN FlipFitUser ON FlipFitGymOwner.gymOwnerID = FlipFitUser.userID WHERE FlipFitUser.email = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, gymOwner.getUserEmail());
@@ -33,7 +40,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
 
     @Override
     public boolean editFlipFitGymOwnerDetails(FlipFitGymOwner gymOwner) {
-        try (Connection connection = DBconnection.getConnection()) {
+        try{
             String query = "UPDATE FlipFitUser JOIN FlipFitGymOwner ON FlipFitUser.userID = FlipFitGymOwner.gymOwnerID SET userName = ?, phoneNumber = ? WHERE email = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, gymOwner.getUserName());
@@ -49,7 +56,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
 
     @Override
     public boolean addGym(FlipFitGymOwner gymOwner, FlipFitGym gym) {
-        try (Connection connection = DBconnection.getConnection()) {
+        try{
             String query = "INSERT INTO FlipFitGym (gymName, gymLocation, ownerID, price, availableSlot) SELECT ?, ?, gymOwnerID, ?, ? FROM FlipFitGymOwner JOIN FlipFitUser ON FlipFitGymOwner.gymOwnerID = FlipFitUser.userID WHERE email = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, gym.getGymName());
@@ -67,7 +74,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
 
     @Override
     public boolean editGym(FlipFitGymOwner gymOwner, FlipFitGym gym) {
-        try (Connection connection = DBconnection.getConnection()) {
+        try{
             String query = "UPDATE FlipFitGym SET gymName = ?, gymLocation = ?, price = ?, availableSlot = ? WHERE gymID = ? AND ownerID = (SELECT gymOwnerID FROM FlipFitGymOwner JOIN FlipFitUser ON FlipFitGymOwner.gymOwnerID = FlipFitUser.userID WHERE email = ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, gym.getGymName());
@@ -88,7 +95,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
     @Override
     public List<FlipFitGym> getGymsOfFlipFitGymOwner(FlipFitGymOwner gymOwner) {
         List<FlipFitGym> gyms = new ArrayList<>();
-        try (Connection connection = DBconnection.getConnection()) {
+        try{
             String query = "SELECT * FROM FlipFitGym WHERE ownerID = (SELECT gymOwnerID FROM FlipFitGymOwner JOIN FlipFitUser ON FlipFitGymOwner.gymOwnerID = FlipFitUser.userID WHERE email = ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, gymOwner.getUserEmail());
@@ -111,7 +118,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
 
     @Override
     public boolean addSlot(Slot slot) {
-        try (Connection connection = DBconnection.getConnection()) {
+        try{
             String query = "INSERT INTO FlipFitGymSlot (gymID, startTime, capacity, availableSeats) VALUES (?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, slot.getGymId());
@@ -146,7 +153,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
 	@Override
     public FlipFitGymOwner login(String email, String pass) {
         FlipFitGymOwner gymOwner = null;
-        try (Connection connection = DBconnection.getConnection()) {
+        try{
             String query = "SELECT * FROM FlipFitUser JOIN FlipFitGymOwner ON FlipFitUser.userID = FlipFitGymOwner.gymOwnerID WHERE email = ? AND passwordHash = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, email);
@@ -170,7 +177,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
 
 	@Override
     public FlipFitGymOwner register(FlipFitGymOwner gymOwner) {
-        try (Connection connection = DBconnection.getConnection()) {
+        try{
             String userInsertQuery = "INSERT INTO FlipFitUser (email, phoneNumber, roleID, passwordHash, userName) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement userStatement = connection.prepareStatement(userInsertQuery, PreparedStatement.RETURN_GENERATED_KEYS);
             userStatement.setString(1, gymOwner.getUserEmail());
