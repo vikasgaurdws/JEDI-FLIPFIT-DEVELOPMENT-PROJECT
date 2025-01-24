@@ -389,7 +389,7 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	            statementCustomer.setInt(1, userId);
 	            rsCustomer = statementCustomer.executeQuery();
 
-	            if (rsCustomer.next()) {
+	            if (rsCustomer.next()) { 
 	                flipFitCustomer.setCustomerAge(rsCustomer.getInt("customerAge"));
 	            } else {
 	                // Handle case where customer-specific info is not found
