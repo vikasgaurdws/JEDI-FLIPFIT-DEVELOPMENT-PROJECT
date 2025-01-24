@@ -6,7 +6,7 @@ public class DBconnection {
 	private static Connection connection = null;
 	private static String url = "jdbc:mysql://localhost:3306/FlipFit_Schema";
 	private static String username = "root";
-	private static String password = "";
+	private static String password = "mysql@123";
 
 	
 	public static Connection getConnection() {

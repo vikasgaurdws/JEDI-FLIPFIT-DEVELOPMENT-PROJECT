@@ -117,8 +117,6 @@ public class FlipfitGymOwnerMenu {
         System.out.println("Enter price");
         flipFitGym.setPrice(in.nextInt());
         flipFitGym.setFlagVerified(false);
-        System.out.println("Enter gym id");
-        flipFitGym.setGymId(in.nextInt());
         
         flipfitGymOwnerOperations.addGym(gymOwner, flipFitGym);
     }
