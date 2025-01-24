@@ -44,7 +44,7 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 	public void addGym(FlipFitGymOwner GymOwner,FlipFitGym gym) {
 	    boolean chk = flipFitGymOwnerDAO.addGym(GymOwner,gym);
 		if(chk){
-			System.out.println("Gym is added successfully\n"  + gym.toString());
+			System.out.println("Gym is added successfully!\n");
 		}
 		else{
 			System.out.println("Try Again");

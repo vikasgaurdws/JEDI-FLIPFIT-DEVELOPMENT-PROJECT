@@ -2,6 +2,7 @@
  * 
  */
 package com.flipkart.business;
+import com.flipkart.DAO.FlipFitGymOwnerDAOImpl;
 import com.flipkart.DAO.FlipFitUserDAOImpl;
 import com.flipkart.bean.FlipFitCustomer;
 import com.flipkart.bean.FlipFitGymOwner;

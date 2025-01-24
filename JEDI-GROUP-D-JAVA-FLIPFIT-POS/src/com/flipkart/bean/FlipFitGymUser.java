@@ -11,7 +11,7 @@ public class FlipFitGymUser {
 	 private String userEmail;
 	 private String userPassword;
 	 private String userMobile;
-	 private String userRole;
+	 private Integer userRole;
 	 public Integer userId;
 
  public Integer getUserId() {
@@ -44,17 +44,17 @@ public String getUserMobile() {
 public void setUserMobile(String userMobile) {
 	this.userMobile = userMobile;
 }
-public String getUserRole() {
+public Integer getUserRole() {
 	return userRole;
 }
-public void setUserRole(String userRole) {
+public void setUserRole(Integer userRole) {
 	this.userRole = userRole;
 }
 
 	public FlipFitGymUser() {
 	}
 
-	public FlipFitGymUser(String userName, String userEmail, String userPassword, String userMobile, String userRole, Integer userId) {
+	public FlipFitGymUser(String userName, String userEmail, String userPassword, String userMobile, Integer userRole, Integer userId) {
 		this.userName = userName;
 		this.userEmail = userEmail;
 		this.userPassword = userPassword;

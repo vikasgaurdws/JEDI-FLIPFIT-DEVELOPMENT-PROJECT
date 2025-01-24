@@ -40,7 +40,7 @@ public class FlipfitGymOwnerMenu {
 
         System.out.println("Enter Password: ");
         gymOwner.setUserPassword(in.next());
-        gymOwner.setUserRole("GymOwner");
+        gymOwner.setUserRole(3);
 
         System.out.println("Enter Name: ");
         gymOwner.setUserName(in.next());
@@ -86,7 +86,7 @@ public class FlipfitGymOwnerMenu {
 
         System.out.println("Enter Password: ");
         gymOwner.setUserPassword(in.next());
-        gymOwner.setUserRole("GymOwner");
+        gymOwner.setUserRole(2);
 
         System.out.println("Enter Name: ");
         gymOwner.setUserName(in.next());
@@ -115,11 +115,9 @@ public class FlipfitGymOwnerMenu {
         System.out.println("Enter available slot");
         flipFitGym.setAvailableSlot(in.nextInt());
         System.out.println("Enter price");
-
+        flipFitGym.setPrice(in.nextInt());
         flipFitGym.setFlagVerified(false);
-        System.out.println("Enter gym id");
-        flipFitGym.setGymId(in.nextInt());
-
+        
         flipfitGymOwnerOperations.addGym(gymOwner, flipFitGym);
     }
 
@@ -133,7 +131,8 @@ public class FlipfitGymOwnerMenu {
         System.out.println("Enter available slot");
         flipFitGym.setAvailableSlot(in.nextInt());
         System.out.println("Enter price");
-
+        flipFitGym.setPrice(in.nextInt());
+        
         flipFitGym.setFlagVerified(false);
         System.out.println("Enter gym id");
         flipFitGym.setGymId(in.nextInt());
