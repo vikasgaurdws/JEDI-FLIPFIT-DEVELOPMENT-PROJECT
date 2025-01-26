@@ -8,7 +8,6 @@ public class Booking {
     private Integer userId;
     private Integer slotId;
     private Integer gymId;
-    private LocalTime time;
     private String bookingStatus;
     private LocalDate bookingDate;
     private Integer bookingId;
@@ -45,13 +44,7 @@ public class Booking {
         this.gymId = gymId;
     }
 
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
-    }
+    
 
     public String getBookingStatus() {
         return bookingStatus;
@@ -76,7 +69,6 @@ public class Booking {
                "User ID: " + userId + "\n" +
                "Slot ID: " + slotId + "\n" +
                "Gym ID: " + gymId + "\n" +
-               "Time: " + time + "\n" +
                "Booking Status: " + bookingStatus + "\n" +
                "Booking Date: " + bookingDate + "\n";
     }

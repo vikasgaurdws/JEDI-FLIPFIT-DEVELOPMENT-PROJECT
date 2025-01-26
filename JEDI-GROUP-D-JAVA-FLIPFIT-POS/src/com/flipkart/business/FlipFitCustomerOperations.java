@@ -1,6 +1,7 @@
 package com.flipkart.business;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.flipkart.bean.Booking;
@@ -13,12 +14,13 @@ import com.flipkart.DAO.FlipFitCustomerDAOImpl;
 
 public class FlipFitCustomerOperations {
 	FlipFitCustomerDAO flipfitcustomerdao=new FlipFitCustomerDAOImpl();
-//	FlipFitUserDAO flipfituserdao=new FlipFitUserDAOImpli();
 
     public boolean cancelBooking(int userId, int bookingId) {
-    	flipfitcustomerdao.cancelBooking(userId,bookingId);
-//        System.out.println("Canceled Booking");
-        return true;
+      
+    	System.out.println("Canceled Booking");
+
+    	return flipfitcustomerdao.cancelBooking(userId,bookingId);
+        
     }
 
     public int bookGymSlot(int userId,int slotId,int gymId,Date date) {
@@ -40,8 +42,8 @@ public class FlipFitCustomerOperations {
     	return flipfitcustomerdao.getSlots(gymId);
     }
     
-    public void makePayment(int gymId,String paymentType,int bookingId) {
-    	flipfitcustomerdao.makePayment(gymId,paymentType,bookingId);
+    public void makePayment(String paymentType,int bookingId, int price) {
+    	flipfitcustomerdao.makePayment(paymentType,bookingId, price);
     }
 
     public List<Booking> getCustomerBookings(int userId) {
@@ -51,14 +53,28 @@ public class FlipFitCustomerOperations {
     	return flipfitcustomerdao.getCustomerProfile(userId);
     }
     // call from user DAO
-    public void registerCustomer(FlipFitCustomer flipfitCustomer) {
-    	flipfitcustomerdao.registerCustomer(flipfitCustomer);
+    public int registerCustomer(FlipFitCustomer flipfitCustomer) {
         System.out.println("Customer added successfully");
+
+    	return flipfitcustomerdao.registerCustomer(flipfitCustomer);
     }
     public int validateCreds(String email, String password) {
     	int id=flipfitcustomerdao.authenticateUser(email,password);// 1 is the int for role of user
         System.out.println("Credentials verified");
         return id;
     }
+
+	public int bookedSeats(int sid, LocalDate locdate) {
+		return flipfitcustomerdao.bookedSeats(sid,locdate);
+		
+	}
+
+	public int joinWaitlist(int userId, int slotId, int gymId, Date valueOf) {
+		return flipfitcustomerdao.waitlist(userId,slotId,gymId,valueOf);
+	}
+
+	public String getUserName(String email, String password) {
+		return flipfitcustomerdao.getUserName(email,password);
+	}
 }
 

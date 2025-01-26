@@ -1,6 +1,7 @@
 package com.flipkart.DAO;
 
 import com.flipkart.bean.*;
+
 import com.flipkart.utils.*;
 
 import java.sql.Connection;
@@ -12,7 +13,7 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
     
@@ -129,7 +130,7 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    Time slotStartTime = getSlotStartTime(slotId);
 
 	    // Check if a conflicting booking exists
-	    String checkQuery = "SELECT bookingID, gymID, gymSlotID, bookingDate FROM FlipFitBookSlot " +
+	    String checkQuery = "SELECT bookingID, gymID, gymSlotID, bookingDate,bookingStatus FROM FlipFitBookSlot " +
 	                        "WHERE userID = ? AND gymSlotID IN (SELECT gymSlotID FROM FlipFitGymSlot WHERE startTime = ?) " +
 	                        "AND bookingDate = ? AND bookingStatus !='Cancelled' " ;
 
@@ -146,8 +147,24 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	            int existingGymId = rs.getInt("gymID");
 	            int existingSlotId = rs.getInt("gymSlotID");
 	            Date existingDate = rs.getDate("bookingDate");
+	            String bookingStatus=rs.getString("bookingStatus");
+	            
+	            if(existingGymId==gymId && slotId==existingSlotId)
+	            {
+	            	return Integer.MIN_VALUE;
+	            }
 
 	            System.out.println("Conflict found! Cancelling previous booking with ID: " + bookingId);
+	            
+	           if(bookingStatus.equals("Confirmed")) {
+	        	   int toPromoteId= firstwaitlistId(existingGymId,existingSlotId,existingDate);
+	        	   if(toPromoteId!=-1)
+	        		   {
+	        		   		promote(toPromoteId);
+	        		   		waitlistPromotionNotification(userId,"Waitlist Promotion");
+	        		   
+	        		   }
+	           }
 	            
 	            
 	            String deleteQuery = "UPDATE FlipFitBookSlot SET bookingStatus='Cancelled' WHERE userID = ? AND bookingID = ?";
@@ -178,6 +195,91 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    }
 	    
 	    return bookingId;
+	}
+
+
+	private void promote(int toPromoteId) {
+	    PreparedStatement updateBookingStatement = null;
+	    PreparedStatement removeFromWaitlistStatement = null;
+
+	    String updateBookingQuery = 
+	        "UPDATE FlipFitBookSlot SET bookingStatus = 'Confirmed' WHERE bookingID = ?";
+	    
+	    String removeFromWaitlistQuery = 
+	        "DELETE FROM FlipFitWaitlist WHERE bookingID = ?";
+
+	    try {
+	        connection = DBconnection.getConnection();
+	        connection.setAutoCommit(false); 
+
+	        // Update booking status to 'Confirmed'
+	        updateBookingStatement = connection.prepareStatement(updateBookingQuery);
+	        updateBookingStatement.setInt(1, toPromoteId);
+	        int updatedRows = updateBookingStatement.executeUpdate();
+
+	        if (updatedRows > 0) {
+	            removeFromWaitlistStatement = connection.prepareStatement(removeFromWaitlistQuery);
+	            removeFromWaitlistStatement.setInt(1, toPromoteId);
+	            removeFromWaitlistStatement.executeUpdate();
+	            
+	        }
+
+	    } catch (SQLException e) {
+	        try {
+	            if (connection != null) connection.rollback();
+	        } catch (SQLException rollbackEx) {
+	            rollbackEx.printStackTrace();
+	        }
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (updateBookingStatement != null) updateBookingStatement.close();
+	            if (removeFromWaitlistStatement != null) removeFromWaitlistStatement.close();
+	            if (connection != null) connection.setAutoCommit(true);
+	        } catch (SQLException e) {	
+	            e.printStackTrace();
+	        }
+	    }
+	}
+
+	private int firstwaitlistId(int existingGymId, int existingSlotId, Date existingDate) {
+	    PreparedStatement findWaitlistedBookingStatement = null;
+	    ResultSet waitlistResultSet = null;
+	    int firstWaitlistedID = -1; 
+	    
+	    String findWaitlistedBookingQuery = 
+	        "SELECT wl.bookingID FROM FlipFitWaitlist wl " +
+	        "JOIN FlipFitBookSlot wb ON wl.bookingID = wb.bookingID " +
+	        "WHERE wb.gymID = ? AND wb.gymSlotID = ? AND wb.bookingDate = ? AND wb.bookingStatus = 'Waitlist' " +
+	        "ORDER BY wl.createdAt ASC LIMIT 1";
+
+	    try {
+	        connection = DBconnection.getConnection();
+
+	        // Prepare and execute the query
+	        findWaitlistedBookingStatement = connection.prepareStatement(findWaitlistedBookingQuery);
+	        findWaitlistedBookingStatement.setInt(1, existingGymId);
+	        findWaitlistedBookingStatement.setInt(2, existingSlotId);
+	        findWaitlistedBookingStatement.setDate(3, new java.sql.Date(existingDate.getTime()));
+
+	        waitlistResultSet = findWaitlistedBookingStatement.executeQuery();
+
+	        if (waitlistResultSet.next()) {
+	            firstWaitlistedID = waitlistResultSet.getInt("bookingID");
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (waitlistResultSet != null) waitlistResultSet.close();
+	            if (findWaitlistedBookingStatement != null) findWaitlistedBookingStatement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return firstWaitlistedID; 
 	}
 
 
@@ -226,7 +328,7 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    PreparedStatement statement = null;
 	    ResultSet rs = null;
 	    
-	    String query = "SELECT COUNT(*) FROM FlipFitBookSlot WHERE slotID = ? AND bookingDate = ? AND bookingStatus = 'Confirmed'";
+	    String query = "SELECT COUNT(*) FROM FlipFitBookSlot WHERE gymSlotID = ? AND bookingDate = ? AND bookingStatus = 'Confirmed'";
 	    
 	    try {
 	        statement = connection.prepareStatement(query);
@@ -255,7 +357,6 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    ResultSet rs = null;
 
 	    String query = "SELECT * FROM FlipFitBookSlot WHERE userId = ? AND bookingStatus != 'Cancelled'";
-
 	    try {
 	        statement = connection.prepareStatement(query);
 	        statement.setInt(1, userId);
@@ -268,7 +369,6 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	            booking.setUserId(rs.getInt("userID"));
 	            booking.setSlotId(rs.getInt("gymslotID"));
 	            booking.setGymId(rs.getInt("gymID"));
-//	            booking.setTime(rs.getTime("time").toLocalTime());
 	            booking.setBookingStatus(rs.getString("bookingStatus"));
 	            booking.setBookingDate(rs.getDate("bookingDate").toLocalDate());
 	            
@@ -281,25 +381,67 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    return bookings;
 	}
 
-	@Override
-	public void cancelBooking(int userId, int bookingId) {
-	    PreparedStatement statement = null;
-
-	    // SQL query to delete the booking
+	private boolean cancelBookingHelper(int userId, int bookingId)
+	{
+		 PreparedStatement statement = null;
+		    ResultSet rs = null;
+		   
 	    String query = "UPDATE FlipFitBookSlot SET bookingStatus='Cancelled' WHERE userID = ? AND bookingID = ?";
 
-	    try {
-	        statement = connection.prepareStatement(query);
+		try
+		{
+			statement = connection.prepareStatement(query);
 	        statement.setInt(1, userId);
 	        statement.setInt(2, bookingId);
 
 	        int affectedRows = statement.executeUpdate();
 
 	        if (affectedRows > 0) {
-	            System.out.println("Booking deleted successfully.");
-	        } else {
-	            System.out.println("No booking found with the given details.");
+	            return true;
+	        } 
+		}
+		catch (SQLException e) {
+	        e.printStackTrace();
+	    } 
+		
+		return false;
+	}
+	@Override
+	public boolean cancelBooking(int userId, int bookingId) {
+	    PreparedStatement statement = null;
+	    ResultSet rs = null;
+	    int existingGymId = -1, existingSlotId = -1;
+	    Date existingBookingDate = null;
+	    String existingBookingStatus = null;
+
+	    // Fetch gymId, slotId, and bookingDate before cancellation
+	    String fetchQuery = "SELECT gymID, gymSlotID, bookingDate,bookingStatus FROM FlipFitBookSlot WHERE userID = ? AND bookingID = ?";
+
+	    try {
+	        statement = connection.prepareStatement(fetchQuery);
+	        statement.setInt(1, userId);
+	        statement.setInt(2, bookingId);
+	        rs = statement.executeQuery();
+
+	        if (rs.next()) {
+	            existingGymId = rs.getInt("gymID");
+	            existingSlotId = rs.getInt("gymSlotID");
+	            existingBookingDate = rs.getDate("bookingDate");
+	            existingBookingStatus=rs.getString("bookingStatus");
 	        }
+	    
+	        if(existingBookingStatus.equals("Waitlist"))
+	        {
+	        	return cancelBookingHelper(userId,bookingId);
+	        	
+	        }
+
+	       int toPromoteId= firstwaitlistId(existingGymId,existingSlotId,existingBookingDate);
+     	   if(toPromoteId!=-1)promote(toPromoteId);
+     	   
+     	   	return cancelBookingHelper(userId,bookingId);
+	        
+	       
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    } finally {
@@ -309,6 +451,7 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	            e.printStackTrace();
 	        }
 	    }
+		return false;
 	}
 
 	
@@ -425,11 +568,7 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    return flipFitCustomer;
 	}
 
-	@Override
-	public void makePayment(int gymId, String paymentType, int bookingId) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	
 	private int getRoleIDFromRole(String roleName)
 	{
@@ -532,15 +671,22 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	        }
 	    }
 	    
+	    if(userId!=-1)
+	    {
+//	    	registrationNotification(userId,"Registered Successfully")
+	    }
+	    
 	    return userId;
 	    
 	}
 
+	
+	
 	@Override
 	public int authenticateUser(String email, String password) {
 	    PreparedStatement statement = null;
 	    ResultSet rs = null;
-	    int userId = -1; // Default value if authentication fails
+	    int userId = -1; 
 
 	    // SQL query to check if the user exists with the given email and password
 	    String query = "SELECT userID FROM FlipFitUser WHERE email = ? AND passwordHash = ?";
@@ -564,8 +710,132 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	}
 
 	   
+	@Override
+	public boolean makePayment(String paymentType, int bookingId, int price) {
+
+		PreparedStatement paymentStatement = null;
+	    ResultSet rs = null;
+
+	    String paymentQuery = "INSERT INTO FlipFitPayment (bookingID, paymentType, paymentAmount, paymentDate,paymentTime) VALUES ( ?, ?, ?, NOW(),NOW())";
+	    try {
+	        connection = DBconnection.getConnection();
+	        
+	        paymentStatement = connection.prepareStatement(paymentQuery);
+	        paymentStatement.setInt(1, bookingId);
+	        paymentStatement.setString(2, paymentType);
+	        paymentStatement.setInt(3, price);
+	        int paymentRows = paymentStatement.executeUpdate();
+	        return paymentRows > 0;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            if (paymentStatement != null) paymentStatement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	}
+
+	@Override
+	public int waitlist(int userId, int slotId, int gymId, Date bookingDate) {
+	    PreparedStatement statement = null;
+	    ResultSet rs = null;
+	    int waitlistId = -1;
+	    Time slotStartTime = getSlotStartTime(slotId);
+
+	    // Check if a conflicting booking exists
+	    String checkQuery = "SELECT bookingID FROM FlipFitBookSlot " +
+	                        "WHERE userID = ? AND gymSlotID IN " +
+	                        "(SELECT gymSlotID FROM FlipFitGymSlot WHERE startTime = ?) " +
+	                        "AND bookingDate = ? ";
+	    try {
+	        statement = connection.prepareStatement(checkQuery);
+	        statement.setInt(1, userId);
+	        statement.setTime(2, slotStartTime);
+	        statement.setDate(3, bookingDate);
+	        rs = statement.executeQuery();
+
+	        if (rs.next()) {
+	            return -1; // Conflict found with a confirmed booking
+	        }
+
+	        String insertQuery = "INSERT INTO FlipFitBookSlot (userID, gymSlotID, gymID, bookingDate, bookingStatus) " +
+	                             "VALUES (?, ?, ?, ?, 'Waitlist')";
+	        PreparedStatement insertStmt = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
+	        insertStmt.setInt(1, userId);
+	        insertStmt.setInt(2, slotId);
+	        insertStmt.setInt(3, gymId);
+	        insertStmt.setDate(4, bookingDate);
+	        insertStmt.executeUpdate();
+
+	        ResultSet generatedKeys = insertStmt.getGeneratedKeys();
+	        if (generatedKeys.next()) {
+	            waitlistId = generatedKeys.getInt(1);
+	        }
+
+	        String waitlistQuery = "INSERT INTO FlipFitWaitlist (bookingID, createdAt) VALUES (?, NOW())";
+	        PreparedStatement waitlistStmt = connection.prepareStatement(waitlistQuery);
+	        waitlistStmt.setInt(1, waitlistId);
+	        waitlistStmt.executeUpdate();
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            if (statement != null) statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return waitlistId;
+	}
+
+	@Override
+	public String getUserName(String email, String password) {
+	    PreparedStatement statement = null;
+	    ResultSet rs = null;
+	    String userName = null; 
+
+	    // SQL query to check if the user exists with the given email and password
+	    String query = "SELECT userName FROM FlipFitUser WHERE email = ? AND passwordHash = ?";
+
+	    try {
+	        statement = connection.prepareStatement(query);
+	        statement.setString(1, email);
+	        statement.setString(2, password); // Ensure password is hashed if stored as a hash in DB
+	        rs = statement.executeQuery();
+
+	        if (rs.next()) {
+	            userName = rs.getString("userName"); // If user exists, retrieve the userName
+	        } else {
+	            System.out.println("Invalid email or password.");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return userName; // Return the userName, or null if authentication failed
+	}
 
 	
+
+//	@Override
+//	public void registrationNotification(int userId, String status)
+//	{
+//		
+//	}
+	
+	
+	
+	public void waitlistPromotionNotification(int userId, String status)
+	{
+		System.out.println("userID: " +userId+ "hasbeen promoted");
+	}
 	
 
 
@@ -576,7 +846,7 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
     
     
     
-//TODO: waitlist(),waitlistpromotion(),bookingNotification(),makePayment()
+//TODO: bookingNotification(),makePayment()
     
     
 
