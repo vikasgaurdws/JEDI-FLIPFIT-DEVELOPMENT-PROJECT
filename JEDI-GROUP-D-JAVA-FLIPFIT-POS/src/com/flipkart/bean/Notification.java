@@ -1,44 +1,50 @@
 package com.flipkart.bean;
 
 public class Notification {
-	private Integer bookingId;
-	private Integer slotId;
-	private String bookingStatus;
+    private Integer notificationId;
+    private Integer bookingId;
+    private String content;
+    private String bookingStatus;
 
-	public String getBookingStatus() {
-		return bookingStatus;
-	}
-	public void setBookingStatus(String bookingStatus) {
-		this.bookingStatus = bookingStatus;
-	}
-	public Integer getBookingId() {
-		return bookingId;
-	}
-	public void setBookingId(Integer bookingId) {
-		this.bookingId = bookingId;
-	}
-	public Integer getSlotId() {
-		return slotId;
-	}
-	public void setSlotId(Integer slotId) {
-		this.slotId = slotId;
-	}
+    public Integer getNotificationId() {
+        return notificationId;
+    }
 
-	public Notification(Integer bookingId, Integer slotId, String bookingStatus) {
-		this.bookingId = bookingId;
-		this.slotId = slotId;
-		this.bookingStatus = bookingStatus;
-	}
+    public void setNotificationId(Integer notificationId) {
+        this.notificationId = notificationId;
+    }
 
-	public Notification() {
-	}
+    public Integer getBookingId() {
+        return bookingId;
+    }
 
-	@Override
-	public String toString() {
-		return "Notification{" +
-				"bookingId=" + bookingId +
-				", slotId=" + slotId +
-				", bookingStatus='" + bookingStatus + '\'' +
-				'}';
-	}
+    public void setBookingId(Integer bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getBookingStatus() {
+        return bookingStatus;
+    }
+
+    public void setBookingStatus(String bookingStatus) {
+        this.bookingStatus = bookingStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "notificationId=" + notificationId +
+                ", bookingId=" + bookingId +
+                ", content='" + content + '\'' +
+                ", bookingStatus='" + bookingStatus + '\'' +
+                '}';
+    }
 }
