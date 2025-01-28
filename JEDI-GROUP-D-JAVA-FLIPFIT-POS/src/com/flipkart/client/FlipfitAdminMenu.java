@@ -85,6 +85,8 @@ public class FlipfitAdminMenu {
 					break;
 				case 5:
 					System.out.println("Exiting...");
+				    sc.close(); // Close scanner
+
 					System.exit(0);
 				default:
 					System.out.println("Please check the option you have entered");

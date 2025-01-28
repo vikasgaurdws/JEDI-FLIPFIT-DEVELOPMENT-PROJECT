@@ -28,11 +28,11 @@ public class FlipFitUserOperations{
 	Registers a gym owner in the system.
 	@param gymOwner The gym owner object representing the gym owner data
 	*/
-	public boolean registerGymOwner(FlipFitGymOwner gymOwner) {
-		boolean registerSuccess = false;
-		registerSuccess = userDao.registerGymOwner(gymOwner);
-		return registerSuccess;
-	}
+//	public FlipFitGymOwner registerGymOwner(FlipFitGymOwner gymOwner) {
+//		boolean registerSuccess = false;
+//		registerSuccess = userDao.registerGymOwner(gymOwner);
+//		return registerSuccess;
+//	}
 	/**
 	Verifies a user's data.
 	@param user The user object representing the user data

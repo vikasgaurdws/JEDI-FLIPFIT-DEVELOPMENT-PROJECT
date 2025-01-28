@@ -146,6 +146,7 @@ public class FlipFitAdminDAOImpl implements FlipFitAdminDAO {
                 owner.setGymOwnerId(rs.getInt("gymOwnerID"));
                 owner.setPanNumber(rs.getString("gymOwnerPAN"));
                 owner.setAdharNumber(rs.getString("gymOwnerAadharNumber"));
+                owner.setFlagVerified(false);
                 pendingOwners.add(owner);
             }
         } catch (SQLException e) {

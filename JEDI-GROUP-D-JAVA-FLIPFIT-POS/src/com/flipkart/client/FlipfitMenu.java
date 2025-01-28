@@ -3,6 +3,7 @@
  */
 package com.flipkart.client;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 import com.flipkart.DAO.FlipFitAdminDAOImpl;
@@ -42,7 +43,7 @@ import com.flipkart.exception.InvalidInputException;
 			FlipFitAdminDAOImpl ob = new FlipFitAdminDAOImpl();
 			if(ob.verifyCred(email, password))
 			{
-				System.out.println("Successfully Logged In");
+				System.out.println("Successfully Logged in as Admin "+ ", Current time: "+LocalDateTime.now());
 				FlipfitAdminMenu flipfitAdminClient = new FlipfitAdminMenu(sc);
 				flipfitAdminClient.adminOptions();
 			}

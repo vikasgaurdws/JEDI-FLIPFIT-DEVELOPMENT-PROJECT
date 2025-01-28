@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.flipkart.bean.*;
 import com.flipkart.utils.DBconnection;
+import java.sql.Statement;
 
 public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
 	
@@ -91,6 +92,40 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
         }
         return false;
     }
+    
+    public boolean getVerifiedGymowner(Integer gymOwnerId) {
+        String query = "SELECT flagVerified FROM FlipFitGymOwner WHERE gymOwnerID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, gymOwnerId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getBoolean("flagVerified");
+                }
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return false;
+    }
+    
+    public boolean getVerifiedGym(Integer gymId) {
+        String query = "SELECT flagVerified FROM FlipFitGym WHERE gymID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, gymId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getBoolean("flagVerified");
+                }
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return false;
+    }
+
+
 
 
     @Override
@@ -106,6 +141,7 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
                 gym.setGymId(resultSet.getInt("gymID"));
                 gym.setGymName(resultSet.getString("gymName"));
                 gym.setGymLocation(resultSet.getString("gymLocation"));
+                gym.setFlagVerified(resultSet.getBoolean("flagVerified"));
                 gym.setPrice(resultSet.getInt("price"));
                 gym.setAvailableSlot(resultSet.getInt("availableSlot"));
                 gyms.add(gym);
@@ -117,22 +153,51 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
     }
 
 
+//    @Override
+//    public boolean addSlot(Slot slot) {
+//        try{
+//            String query = "INSERT INTO FlipFitGymSlot (gymID, startTime, capacity, availableSeats) VALUES (?, ?, ?, ?)";
+//            PreparedStatement preparedStatement = connection.prepareStatement(query);
+//            preparedStatement.setInt(1, slot.getGymId());
+//            preparedStatement.setTime(2, java.sql.Time.valueOf(slot.getStartTime()));
+//            preparedStatement.setInt(3, slot.getCapacity());
+//            preparedStatement.setInt(4, slot.getAvailableSeats());
+//            int rowsInserted = preparedStatement.executeUpdate();
+//            return rowsInserted > 0;
+//        } catch (SQLException e) {
+//            printSQLException(e);
+//        }
+//        return false;
+//    }
+    
     @Override
     public boolean addSlot(Slot slot) {
-        try{
+        try {
             String query = "INSERT INTO FlipFitGymSlot (gymID, startTime, capacity, availableSeats) VALUES (?, ?, ?, ?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, slot.getGymId());
             preparedStatement.setTime(2, java.sql.Time.valueOf(slot.getStartTime()));
             preparedStatement.setInt(3, slot.getCapacity());
             preparedStatement.setInt(4, slot.getAvailableSeats());
+
             int rowsInserted = preparedStatement.executeUpdate();
-            return rowsInserted > 0;
+
+            if (rowsInserted > 0) {
+                // Retrieve the generated slotID (auto-incremented value)
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int slotID = generatedKeys.getInt(1); // Get the generated slotID
+                    slot.setSlotId(slotID); // Assuming Slot has a setSlotId method
+                    return true;
+                }
+            }
         } catch (SQLException e) {
             printSQLException(e);
         }
         return false;
     }
+
+    
 
     public static void printSQLException(SQLException ex) {
         for (Throwable e : ex) {
@@ -151,18 +216,52 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
     }
 
 
-	@Override
+//	@Override
+//    public FlipFitGymOwner login(String email, String pass) {
+//        FlipFitGymOwner gymOwner = null;
+//        try{
+//            String query = "SELECT * FROM FlipFitUser JOIN FlipFitGymOwner ON FlipFitUser.userID = FlipFitGymOwner.gymOwnerID WHERE email = ? AND passwordHash = ?";
+//            PreparedStatement preparedStatement = connection.prepareStatement(query);
+//            preparedStatement.setString(1, email);
+//            preparedStatement.setString(2, pass);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            if (resultSet.next()) {
+//                gymOwner = new FlipFitGymOwner();
+//                gymOwner.setGymOwnerId(resultSet.getInt("gymOwnerID"));
+//                gymOwner.setPanNumber(resultSet.getString("gymOwnerPAN"));
+//                gymOwner.setAdharNumber(resultSet.getString("gymOwnerAadharNumber"));
+//                gymOwner.setFlagVerified(resultSet.getBoolean("flagVerified"));
+//                gymOwner.setUserEmail(resultSet.getString("email"));
+//                gymOwner.setUserName(resultSet.getString("userName"));
+//                gymOwner.setUserMobile(resultSet.getString("phoneNumber"));
+//            }
+//        } catch (SQLException e) {
+//            printSQLException(e);
+//        }
+//        return gymOwner;
+//    }
+
+    
+    @Override
     public FlipFitGymOwner login(String email, String pass) {
         FlipFitGymOwner gymOwner = null;
-        try{
-            String query = "SELECT * FROM FlipFitUser JOIN FlipFitGymOwner ON FlipFitUser.userID = FlipFitGymOwner.gymOwnerID WHERE email = ? AND passwordHash = ?";
+        try {
+            String query = "SELECT u.userID, u.email, u.phoneNumber, u.userName, "
+                         + "g.gymOwnerPAN, g.gymOwnerAadharNumber, g.flagVerified "
+                         + "FROM FlipFitUser u "
+                         + "JOIN FlipFitGymOwner g ON u.userID = g.gymOwnerID "
+                         + "WHERE u.email = ? AND u.passwordHash = ?";
+            
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, pass);
             ResultSet resultSet = preparedStatement.executeQuery();
+            
             if (resultSet.next()) {
                 gymOwner = new FlipFitGymOwner();
-                gymOwner.setGymOwnerId(resultSet.getInt("gymOwnerID"));
+                gymOwner.setGymOwnerId(resultSet.getInt("userID")); 
+                gymOwner.setUserId(resultSet.getInt("userID"));
+
                 gymOwner.setPanNumber(resultSet.getString("gymOwnerPAN"));
                 gymOwner.setAdharNumber(resultSet.getString("gymOwnerAadharNumber"));
                 gymOwner.setFlagVerified(resultSet.getBoolean("flagVerified"));
@@ -176,37 +275,100 @@ public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAO {
         return gymOwner;
     }
 
-	@Override
+    
+    
+//	@Override
+//    public FlipFitGymOwner register(FlipFitGymOwner gymOwner) {
+//        try{
+//            String userInsertQuery = "INSERT INTO FlipFitUser (email, phoneNumber, roleID, passwordHash, userName) VALUES (?, ?, ?, ?, ?)";
+//            PreparedStatement userStatement = connection.prepareStatement(userInsertQuery, PreparedStatement.RETURN_GENERATED_KEYS);
+//            userStatement.setString(1, gymOwner.getUserEmail());
+//            userStatement.setString(2, gymOwner.getUserMobile());
+//            userStatement.setInt(3, 2); // Assuming roleID 2 is for Gym Owners
+//            userStatement.setString(4, gymOwner.getUserPassword());
+//            userStatement.setString(5, gymOwner.getUserName());
+//            int userRowsInserted = userStatement.executeUpdate();
+//            if (userRowsInserted > 0) {
+//                ResultSet generatedKeys = userStatement.getGeneratedKeys();
+//                if (generatedKeys.next()) {
+//                    int userId = generatedKeys.getInt(1);
+//                    String gymOwnerInsertQuery = "INSERT INTO FlipFitGymOwner (gymOwnerID, gymOwnerPAN, gymOwnerAadharNumber, flagVerified) VALUES (?, ?, ?, ?)";
+//                    PreparedStatement gymOwnerStatement = connection.prepareStatement(gymOwnerInsertQuery);
+//                    gymOwnerStatement.setInt(1, userId);
+//                    gymOwnerStatement.setString(2, gymOwner.getPanNumber());
+//                    gymOwnerStatement.setString(3, gymOwner.getAdharNumber());
+//                    gymOwnerStatement.setBoolean(4, gymOwner.getFlagVerified());
+//                    int gymOwnerRowsInserted = gymOwnerStatement.executeUpdate();
+//                    if (gymOwnerRowsInserted > 0) {
+//                        gymOwner.setGymOwnerId(userId);
+//                        return gymOwner;
+//                    }
+//                }
+//            }
+//        } catch (SQLException e) {
+//            printSQLException(e);
+//        }
+//        return null;
+//    }
+    
+    
+    @Override
     public FlipFitGymOwner register(FlipFitGymOwner gymOwner) {
-        try{
+        try {
+            connection.setAutoCommit(false); // Start transaction
+
+            // Insert into FlipFitUser
             String userInsertQuery = "INSERT INTO FlipFitUser (email, phoneNumber, roleID, passwordHash, userName) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement userStatement = connection.prepareStatement(userInsertQuery, PreparedStatement.RETURN_GENERATED_KEYS);
-            userStatement.setString(1, gymOwner.getUserEmail());
-            userStatement.setString(2, gymOwner.getUserMobile());
-            userStatement.setInt(3, 2); // Assuming roleID 2 is for Gym Owners
-            userStatement.setString(4, gymOwner.getUserPassword());
-            userStatement.setString(5, gymOwner.getUserName());
-            int userRowsInserted = userStatement.executeUpdate();
-            if (userRowsInserted > 0) {
-                ResultSet generatedKeys = userStatement.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int userId = generatedKeys.getInt(1);
-                    String gymOwnerInsertQuery = "INSERT INTO FlipFitGymOwner (gymOwnerID, gymOwnerPAN, gymOwnerAadharNumber, flagVerified) VALUES (?, ?, ?, ?)";
-                    PreparedStatement gymOwnerStatement = connection.prepareStatement(gymOwnerInsertQuery);
-                    gymOwnerStatement.setInt(1, userId);
-                    gymOwnerStatement.setString(2, gymOwner.getPanNumber());
-                    gymOwnerStatement.setString(3, gymOwner.getAdharNumber());
-                    gymOwnerStatement.setBoolean(4, gymOwner.getFlagVerified());
-                    int gymOwnerRowsInserted = gymOwnerStatement.executeUpdate();
-                    if (gymOwnerRowsInserted > 0) {
-                        gymOwner.setGymOwnerId(userId);
-                        return gymOwner;
+            try (PreparedStatement userStatement = connection.prepareStatement(userInsertQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                userStatement.setString(1, gymOwner.getUserEmail());
+                userStatement.setString(2, gymOwner.getUserMobile());
+                userStatement.setInt(3, 2); // Assuming roleID 2 is for Gym Owners
+                userStatement.setString(4, gymOwner.getUserPassword()); // Should hash password before storing
+                userStatement.setString(5, gymOwner.getUserName());
+
+                int userRowsInserted = userStatement.executeUpdate();
+                if (userRowsInserted > 0) {
+                    try (ResultSet generatedKeys = userStatement.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            int userId = generatedKeys.getInt(1);
+
+                            // Insert into FlipFitGymOwner
+                            String gymOwnerInsertQuery = "INSERT INTO FlipFitGymOwner (gymOwnerID, gymOwnerPAN, gymOwnerAadharNumber, flagVerified) VALUES (?, ?, ?, ?)";
+                            try (PreparedStatement gymOwnerStatement = connection.prepareStatement(gymOwnerInsertQuery)) {
+                                gymOwnerStatement.setInt(1, userId);
+                                gymOwnerStatement.setString(2, gymOwner.getPanNumber());
+                                gymOwnerStatement.setString(3, gymOwner.getAdharNumber());
+                                gymOwnerStatement.setBoolean(4, gymOwner.getFlagVerified());
+
+                                int gymOwnerRowsInserted = gymOwnerStatement.executeUpdate();
+                                if (gymOwnerRowsInserted > 0) {
+                                    connection.commit(); // Commit transaction
+                                    gymOwner.setGymOwnerId(userId);
+                                    gymOwner.setUserId(userId);
+
+                                    return gymOwner;
+                                }
+                            }
+                        }
                     }
                 }
             }
+            connection.rollback(); 
         } catch (SQLException e) {
+            try {
+                connection.rollback(); 
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();
+            }
             printSQLException(e);
+        } finally {
+            try {
+                connection.setAutoCommit(true); 
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
+
 }
