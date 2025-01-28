@@ -1,5 +1,6 @@
 package com.flipkart.bean;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -8,10 +9,17 @@ public class Booking {
     private Integer userId;
     private Integer slotId;
     private Integer gymId;
+    private LocalTime time;
     private String bookingStatus;
     private LocalDate bookingDate;
     private Integer bookingId;
 
+    // Constructor
+    public Booking() {
+        // Empty constructor if needed for initialization
+    }
+
+    // Getters and Setters
     public Integer getBookingId() {
         return bookingId;
     }
@@ -44,7 +52,13 @@ public class Booking {
         this.gymId = gymId;
     }
 
-    
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
 
     public String getBookingStatus() {
         return bookingStatus;
@@ -62,7 +76,7 @@ public class Booking {
         this.bookingDate = bookingDate;
     }
 
-    // toString method added
+    // toString method for printing details
     @Override
     public String toString() {
         return "Booking ID: " + bookingId + "\n" +
@@ -70,6 +84,9 @@ public class Booking {
                "Slot ID: " + slotId + "\n" +
                "Gym ID: " + gymId + "\n" +
                "Booking Status: " + bookingStatus + "\n" +
-               "Booking Date: " + bookingDate + "\n";
+               "Booking Date: " + bookingDate + "\n" +
+               "Time: " + time + "\n";
     }
+
+	
 }

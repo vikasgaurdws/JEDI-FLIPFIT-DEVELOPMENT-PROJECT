@@ -2,7 +2,6 @@ package com.flipkart.bean;
 
 public class Notification {
     private Integer notificationId;
-    private Integer bookingId;
     private String content;
     private String bookingStatus;
 
@@ -14,13 +13,6 @@ public class Notification {
         this.notificationId = notificationId;
     }
 
-    public Integer getBookingId() {
-        return bookingId;
-    }
-
-    public void setBookingId(Integer bookingId) {
-        this.bookingId = bookingId;
-    }
 
     public String getContent() {
         return content;
@@ -42,7 +34,6 @@ public class Notification {
     public String toString() {
         return "Notification{" +
                 "notificationId=" + notificationId +
-                ", bookingId=" + bookingId +
                 ", content='" + content + '\'' +
                 ", bookingStatus='" + bookingStatus + '\'' +
                 '}';

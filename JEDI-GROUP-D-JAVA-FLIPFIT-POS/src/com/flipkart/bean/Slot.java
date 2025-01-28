@@ -58,7 +58,6 @@ public class Slot {
                 "gymId=" + gymId +
                 ", startTime=" + startTime +
                 ", capacity=" + capacity +
-                ", availableSeats=" + availableSeats +
                 ", slotId=" + slotId +
                 '}';
     }
