@@ -3,6 +3,7 @@ package com.flipkart.business;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.flipkart.bean.Booking;
 import com.flipkart.bean.FlipFitCustomer;
@@ -42,8 +43,8 @@ public class FlipFitCustomerOperations {
     	return flipfitcustomerdao.getSlots(gymId);
     }
     
-    public void makePayment(String paymentType,int bookingId, int price) {
-    	flipfitcustomerdao.makePayment(paymentType,bookingId, price);
+    public boolean makePayment(String paymentType,int bookingId, int price) {
+    	return flipfitcustomerdao.makePayment(paymentType,bookingId, price);
     }
 
     public List<Booking> getCustomerBookings(int userId) {
@@ -74,6 +75,12 @@ public class FlipFitCustomerOperations {
 
 	public String getUserName(String email, String password) {
 		return flipfitcustomerdao.getUserName(email,password);
+	}
+
+	public List<Booking> schedule(int userId, Date date) {
+		  return getCustomerBookings(userId).stream()
+			        .filter(booking -> booking.getBookingDate().equals(date.toLocalDate()))
+			        .collect(Collectors.toList());		
 	}
 }
 
