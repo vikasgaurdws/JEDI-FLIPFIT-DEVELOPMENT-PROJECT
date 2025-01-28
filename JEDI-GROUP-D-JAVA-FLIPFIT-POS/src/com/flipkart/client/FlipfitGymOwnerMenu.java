@@ -10,6 +10,7 @@ import java.util.Scanner;
 import com.flipkart.bean.FlipFitGymOwner;
 import com.flipkart.bean.Slot;
 import com.flipkart.business.FlipFitGymOwnerOperations;
+import com.flipkart.exception.InvalidInputException;
 import com.flipkart.bean.FlipFitGym;
 
 import static java.sql.Types.NULL;
@@ -56,10 +57,10 @@ public class FlipfitGymOwnerMenu {
 
         boolean done = flipfitGymOwnerOperations.registerGymOwner(gymOwner);
         if (done) {
-            System.out.println("Added the user successfully \n" + gymOwner.toString());
+            System.out.println("Added the Gym Owner successfully \n" + gymOwner.toString());
             this.gymOwner = gymOwner;
         } else {
-            System.out.println("Error adding the user");
+            System.out.println("Error adding the Gym Owner");
         }
     }
 
@@ -105,7 +106,7 @@ public class FlipfitGymOwnerMenu {
     }
 
 
-    public void addGym() {
+    public void addGym() throws InvalidInputException{
         FlipFitGym flipFitGym = new FlipFitGym();
         System.out.println("\nEnter Gym Details: \n");
         System.out.println("Enter gym name");
@@ -113,15 +114,19 @@ public class FlipfitGymOwnerMenu {
         System.out.println("Enter gym location");
         flipFitGym.setGymLocation(in.next());
         System.out.println("Enter available slot");
+        try {
         flipFitGym.setAvailableSlot(in.nextInt());
         System.out.println("Enter price");
         flipFitGym.setPrice(in.nextInt());
+        }catch(Exception e) {
+        	throw new InvalidInputException(e.getMessage());
+        }
         flipFitGym.setFlagVerified(false);
         
         flipfitGymOwnerOperations.addGym(gymOwner, flipFitGym);
     }
 
-    public void editGym() {
+    public void editGym() throws InvalidInputException {
         FlipFitGym flipFitGym = new FlipFitGym();
         System.out.println("\nEnter Gym Details: \n");
         System.out.println("Enter gym name");
@@ -129,9 +134,13 @@ public class FlipfitGymOwnerMenu {
         System.out.println("Enter gym location");
         flipFitGym.setGymLocation(in.next());
         System.out.println("Enter available slot");
-        flipFitGym.setAvailableSlot(in.nextInt());
-        System.out.println("Enter price");
-        flipFitGym.setPrice(in.nextInt());
+        try {
+            flipFitGym.setAvailableSlot(in.nextInt());
+            System.out.println("Enter price");
+            flipFitGym.setPrice(in.nextInt());
+            }catch(Exception e) {
+            	throw new InvalidInputException(e.getMessage());
+            }
         
         flipFitGym.setFlagVerified(false);
         System.out.println("Enter gym id");
@@ -148,7 +157,8 @@ public class FlipfitGymOwnerMenu {
         }
     }
   
-public void addSlot() {
+public void addSlot() throws InvalidInputException {
+	try {
 		Slot slot = new Slot();
 		System.out.println("Enter slot id");
 		slot.setSlotId(Integer.valueOf(in.next()));
@@ -161,6 +171,9 @@ public void addSlot() {
 		System.out.println("Enter available seats");
 		slot.setAvailableSeats(Integer.valueOf(in.next()));
 		flipfitGymOwnerOperations.addSlot(slot);
+		}catch(Exception e) {
+			throw new InvalidInputException(e.getMessage());
+		}
 	}
 
 
@@ -181,6 +194,7 @@ public void addSlot() {
 
             System.out.println("______________________________________________________________\n");
             int choice = in.nextInt();
+            try {
             switch (choice) {
                 case 1:
                     flipfitGymOwnerOperations.getProfile(gymOwner);
@@ -201,8 +215,8 @@ public void addSlot() {
                     getGymDetails();
                     break;
                 case 7:
-                    recur = false;
-                    break;
+                	System.out.println("Thankyou for visiting!!");
+                    System.exit(0);
                 default:
                     System.out.println("Invalid Choice!");
             }
@@ -210,7 +224,14 @@ public void addSlot() {
                 gymOwner = new FlipFitGymOwner();
                 System.out.println("Logged Out Successfully!");
             }
+        }catch(InvalidInputException e) {
+        	System.out.println("\n++++++++++++++++++++++++++++++++++++++++");
+        	System.out.println("Enter a valid input!");
+        	System.out.println("++++++++++++++++++++++++++++++++++++++++\n");
+
+        	gymOwnerMenu(email);
         }
+       }
 
     }
 

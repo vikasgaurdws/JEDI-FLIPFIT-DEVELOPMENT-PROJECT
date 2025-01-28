@@ -12,6 +12,9 @@ import com.flipkart.bean.FlipFitCustomer;
 import com.flipkart.bean.FlipFitGym;
 import com.flipkart.bean.Slot;
 import com.flipkart.business.FlipFitCustomerOperations;
+import com.flipkart.exception.InvalidDateException;
+import com.flipkart.exception.InvalidInputException;
+import com.flipkart.exception.InvalidLocationException;
 
 
 public class FlipfitCustomerMenu {
@@ -31,7 +34,7 @@ public class FlipfitCustomerMenu {
         }	
 
     // Register a new customer
-    public void registerCustomer() {
+    public void registerCustomer() throws Exception {
         System.out.println("Enter Name: ");
         flipfitCustomer.setUserName(sc.next());
 
@@ -54,7 +57,11 @@ public class FlipfitCustomerMenu {
         flipfitCustomer.setUserRole(3);
 
         System.out.println("Enter Age: ");
+        try {
         flipfitCustomer.setCustomerAge(Integer.valueOf(sc.next()));
+        }catch(Exception e) {
+        	throw new InvalidInputException(e.getMessage());
+        }
 
 
         this.userId = flipfitCustomerOperations.registerCustomer(flipfitCustomer);
@@ -72,6 +79,7 @@ public class FlipfitCustomerMenu {
         if (userId!=-1) {
             System.out.println("Login successful!");
             flipfitCustomer.setUserId(userId);
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             System.out.println("Welcome "+userName+" current time: "+LocalDateTime.now());
             flipfitCustomerMenu();
         } else {
@@ -79,7 +87,7 @@ public class FlipfitCustomerMenu {
         }
     }
 
-    public void editProfile() {
+    public void editProfile() throws Exception {
         System.out.println("Enter password: ");
         flipfitCustomer.setUserPassword(sc.next());
 
@@ -90,7 +98,11 @@ public class FlipfitCustomerMenu {
         flipfitCustomer.setUserMobile(sc.next());
 
         System.out.println("Enter Age: ");
-        flipfitCustomer.setCustomerAge(Integer.valueOf(sc.next()));
+        try {
+            flipfitCustomer.setCustomerAge(Integer.valueOf(sc.next()));
+            }catch(Exception e) {
+            	throw new InvalidInputException(e.getMessage());
+            }
 
 
         // Here you would likely want to update the customer using an operation method
@@ -113,7 +125,7 @@ public class FlipfitCustomerMenu {
         }
     }
 
-    public void getGyms() {
+    public void getGyms() throws Exception{
 
         List<FlipFitGym> gyms = flipfitCustomerOperations.getAvailableGyms();
         gyms.forEach(System.out::println);
@@ -144,8 +156,14 @@ public class FlipfitCustomerMenu {
 
             System.out.println("Enter date that you want to see the booked seats (yyyy-mm-dd): ");
             String dateString = sc.next(); 
-            LocalDate locdate = LocalDate.parse(dateString); 
-
+            LocalDate locdate;
+            try {
+            	locdate = LocalDate.parse(dateString); 
+            }catch(Exception e) {
+            	throw new InvalidDateException(e.getMessage());
+            }
+            if(locdate.compareTo(LocalDate.now())<0)
+            	throw new InvalidDateException("");
             int bookedSeats = flipfitCustomerOperations.bookedSeats(sid, locdate);
             //from the slots list above get the capacity 
             
@@ -198,12 +216,14 @@ public class FlipfitCustomerMenu {
         }
     }
 
-    public void searchByLocation() {
+    public void searchByLocation() throws Exception {
         System.out.println("Enter location to search for gyms: ");
         sc.nextLine();
         String location = sc.nextLine();
         
         List<FlipFitGym> gyms= flipfitCustomerOperations.searchGymsByLocation(location);
+        if(gyms.size()==0)
+        	throw new InvalidLocationException(location);
         gyms.forEach(System.out::println);
         
         System.out.println("Enter gym Id to view slots: ");
@@ -230,8 +250,14 @@ public class FlipfitCustomerMenu {
 
             System.out.println("Enter date that you want to see the booked seats (yyyy-mm-dd): ");
             String dateString = sc.next(); 
-            LocalDate locdate = LocalDate.parse(dateString); 
-
+            LocalDate locdate;
+            try {
+            	locdate = LocalDate.parse(dateString); 
+            }catch(Exception e) {
+            	throw new InvalidDateException(e.getMessage());
+            }
+            if(locdate.compareTo(LocalDate.now())<0)
+            	throw new InvalidDateException("");
             int bookedSeats = flipfitCustomerOperations.bookedSeats(sid, locdate);
             System.out.println("No. of Bookings for Slot ID: " + sid + " on " + locdate + " is " + bookedSeats);
 
@@ -280,7 +306,7 @@ public class FlipfitCustomerMenu {
         }
         
         else if(success==-1) {
-            System.out.println("You have a booking already during this slot and if you want to join waitlist please cancell that first ");
+            System.out.println("You have a booking already during this slot and if you want to join waitlist please cancel that first ");
         }
     }
 
@@ -307,7 +333,7 @@ public class FlipfitCustomerMenu {
         }
         else if(success==Integer.MIN_VALUE)
         {
-        	System.out.println("You are rebooking the slot again in the same gym ");
+        	System.out.println("You are rebooking the slot again in the same gym!!!");
         }
         else {
             System.out.println("Failed to book the slot.");
@@ -317,9 +343,14 @@ public class FlipfitCustomerMenu {
    
 
 	// Cancel a booking
-    public void cancelBooking() {
+    public void cancelBooking()throws Exception {
         System.out.println("Enter booking ID to cancel: ");
-        int bookingId = sc.nextInt();
+        int bookingId = -1;
+        try {
+        bookingId=sc.nextInt();
+        }catch(Exception e) {
+        	throw new InvalidInputException(e.getMessage());
+        }
         boolean success = flipfitCustomerOperations.cancelBooking(userId, bookingId);
         if (success) {
             System.out.println("Booking cancelled successfully.");
@@ -329,7 +360,7 @@ public class FlipfitCustomerMenu {
     }
 
     // View customer's bookings
-    public void viewBookings() {
+    public void viewBookings() throws Exception{
     	 List<Booking> bookings =flipfitCustomerOperations.getCustomerBookings(userId);
 
     	 if (bookings.isEmpty()) {
@@ -363,7 +394,7 @@ public class FlipfitCustomerMenu {
     
     public void flipfitCustomerMenu()
     {
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         while (true) {
             System.out.println("1. Edit profile");
             System.out.println("2. View profile");
@@ -376,7 +407,16 @@ public class FlipfitCustomerMenu {
 
 
             System.out.print("Enter your choice: ");
-            int choice = sc.nextInt();
+            int choice=-1;
+            try {
+            choice= sc.nextInt();
+            }catch(Exception e) {
+            	System.out.println("\n++++++++++++++++++++++++++++++++++++++++");
+    			System.out.println("Enter a valid choice!");
+    			System.out.println("++++++++++++++++++++++++++++++++++++++++\n");
+    			sc.next();
+    			flipfitCustomerMenu();
+            }try {
             switch (choice) {
 
 
@@ -405,9 +445,27 @@ public class FlipfitCustomerMenu {
                     return;	
                 case 8:
                     System.out.println("Exiting...");
-                    return;
+                    System.exit(0);
                 default:
                     System.out.println("Please check the option you have entered");
+            }
+            }catch(InvalidLocationException e) {
+            	System.out.println("\n++++++++++++++++++++++++++++++++++++++++");
+    			System.out.println("Enter a valid Location!");
+    			System.out.println("++++++++++++++++++++++++++++++++++++++++\n");
+    			flipfitCustomerMenu();
+            }catch(InvalidDateException e) {
+            	System.out.println("\n++++++++++++++++++++++++++++++++++++++++");
+    			System.out.println("Enter a valid date in yyyy-mm-dd format!");
+    			System.out.println("++++++++++++++++++++++++++++++++++++++++\n");
+    			flipfitCustomerMenu();
+            }
+            catch(Exception e) {
+            	System.out.println("\n++++++++++++++++++++++++++++++++++++++++");
+    			System.out.println("Enter a valid choice!");
+    			System.out.println("++++++++++++++++++++++++++++++++++++++++\n");
+    			sc.next();
+    			flipfitCustomerMenu();
             }
         }
     }

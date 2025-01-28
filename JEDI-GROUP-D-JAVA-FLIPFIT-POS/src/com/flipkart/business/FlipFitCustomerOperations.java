@@ -61,7 +61,6 @@ public class FlipFitCustomerOperations {
     }
     public int validateCreds(String email, String password) {
     	int id=flipfitcustomerdao.authenticateUser(email,password);// 1 is the int for role of user
-        System.out.println("Credentials verified");
         return id;
     }
 

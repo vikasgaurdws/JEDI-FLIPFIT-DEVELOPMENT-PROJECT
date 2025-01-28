@@ -709,8 +709,6 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 
 	        if (rs.next()) {
 	            userId = rs.getInt("userID"); // Authentication successful, return user ID
-	        } else {
-	            System.out.println("Invalid email or password.");
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -822,8 +820,6 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 
 	        if (rs.next()) {
 	            userName = rs.getString("userName"); // If user exists, retrieve the userName
-	        } else {
-	            System.out.println("Invalid email or password.");
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
