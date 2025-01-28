@@ -442,7 +442,7 @@ public class FlipfitCustomerMenu {
                 	break;
                 case 7:
                     viewDailySchedule();
-                    return;	
+                    break;	
                 case 8:
                     System.out.println("Exiting...");
                     System.exit(0);
