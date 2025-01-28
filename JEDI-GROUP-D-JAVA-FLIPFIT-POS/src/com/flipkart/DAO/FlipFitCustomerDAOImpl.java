@@ -188,16 +188,35 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	        if (generatedKeys.next()) {
 	            bookingId = generatedKeys.getInt(1);
 	        }
-	        
+	        SlotNotification("Slot Booking Successful");
 //	        System.out.println("New booking added with ID: " + bookingId);
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        SlotNotification("Slot Booking Failed");
 	    }
 	    
 	    return bookingId;
 	}
+	public void SlotNotification(String status) {
+        String query = "SELECT content FROM FlipFitNotification WHERE status = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
 
+            // Execute query1 to get the userName
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                String content = resultSet.getString("content");
+
+                System.out.println(content);
+            } else {
+                System.out.println("No Notification");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 	private void promote(int toPromoteId) {
 	    PreparedStatement updateBookingStatement = null;
 	    PreparedStatement removeFromWaitlistStatement = null;
@@ -679,16 +698,49 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	        }
 	    }
 	    
-	    if(userId!=-1)
-	    {
-//	    	registrationNotification(userId,"Registration Successfully")
-	    }
+	     
 	   
 	    return userId;
 	    
 	}
 
-	
+	public void CustomerNotification(int userId, String status) {
+        String query1 = "SELECT userName FROM FlipFitUser WHERE userID = ?";
+        String query2 = "SELECT content FROM FlipFitNotification WHERE status = ?";
+
+        try (PreparedStatement preparedStatement1 = connection.prepareStatement(query1);
+             PreparedStatement preparedStatement2 = connection.prepareStatement(query2)) {
+
+            // Set the parameter for the userID query
+            preparedStatement1.setInt(1, userId);
+
+            // Execute query1 to get the userName
+            ResultSet resultSet1 = preparedStatement1.executeQuery();
+
+            if (resultSet1.next()) {
+                String userName = resultSet1.getString("userName");
+
+                // Set the parameter for the status query
+                preparedStatement2.setString(1, status);
+
+                // Execute query2 to get the content
+                ResultSet resultSet2 = preparedStatement2.executeQuery();
+
+                if (resultSet2.next()) {
+                    String content = resultSet2.getString("content");
+
+                    // Output the notification content and userName
+                    System.out.println("Notification for " + userName + ": " + content);
+                } else {
+                    System.out.println("No notifications found with the specified status.");
+                }
+            } else {
+                System.out.println("User not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	
 
@@ -835,6 +887,7 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 //	{
 //		
 //	}
+	
 	
 	
 	
