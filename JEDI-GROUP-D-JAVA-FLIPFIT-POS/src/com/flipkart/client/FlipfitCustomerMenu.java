@@ -1,11 +1,13 @@
 package com.flipkart.client;
 
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
+import com.flipkart.bean.Booking;
 import com.flipkart.bean.FlipFitCustomer;
 import com.flipkart.bean.FlipFitGym;
 import com.flipkart.bean.Slot;
@@ -266,9 +268,15 @@ public class FlipfitCustomerMenu {
         if (success!=-1 ) {
             System.out.println("Enter payment type: ");
             String type=sc.nextLine();
-            flipfitCustomerOperations.makePayment(type, success,price);
-            System.out.println("Slot booked successfully and your booking id is: "+success);
-
+            
+            
+            boolean paymentStatus=flipfitCustomerOperations.makePayment(type, success,price);
+            if(paymentStatus)System.out.println("Payment of "+ price+" recieved and Slot booked with bookingID: "+success);
+            else
+            {
+            	System.out.println("Payment Failed Booking not successful");
+            	flipfitCustomerOperations.cancelBooking(userId, success);
+            }
         }
         
         else if(success==-1) {
@@ -285,16 +293,21 @@ public class FlipfitCustomerMenu {
         
         if (success!=-1 && success!=Integer.MIN_VALUE) {
             System.out.println("Enter payment type: ");
+            
             sc.nextLine();  
-
             String type=sc.nextLine();
-            flipfitCustomerOperations.makePayment(type, success,price);
-            System.out.println("Payment of "+ price+" recieved and Slot booked with bookingID: "+success);
-
+            
+            boolean paymentStatus=flipfitCustomerOperations.makePayment(type, success,price);
+            if(paymentStatus)System.out.println("Payment of "+ price+" recieved and Slot booked with bookingID: "+success);
+            else
+            {
+            	System.out.println("Payment Failed Booking not successful");
+            	flipfitCustomerOperations.cancelBooking(userId, success);
+            }
         }
         else if(success==Integer.MIN_VALUE)
         {
-        	System.out.println("You are rebooking the slot again in the same gym you idiot!!!");
+        	System.out.println("You are rebooking the slot again in the same gym ");
         }
         else {
             System.out.println("Failed to book the slot.");
@@ -317,12 +330,36 @@ public class FlipfitCustomerMenu {
 
     // View customer's bookings
     public void viewBookings() {
-        flipfitCustomerOperations.getCustomerBookings(userId).forEach(System.out::println);
+    	 List<Booking> bookings =flipfitCustomerOperations.getCustomerBookings(userId);
+
+    	 if (bookings.isEmpty()) {
+             System.out.println("No bookings found for the selected date.");
+         } else {
+             bookings.forEach(System.out::println);
+         }
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.println("Do you want to cancel a booking? Enter 1 for yes 0 for no");
         if(sc.nextInt()==1)
             cancelBooking();
     }
+    
+    
+    private void viewDailySchedule() {
+    	System.out.println("Enter the date that you want to see your schedule(yyyy-mm--dd): ");
+
+        String dateInput = sc.next(); 
+        Date date = Date.valueOf(dateInput); 
+
+        List<Booking> bookings = flipfitCustomerOperations.schedule(userId, date);
+
+        if (bookings.isEmpty()) {
+            System.out.println("No bookings found for the selected date.");
+        } else {
+            bookings.forEach(System.out::println);
+        }
+		
+	}
+    
     
     public void flipfitCustomerMenu()
     {
@@ -334,7 +371,9 @@ public class FlipfitCustomerMenu {
             System.out.println("4. Search gyms by location");
             System.out.println("5. View Bookings");
             System.out.println("6. Cancel Bookings");
-            System.out.println("7. Exit");
+            System.out.println("7. View your Daily Schedule ");
+            System.out.println("8. Exit");
+
 
             System.out.print("Enter your choice: ");
             int choice = sc.nextInt();
@@ -362,6 +401,9 @@ public class FlipfitCustomerMenu {
                 	cancelBooking();
                 	break;
                 case 7:
+                    viewDailySchedule();
+                    return;	
+                case 8:
                     System.out.println("Exiting...");
                     return;
                 default:
@@ -369,4 +411,6 @@ public class FlipfitCustomerMenu {
             }
         }
     }
+
+	
 }

@@ -1,54 +1,67 @@
 package com.flipkart.bean;
 import java.time.*;
+
+
 public class CreditCard {
-	private LocalDate expiryDate;
-	private Integer cvv;
-	private Long cardNumber;
-	private String name;
+    private LocalDate expiryDate;
+    private String cvv;
+    private String cardNumber;
+    private String name;
 
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public LocalDate getExpiryDate() {
-		return expiryDate;
-	}
-	public void setExpiryDate(LocalDate expiryDate) {
-		this.expiryDate = expiryDate;
-	}
-	public Integer getCvv() {
-		return cvv;
-	}
-	public void setCvv(Integer cvv) {
-		this.cvv = cvv;
-	}
-	public Long getCardNumber() {
-		return cardNumber;
-	}
-	public void setCardNumber(Long cardNumber) {
-		this.cardNumber = cardNumber;
-	}
+    // Constructor
+    public CreditCard(LocalDate expiryDate, String cvv, String cardNumber, String name) {
+        this.expiryDate = expiryDate;
+        this.cvv = cvv;
+        this.cardNumber = cardNumber;
+        this.name = name;
+    }
+    
+    public CreditCard()
 
+    {
+    	
+    }
+    // Getters and Setters
+    public LocalDate getExpiryDate() {
+        return expiryDate;
+    }
 
-	public CreditCard() {
-	}
+    public void setExpiryDate(LocalDate expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 
-	public CreditCard(LocalDate expiryDate, Integer cvv, Long cardNumber, String name) {
-		this.expiryDate = expiryDate;
-		this.cvv = cvv;
-		this.cardNumber = cardNumber;
-		this.name = name;
-	}
+    public String getCvv() {
+        return cvv;
+    }
 
-	@Override
-	public String toString() {
-		return "CreditCard{" +
-				"expiryDate=" + expiryDate +
-				", cvv=" + cvv +
-				", cardNumber=" + cardNumber +
-				", name='" + name + '\'' +
-				'}';
-	}
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // Overriding toString() method
+    @Override
+    public String toString() {
+        return "CreditCard{" +
+               "expiryDate=" + expiryDate +
+               ", cvv='***'" +  
+               ", cardNumber='XXXX-XXXX-XXXX-" + (cardNumber.length() > 4 ? cardNumber.substring(cardNumber.length() - 4) : "****") + "'" + // Mask card number
+               ", name='" + name + "'" +
+               '}';
+    }
 }

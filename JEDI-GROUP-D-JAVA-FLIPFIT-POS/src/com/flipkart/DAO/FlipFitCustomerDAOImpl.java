@@ -356,7 +356,9 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    PreparedStatement statement = null;
 	    ResultSet rs = null;
 
-	    String query = "SELECT * FROM FlipFitBookSlot WHERE userId = ? AND bookingStatus != 'Cancelled'";
+	    String query = "SELECT * FROM FlipFitBookSlot NATURAL JOIN FlipFitGymSlot WHERE userId = ? AND bookingStatus != 'Cancelled'";
+
+	    
 	    try {
 	        statement = connection.prepareStatement(query);
 	        statement.setInt(1, userId);
@@ -371,8 +373,10 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	            booking.setGymId(rs.getInt("gymID"));
 	            booking.setBookingStatus(rs.getString("bookingStatus"));
 	            booking.setBookingDate(rs.getDate("bookingDate").toLocalDate());
+	            booking.setTime(rs.getTime("startTime").toLocalTime()); 
 	            
 	            bookings.add(booking);
+
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -380,6 +384,10 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 
 	    return bookings;
 	}
+	
+	
+
+
 
 	private boolean cancelBookingHelper(int userId, int bookingId)
 	{
@@ -673,15 +681,17 @@ public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAO {
 	    
 	    if(userId!=-1)
 	    {
-//	    	registrationNotification(userId,"Registered Successfully")
+//	    	registrationNotification(userId,"Registration Successfully")
 	    }
-	    
+	   
 	    return userId;
 	    
 	}
 
 	
 	
+	
+
 	@Override
 	public int authenticateUser(String email, String password) {
 	    PreparedStatement statement = null;

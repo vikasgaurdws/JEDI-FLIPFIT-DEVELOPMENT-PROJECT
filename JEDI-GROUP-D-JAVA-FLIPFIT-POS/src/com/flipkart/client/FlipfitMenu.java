@@ -29,7 +29,7 @@ import com.flipkart.DAO.FlipFitAdminDAOImpl;
 		System.out.println("Enter your Role");
 		System.out.println("1.Admin");	
 		System.out.println("2.Gym Owner");
-		System.out.println("3.User");
+		System.out.println("3.Customer");
 		int role = sc.nextInt();
 		switch(role) {
 		case 1:
@@ -62,7 +62,7 @@ import com.flipkart.DAO.FlipFitAdminDAOImpl;
 			System.out.println("Choose One of the Below");
 			System.out.println("1.Login");
 			System.out.println("2.Change Password");
-			System.out.println("3.User Registration");
+			System.out.println("3.Customer Registration");
 			System.out.println("4.GymOwner Registration");
 			System.out.println("5.Exit");
 			
