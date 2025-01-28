@@ -13,15 +13,10 @@ import java.util.List;
 
 public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 
-	private final FlipFitGymOwnerDAOImpl flipFitGymOwnerDAO = new FlipFitGymOwnerDAOImpl();
+	private  FlipFitGymOwnerDAOImpl flipFitGymOwnerDAO = new FlipFitGymOwnerDAOImpl();
 	
-    public void requestForProfileVerfication(){
-        System.out.println("requestForProfileVerfication");
-
-    }
-    public void requestGymVerification(){
-        System.out.println("requestGV");
-    }
+  
+    
 
 	public void getProfile(FlipFitGymOwner gymOwner) {
 		System.out.println("gym owner details are : ");
@@ -42,6 +37,7 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 	
 
 	public void addGym(FlipFitGymOwner GymOwner,FlipFitGym gym) {
+//		boolean chk = false;
 	    boolean chk = flipFitGymOwnerDAO.addGym(GymOwner,gym);
 		if(chk){
 			System.out.println("Gym is added successfully!\n");
@@ -49,8 +45,18 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 		else{
 			System.out.println("Try Again");
 		}
-
-
+	}
+	
+	public boolean isGymOwnerVerified(Integer GymOwnerid)
+	{
+		boolean flag = flipFitGymOwnerDAO.getVerifiedGymowner(GymOwnerid);
+		return flag;
+	}
+	
+	public boolean isGymVerified(Integer Gymid)
+	{
+		boolean flag = flipFitGymOwnerDAO.getVerifiedGym(Gymid);
+		return flag;
 	}
 	
 	public void addSlot(Slot slot) {
@@ -77,28 +83,27 @@ public class FlipFitGymOwnerOperations extends FlipFitUserOperations{
 	}
 
 
-	public boolean isGymVerified(String gymId) {
-		return true;
-	}
-	public boolean isGymOwnerVerified(String email) {
-		return true;
-	}
+	
+	public FlipFitGymOwner registerGymOwner(FlipFitGymOwner gymOwner)
+	{
+		FlipFitGymOwner chk = flipFitGymOwnerDAO.register(gymOwner);
 
+		return chk;
+	}
+	
+	public FlipFitGymOwner login(String email,String Password)
+	{
+		FlipFitGymOwner chk = flipFitGymOwnerDAO.login(email,Password);
+		return chk;
+	}
 
 	public List<FlipFitGym> getGymDetail(FlipFitGymOwner gymOwner) {
 
-
-//		FlipFitGym flipFitGym = new FlipFitGym("Gym1","Bellandur",5,500,false,1);
-//		List<FlipFitGym> list = new ArrayList<>();
-//		list.add(flipFitGym);
-//		return list;
 
 
 		return flipFitGymOwnerDAO.getGymsOfFlipFitGymOwner(gymOwner);
 
 	}
 
-	public FlipFitGymOwner login(String email, String password) {
-        return flipFitGymOwnerDAO.login(email,password);
-	}
+	
 }

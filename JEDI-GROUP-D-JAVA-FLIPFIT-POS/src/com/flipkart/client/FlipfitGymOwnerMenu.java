@@ -3,7 +3,9 @@
  */
 package com.flipkart.client;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,7 +25,6 @@ public class FlipfitGymOwnerMenu {
     FlipFitGymOwnerOperations flipfitGymOwnerOperations;
     Scanner in;
 
-//	FlipFitGym flipFitGym = new FlipFitGym("Gym1", "Bellandur", 5, 500, false, 1);
 
     FlipfitGymOwnerMenu(Scanner in) {
         this.in = in;
@@ -54,14 +55,20 @@ public class FlipfitGymOwnerMenu {
 
         System.out.println("Enter Aadhaar: ");
         gymOwner.setAdharNumber(in.next());
-
-        boolean done = flipfitGymOwnerOperations.registerGymOwner(gymOwner);
-        if (done) {
-            System.out.println("Added the Gym Owner successfully \n" + gymOwner.toString());
-            this.gymOwner = gymOwner;
-        } else {
-            System.out.println("Error adding the Gym Owner");
+        
+        
+        gymOwner.setFlagVerified(false);
+        FlipFitGymOwner done = flipfitGymOwnerOperations.registerGymOwner(gymOwner);
+        System.out.println(done);
+        this.gymOwner = done;
+        
+        if(gymOwner!=null)
+        {
+        	System.out.println("Registration sucessful");
+        	return;
         }
+
+
     }
 
     public void login(String email, String password) {
@@ -70,6 +77,9 @@ public class FlipfitGymOwnerMenu {
         this.gymOwner = flipfitGymOwnerOperations.login(email, password);
         if (gymOwner != null) {
             System.out.println("Login successful!");
+            System.out.println("Welcome "+gymOwner.getUserName()+"! "+", Current time: "+LocalDateTime.now());
+
+            System.out.println(gymOwner);
             gymOwnerMenu(email);
         } else {
             System.out.println("Invalid email or password.");
@@ -102,14 +112,25 @@ public class FlipfitGymOwnerMenu {
         gymOwner.setAdharNumber(in.next());
 
         flipfitGymOwnerOperations.editProfile(gymOwner);
-        this.gymOwner = gymOwner;
+        this.gymOwner =gymOwner;
     }
 
 
     public void addGym() throws InvalidInputException{
+    	
+    	int id=gymOwner.getGymOwnerId();
+    	boolean flag= flipfitGymOwnerOperations.isGymOwnerVerified(id);
+    	
+    	if(!flag)
+    		{
+    			System.out.println("you are not yet verified please retry later");
+    			return;
+    		
+    		}
         FlipFitGym flipFitGym = new FlipFitGym();
-        System.out.println("\nEnter Gym Details: \n");
+        System.out.println("\nEnter Gym Details:");
         System.out.println("Enter gym name");
+        in.nextLine(); // Consume leftover newline
         flipFitGym.setGymName(in.next());
         System.out.println("Enter gym location");
         flipFitGym.setGymLocation(in.next());
@@ -124,7 +145,7 @@ public class FlipfitGymOwnerMenu {
         flipFitGym.setFlagVerified(false);
         
         flipfitGymOwnerOperations.addGym(gymOwner, flipFitGym);
-    }
+    	}
 
     public void editGym() throws InvalidInputException {
         FlipFitGym flipFitGym = new FlipFitGym();
@@ -160,16 +181,27 @@ public class FlipfitGymOwnerMenu {
 public void addSlot() throws InvalidInputException {
 	try {
 		Slot slot = new Slot();
-		System.out.println("Enter slot id");
-		slot.setSlotId(Integer.valueOf(in.next()));
+		
 		System.out.println("Enter Gym id");
-		slot.setGymId(Integer.valueOf(in.next()));
-		System.out.println("Enter Start time");
-		slot.setStartTime(LocalTime.ofSecondOfDay(Integer.parseInt(in.next())));
-		System.out.println("Enter capacity");
+		int gymid = Integer.valueOf(in.next());
+		boolean flag = flipfitGymOwnerOperations.isGymVerified(gymid);
+		if(!flag)
+		{
+			System.out.println("Sorry your gym is not yet verified");
+			return ;
+		}
+		slot.setGymId(gymid);
+		
+		System.out.println("Enter Start time (HH:MM):");
+		String timeInput = in.next(); // User inputs time like "09:30"
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+		LocalTime startTime = LocalTime.parse(timeInput, formatter);
+		slot.setStartTime(startTime);
+		
+		System.out.println("Enter no of seats for each slot");
 		slot.setCapacity(Integer.valueOf(in.next()));
-		System.out.println("Enter available seats");
-		slot.setAvailableSeats(Integer.valueOf(in.next()));
+
+		slot.setAvailableSeats(0);
 		flipfitGymOwnerOperations.addSlot(slot);
 		}catch(Exception e) {
 			throw new InvalidInputException(e.getMessage());
@@ -185,10 +217,9 @@ public void addSlot() throws InvalidInputException {
             System.out.println("1. View Profile");
             System.out.println("2. Edit Profile");
             System.out.println("3. Add Gym");
-            System.out.println("4. Edit Gym");
-            System.out.println("5. Add Slot");
-            System.out.println("6. View All Gym Details");
-            System.out.println("7. LogOut\n");
+            System.out.println("4. Add Slot");
+            System.out.println("5. View All Gym Details");
+            System.out.println("6. LogOut\n");
 
             System.out.println("Enter Your Choice: ");
 
@@ -205,16 +236,14 @@ public void addSlot() throws InvalidInputException {
                 case 3:
                     addGym();
                     break;
+                
                 case 4:
-                    editGym();
-                    break;
-                case 5:
                     addSlot();
                     break;
-                case 6:
+                case 5:
                     getGymDetails();
                     break;
-                case 7:
+                case 6:
                 	System.out.println("Thankyou for visiting!!");
                     System.exit(0);
                 default:
