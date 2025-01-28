@@ -37,7 +37,7 @@ public class FlipFitAdminDAOImpl implements FlipFitAdminDAO {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, email);
             statement.setString(2, pwd);
-            statement.setString(3, "1"); // Assuming "role" stores roleId as a string
+	        statement.setInt(3, 1); 
             
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
