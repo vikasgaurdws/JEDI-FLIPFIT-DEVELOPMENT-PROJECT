@@ -6,6 +6,7 @@ package com.flipkart.client;
 import java.util.Scanner;
 
 import com.flipkart.DAO.FlipFitAdminDAOImpl;
+import com.flipkart.exception.InvalidInputException;
 
 /**
  * 
@@ -21,16 +22,21 @@ import com.flipkart.DAO.FlipFitAdminDAOImpl;
 		public static Scanner sc = new Scanner(System.in);
 		
 	public static void login() throws Exception {
-		Scanner sc = new Scanner(System.in);
+//		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter your Email");
-		String email = sc.nextLine();
+		String email = sc.next();
 		System.out.println("Enter your Password");
-		String password = sc.nextLine();
+		String password = sc.next();
 		System.out.println("Enter your Role");
 		System.out.println("1.Admin");	
 		System.out.println("2.Gym Owner");
 		System.out.println("3.User");
-		int role = sc.nextInt();
+		int role =-1;
+		try {
+				role=sc.nextInt();
+		}catch(Exception e){
+			throw new InvalidInputException(e.getMessage());
+		}
 		switch(role) {
 		case 1:
 			FlipFitAdminDAOImpl ob = new FlipFitAdminDAOImpl();
@@ -67,9 +73,12 @@ import com.flipkart.DAO.FlipFitAdminDAOImpl;
 			System.out.println("5.Exit");
 			
 			System.out.println("Enter Your Choice");
-			
-			int n = sc.nextInt();
-			
+			int n=-1;
+			try {
+				n=sc.nextInt();
+			}catch(Exception e) {
+				throw new InvalidInputException(e.getMessage());
+			}
 			switch(n) {
 				case 1:
 						login();
@@ -85,7 +94,7 @@ import com.flipkart.DAO.FlipFitAdminDAOImpl;
 						login();
 						break;
 				case 5: System.out.println("Thank you for visiting\n");
-					return;
+					System.exit(0);
 				default: System.out.println("Wrong Choice\n");
 					
 			}
@@ -94,10 +103,18 @@ import com.flipkart.DAO.FlipFitAdminDAOImpl;
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		System.out.println("Welcome to flipfit");
+		try {
 			display();
-
-
+		}catch(InvalidInputException e) {
+			System.out.println("\n++++++++++++++++++++++++++++++++++++++++");
+			System.out.println("Enter a valid choice!");
+			System.out.println("++++++++++++++++++++++++++++++++++++++++\n");
+			sc.next();
+			main(args);
+		}catch(Exception e) {
+			System.out.println(e.getLocalizedMessage());
+		}
 	}
 }

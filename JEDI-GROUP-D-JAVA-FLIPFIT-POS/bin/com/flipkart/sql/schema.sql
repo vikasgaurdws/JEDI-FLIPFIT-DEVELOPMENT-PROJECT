@@ -6,7 +6,7 @@ CREATE TABLE Role (
 
 -- Create the FlipFitUser table with userName column
 CREATE TABLE FlipFitUser (
-    userID INT PRIMARY KEY,
+    userID INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) NOT NULL,
     phoneNumber VARCHAR(15),
     roleID INT,
