@@ -1,5 +1,4 @@
-# JEDI-FLIPFIT-DEVELOPMENT-PROJECT
-# FlipFit Gym Management System
+# JEDI-FLIPFIT Gym Management System
 
 ## Contents
 1. [Project Overview](#project-overview)
