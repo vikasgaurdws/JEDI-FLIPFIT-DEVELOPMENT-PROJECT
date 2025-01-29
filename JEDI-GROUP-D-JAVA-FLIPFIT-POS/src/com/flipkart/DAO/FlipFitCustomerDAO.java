@@ -33,7 +33,7 @@ public interface FlipFitCustomerDAO {
 	
 	public FlipFitCustomer getCustomerProfile(int userId);
 
-
+	
 	boolean makePayment(String paymentType, int bookingId, int price);
 
 	public int waitlist(int userId, int slotId, int gymId, Date valueOf);
