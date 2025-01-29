@@ -251,15 +251,6 @@ public interface FlipFitGymOwnerDAO {
 3. Commit changes
 4. Create pull request
 
-## License
-MIT License
-
 ## Contact
-For support, email: support@flipfit.com
-
-## Version History
-- v1.0.0 (Current): Initial Release
-- Future updates planned for web interface and mobile app
-
----
-© 2025 FlipFit Gym Management System. All rights reserved.
+Vikas Gaur
+(Whatsappp: 9340544813)
